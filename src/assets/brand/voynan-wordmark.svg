@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120">
+  <defs>
+    <linearGradient id="eclipseFade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F4F1EA" stop-opacity="0" />
+      <stop offset="0.18" stop-color="#DBA265" stop-opacity="0.55" />
+      <stop offset="0.38" stop-color="#C77B3A" stop-opacity="1" />
+      <stop offset="0.62" stop-color="#C77B3A" stop-opacity="1" />
+      <stop offset="0.82" stop-color="#DBA265" stop-opacity="0.55" />
+      <stop offset="1" stop-color="#F4F1EA" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <text
+    x="20"
+    y="76"
+    fill="#F4F1EA"
+    font-family="'Futura','Century Gothic','Avenir Next','Helvetica Neue',Arial,sans-serif"
+    font-size="56"
+    letter-spacing="4"
+  >
+    v
+  </text>
+  <circle
+    cx="67"
+    cy="61"
+    r="15"
+    fill="none"
+    stroke="#F4F1EA"
+    stroke-width="5"
+  />
+  <path
+    d="M 52.9 66.13 A 15 15 0 0 0 81.1 66.13"
+    fill="none"
+    stroke="url(#eclipseFade)"
+    stroke-width="5"
+    stroke-linecap="round"
+  />
+  <text
+    x="88"
+    y="76"
+    fill="#F4F1EA"
+    font-family="'Futura','Century Gothic','Avenir Next','Helvetica Neue',Arial,sans-serif"
+    font-size="56"
+    letter-spacing="4"
+  >
+    ynan
+  </text>
+</svg>

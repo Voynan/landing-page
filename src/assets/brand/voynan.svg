@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="eclipseFade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F4F1EA" stop-opacity="0" />
+      <stop offset="0.18" stop-color="#DBA265" stop-opacity="0.55" />
+      <stop offset="0.38" stop-color="#C77B3A" stop-opacity="1" />
+      <stop offset="0.62" stop-color="#C77B3A" stop-opacity="1" />
+      <stop offset="0.82" stop-color="#DBA265" stop-opacity="0.55" />
+      <stop offset="1" stop-color="#F4F1EA" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <circle
+    cx="50"
+    cy="50"
+    r="40"
+    fill="none"
+    stroke="#F4F1EA"
+    stroke-width="10"
+  />
+  <path
+    d="M 12.41 63.68 A 40 40 0 0 0 87.59 63.68"
+    fill="none"
+    stroke="url(#eclipseFade)"
+    stroke-width="10"
+    stroke-linecap="round"
+  />
+</svg>

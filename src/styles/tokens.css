@@ -1,0 +1,128 @@
+:root {
+  color-scheme: dark;
+
+  /* Brand palette */
+  --color-navy: #0e1524;
+  --color-navy-deep: #090d18;
+  --color-navy-raised: #16203a;
+  --color-navy-hover: #1d2a49;
+  --color-ivory: #f4f1ea;
+  --color-slate: #8a93a6;
+  --color-slate-muted: rgb(138 147 166 / 68%);
+  --color-copper: #c77b3a;
+  --color-copper-light: #dba265;
+  --color-line: rgb(244 241 234 / 13%);
+  --color-line-strong: rgb(244 241 234 / 24%);
+  --color-grid: rgb(244 241 234 / 3.5%);
+
+  /* Semantic color roles */
+  --background: var(--color-navy-deep);
+  --foreground: var(--color-ivory);
+  --card: var(--color-navy);
+  --card-foreground: var(--color-ivory);
+  --popover: var(--color-navy);
+  --popover-foreground: var(--color-ivory);
+  --primary: var(--color-copper);
+  --primary-foreground: var(--color-navy-deep);
+  --secondary: var(--color-navy-raised);
+  --secondary-foreground: var(--color-ivory);
+  --muted: var(--color-navy-raised);
+  --muted-foreground: var(--color-slate);
+  --accent: var(--color-copper);
+  --accent-foreground: var(--color-navy-deep);
+  --destructive: #ef8c83;
+  --destructive-foreground: var(--color-navy-deep);
+  --border: var(--color-line);
+  --input: var(--color-line-strong);
+  --ring: var(--color-copper-light);
+
+  /* Typography */
+  --font-brand: "Poppins", "Avenir Next", "Segoe UI", sans-serif;
+  --font-technical: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --text-hero: clamp(2.6rem, 6.2vw, 5.5rem);
+  --leading-hero: 0.98;
+  --text-statement: clamp(1.8rem, 4vw, 3.4rem);
+  --leading-statement: 1.12;
+  --text-h2: clamp(2.1rem, 4.2vw, 3.8rem);
+  --leading-h2: 1.03;
+  --text-h3: clamp(1.45rem, 2.4vw, 2.1rem);
+  --leading-h3: 1.15;
+  --text-statistic: clamp(2.5rem, 5vw, 4.8rem);
+  --leading-statistic: 1;
+  --text-body: clamp(1rem, 1.2vw, 1.125rem);
+  --leading-body: 1.6;
+  --text-kicker: 0.75rem;
+  --leading-kicker: 1.5;
+  --text-code: clamp(0.78rem, 1vw, 0.9rem);
+  --leading-code: 1.6;
+  --measure-copy: 70ch;
+
+  /* Layout */
+  --container-max: 73.75rem;
+  --page-pad-desktop: 3rem;
+  --page-pad-tablet: 1.75rem;
+  --page-pad-mobile: 1.25rem;
+  --page-pad: var(--page-pad-desktop);
+  --grid-columns: 12;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius: var(--radius-md);
+
+  /* Motion */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-hover: 220ms;
+  --duration-nav: 400ms;
+  --duration-reveal: 760ms;
+  --duration-transform: 1100ms;
+}
+
+@media (width <= 61.25rem) {
+  :root {
+    --page-pad: var(--page-pad-tablet);
+    --grid-columns: 8;
+  }
+}
+
+@media (width <= 35rem) {
+  :root {
+    --page-pad: var(--page-pad-mobile);
+    --grid-columns: 4;
+  }
+}
+
+@theme inline {
+  --font-sans: var(--font-brand);
+  --font-mono: var(--font-technical);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
