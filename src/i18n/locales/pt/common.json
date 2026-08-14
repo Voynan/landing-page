@@ -1,0 +1,39 @@
+{
+  "nav": {
+    "products": "Produtos",
+    "openSource": "Open source",
+    "buildWithUs": "Construa conosco",
+    "language": "Idioma"
+  },
+  "form": {
+    "fields": {
+      "name": "Nome",
+      "email": "E-mail",
+      "message": "Mensagem"
+    },
+    "validation": {
+      "required": "Preencha este campo.",
+      "email": "Informe um e-mail válido."
+    },
+    "submit": "Iniciar conversa"
+  },
+  "status": {
+    "submitting": "Enviando…",
+    "success": "Mensagem enviada.",
+    "failure": "Não foi possível enviar a mensagem."
+  },
+  "accessibility": {
+    "skipToContent": "Ir para o conteúdo",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu",
+    "menuOpened": "Menu aberto",
+    "menuClosed": "Menu fechado"
+  },
+  "feedback": {
+    "copyEmail": "Copiar e-mail",
+    "emailCopied": "E-mail copiado"
+  },
+  "metadata": {
+    "languageLabel": "Português"
+  }
+}

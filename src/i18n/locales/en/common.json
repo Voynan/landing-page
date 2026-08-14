@@ -1,0 +1,39 @@
+{
+  "nav": {
+    "products": "Products",
+    "openSource": "Open source",
+    "buildWithUs": "Build with us",
+    "language": "Language"
+  },
+  "form": {
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message"
+    },
+    "validation": {
+      "required": "Complete this field.",
+      "email": "Enter a valid email address."
+    },
+    "submit": "Start a conversation"
+  },
+  "status": {
+    "submitting": "Sending…",
+    "success": "Message sent.",
+    "failure": "The message could not be sent."
+  },
+  "accessibility": {
+    "skipToContent": "Skip to content",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "menuOpened": "Menu opened",
+    "menuClosed": "Menu closed"
+  },
+  "feedback": {
+    "copyEmail": "Copy email",
+    "emailCopied": "Email copied"
+  },
+  "metadata": {
+    "languageLabel": "English"
+  }
+}
