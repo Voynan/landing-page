@@ -1,0 +1,12 @@
+.agents/
+.codex/
+.impeccable/
+docs/
+node_modules/
+dist/
+src/assets/**/*.svg
+playwright-report/
+test-results/
+bun.lock
+LICENSE
+README.md
