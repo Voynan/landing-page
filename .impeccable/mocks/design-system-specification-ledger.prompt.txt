@@ -1,0 +1,9 @@
+Use case: ui-mockup
+Asset type: high-fidelity desktop web design composition for an internal design system page, 1536x1024 landscape
+Primary request: Design option C, “Specification Ledger”, for Voynan’s internal design system page. Compose a persistent narrow left ledger with section names and status marks, a central reading column for explanation, and a right specimen column for live tokens and controls. Show the opening viewport plus lower content: “Voynan Design System”, foundations token ledger, typography role/value table with live samples, and layout diagrams. The page should feel like an authoritative engineering specification that remains highly visual, with rows, rules, computed values, and real live examples.
+Style/medium: polished flat web UI mockup, production-realistic, dense but breathable technical publication
+Color palette: deep navy #090D18 and #0E1524, ivory #F4F1EA, slate #8A93A6, copper #C77B3A as the only accent
+Typography: light geometric sans inspired by Poppins for headings, regular sans body, JetBrains Mono-like technical labels
+Materials/textures: tonal navy fields, thin ivory structural rules, almost-square 2–4px corners, no shadows
+Text (verbatim where legible): “Voynan Design System”, “Foundations”, “Typography”, “Layout”, “Controls”, “Content stress”, “Media”, “Motion”, “Accessibility”
+Constraints: internal read-mode page, one h1, no product screenshots, no invented metrics or claims, no repeated rounded cards, no bento layout, no decorative glass, no gradients, no neon, no dashboard chrome, no floating panels, accessible contrast, it must read as a website UI composition and not a poster.

@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "surface": "src/pages/design-system/DesignSystemPage.tsx",
+  "approved_mock": ".impeccable/mocks/design-system-instrument-bench.png",
+  "decision": {
+    "additional_assets_required": false,
+    "justification": "The approved Instrument Bench is composed primarily from semantic interface material: live text, token swatches, thin rules, grid and scale diagrams, and production controls. Two official user-supplied brand SVGs are consumed directly; no generated raster or additional vector asset is required."
+  },
+  "produce": [],
+  "direct": [
+    {
+      "id": "voynan-wordmark",
+      "source": "src/assets/brand/voynan-wordmark.svg",
+      "usage": "Primary horizontal signature in the Foundations brand-marks band.",
+      "qa_status": "accepted"
+    },
+    {
+      "id": "voynan-eclipse-icon",
+      "source": "src/assets/brand/voynan.svg",
+      "usage": "Compact eclipse mark for avatar, favicon, and icon contexts in the Foundations brand-marks band.",
+      "qa_status": "accepted"
+    }
+  ],
+  "semantic": [
+    {
+      "id": "page-shell-and-section-index",
+      "implementation": "Use the existing page header, one semantic h1, sticky nav with anchor links, and eight named section regions. CSS owns the full-width navy bands, horizontal rules, spacing, left alignment, and responsive overflow of the local index.",
+      "notes": "Do not rasterize the title, navigation, rules, or section labels. The mock's topology is binding, while its invented branding and any unsupported specimen labels are not.",
+      "qa_status": "accepted"
+    },
+    {
+      "id": "foundations-calibration-strip",
+      "implementation": "Render token entries as semantic articles and description lists, with CSS custom properties painting each swatch and 1px structural rules separating the calibrated row. Any scale or tick grammar that is retained should use DOM/CSS geometry rather than an image.",
+      "notes": "Keep only the approved navy, ivory, slate, and copper system. Do not reproduce the mock's invented green, blue, red, pure-white, or unsupported compatibility claims.",
+      "qa_status": "accepted"
+    },
+    {
+      "id": "typography-ramp",
+      "implementation": "Build the full ramp with semantic headings, paragraphs, code labels, production font tokens, Poppins at the approved weights, and JetBrains Mono for technical metadata. CSS owns type scale, measure, alignment, and row rules.",
+      "notes": "Core type samples must remain selectable, zoomable, localizable text; no headline or label belongs in a raster or SVG outline.",
+      "qa_status": "accepted"
+    },
+    {
+      "id": "layout-and-spacing-instruments",
+      "implementation": "Use CSS Grid and repeated semantic spans for the 12/8/4-column specimen, description lists for breakpoints, and DOM/CSS bars for spacing and radius scales. CSS owns almost-square corners and tonal surface separation.",
+      "notes": "These are precise, countable diagrams that code can draw more faithfully and responsively than raster artwork.",
+      "qa_status": "accepted"
+    },
+    {
+      "id": "production-controls-bench",
+      "implementation": "Compose the bench from the real Button, Label, Sheet, SkipLink, LiveRegion, and native input primitives already used by the surface. If a simple arrow, search, check, or chevron is later required by a production primitive, use its existing icon library or inline SVG with accessible labeling where needed.",
+      "notes": "Do not ship a screenshot of the controls or recreate unsupported toggles, sliders, selects, and semantic colors solely because they appear in the directional mock.",
+      "qa_status": "accepted"
+    },
+    {
+      "id": "content-stress-bench",
+      "implementation": "Keep bilingual long-form samples, long strings, URLs, and recovery messages as semantic HTML. CSS owns readable measure, overflow wrapping, band rules, and responsive column collapse.",
+      "notes": "Text pressure tests must remain real text so zoom, wrapping, language metadata, and assistive technology behavior can be evaluated.",
+      "qa_status": "accepted"
+    },
+    {
+      "id": "media-contract-frames",
+      "implementation": "Keep poster, portrait crop, loading, and error/reduced-data states as labeled semantic contract cards with CSS aspect-ratio frames and tonal fills until approved production media lands in its owning task.",
+      "notes": "No fake product screenshot, generated dashboard, placeholder photograph, or mock-derived crop should be produced for this internal surface.",
+      "qa_status": "accepted"
+    },
+    {
+      "id": "motion-contract-instruments",
+      "implementation": "Represent duration and distance tokens with semantic rows and CSS tracks. Real motion, when owned by a later task, remains code-driven and must honor prefers-reduced-motion while preserving the same content and actions.",
+      "notes": "Motion and measurement geometry are interactive/vector territory; raster would flatten the contract.",
+      "qa_status": "accepted"
+    },
+    {
+      "id": "accessibility-bench",
+      "implementation": "Use live production controls, semantic contrast-pair blocks, ordered landmark lists, visible textual recovery cues, and the production live region. CSS owns focus outlines and color pair presentation.",
+      "notes": "Accessibility specimens must remain operable and inspectable; no bitmap can substitute for focus, landmark, announcement, or non-color feedback behavior.",
+      "qa_status": "accepted"
+    }
+  ],
+  "execution_order": [
+    "Consume the two supplied brand SVGs directly; no raster or additional vector production is required.",
+    "Preserve the semantic implementation sequence: shell/index, foundations, typography, layout, controls, content stress, media contract, motion contract, accessibility.",
+    "If later owning tasks supply approved production media or brand artwork, rerun the asset inventory for those new sources instead of deriving pixels from the mock."
+  ],
+  "blockers": [],
+  "assumptions": [
+    "The approved Instrument Bench mock is a compositional north star, not a shipping screenshot.",
+    "The surface brief's prohibition on fake screenshots and unsupported controls remains binding.",
+    "Media and Motion remain semantic contracts until their separate owning tasks land.",
+    "The official wordmark and eclipse icon are supplied as standalone SVGs; no approved product media, founder imagery, or logo raster has been supplied for this internal surface."
+  ]
+}

@@ -1,0 +1,305 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-14T21:24:23Z",
+  "title": "Design System: Voynan",
+  "extensions": {
+    "colorMeta": {
+      "navy": {
+        "role": "neutral",
+        "displayName": "Structural Navy",
+        "description": "Default brand, card, and popover surface."
+      },
+      "navy-deep": {
+        "role": "neutral",
+        "displayName": "Deep Navy",
+        "description": "Immediate page paint and deepest background field."
+      },
+      "navy-raised": {
+        "role": "neutral",
+        "displayName": "Raised Navy",
+        "description": "Secondary and muted surface layer."
+      },
+      "navy-hover": {
+        "role": "neutral",
+        "displayName": "Hover Navy",
+        "description": "Tonal response for raised interactive surfaces."
+      },
+      "ivory": {
+        "role": "neutral",
+        "displayName": "Manuscript Ivory",
+        "description": "Primary text and foreground in place of pure white."
+      },
+      "slate": {
+        "role": "neutral",
+        "displayName": "Blue Slate",
+        "description": "Secondary text, captions, and live-region output."
+      },
+      "slate-muted": {
+        "role": "neutral",
+        "displayName": "Muted Blue Slate",
+        "description": "Lower-emphasis supporting text."
+      },
+      "copper": {
+        "role": "primary",
+        "displayName": "Signature Copper",
+        "description": "The interface's single signature accent."
+      },
+      "copper-light": {
+        "role": "primary",
+        "displayName": "Light Copper",
+        "description": "Hover and focus-adjacent lift within the copper family."
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Ivory Rule",
+        "description": "Subtle borders and dividers."
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Strong Ivory Rule",
+        "description": "Higher-emphasis input and structural boundary."
+      },
+      "grid": {
+        "role": "neutral",
+        "displayName": "Atmospheric Ivory Grid",
+        "description": "Very subtle decorative grid."
+      },
+      "destructive": {
+        "role": "functional",
+        "displayName": "Destructive",
+        "description": "Error and destructive action state."
+      }
+    },
+    "typographyMeta": {
+      "hero": {
+        "displayName": "Hero",
+        "purpose": "Largest primary message."
+      },
+      "statement": {
+        "displayName": "Statement",
+        "purpose": "Editorial thesis copy."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Chapter-level headings."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Product and group headings."
+      },
+      "statistic": {
+        "displayName": "Statistic",
+        "purpose": "Large verified figures only."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Primary editorial reading text."
+      },
+      "body-small": {
+        "displayName": "Body Small",
+        "purpose": "Compact status and supporting text."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Interface controls and form labels."
+      },
+      "kicker": {
+        "displayName": "Kicker",
+        "purpose": "Short indices and context."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Real code, technical states, and identifiers."
+      }
+    },
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default easing for interface state transitions."
+      },
+      {
+        "name": "ease-enter",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Entrance easing used by the skip link and reveal contracts."
+      },
+      {
+        "name": "duration-hover",
+        "value": "220ms",
+        "purpose": "Button and skip-link state transitions."
+      },
+      {
+        "name": "duration-nav",
+        "value": "400ms",
+        "purpose": "Navigation and local-orientation transition contract."
+      },
+      {
+        "name": "duration-reveal",
+        "value": "760ms",
+        "purpose": "Purposeful reveal transition contract."
+      },
+      {
+        "name": "duration-transform",
+        "value": "1100ms",
+        "purpose": "Larger narrative transformation contract."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tablet-grid",
+        "value": "max-width: 61.25rem",
+        "purpose": "At 980px and below, switch from the base 12-column grid and 48px padding to 8 columns and 28px padding."
+      },
+      {
+        "name": "mobile-grid",
+        "value": "max-width: 35rem",
+        "purpose": "At 560px and below, switch to 4 columns and 20px padding."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Default copper action with the shared accessible target and state contracts.",
+      "html": "<button class=\"ds-button-primary\">Start a conversation</button>",
+      "css": ".ds-button-primary { display: inline-flex; min-height: 2.75rem; min-width: 2.75rem; align-items: center; justify-content: center; gap: 0.5rem; padding: 0 1.25rem; border: 1px solid transparent; border-radius: var(--radius-md); background: var(--primary); color: var(--primary-foreground); font-family: var(--font-brand); font-size: 0.875rem; font-weight: 500; transition: color var(--duration-hover) var(--ease-standard), background-color var(--duration-hover) var(--ease-standard), border-color var(--duration-hover) var(--ease-standard), opacity var(--duration-hover) var(--ease-standard), transform var(--duration-hover) var(--ease-standard); } .ds-button-primary:hover { background: var(--color-copper-light); } .ds-button-primary:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; } .ds-button-primary:active { transform: translateY(1px); } .ds-button-primary:disabled { pointer-events: none; opacity: 0.45; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Transparent alternative action whose border and text move to copper on hover.",
+      "html": "<button class=\"ds-button-outline\">Explore products</button>",
+      "css": ".ds-button-outline { display: inline-flex; min-height: 2.75rem; min-width: 2.75rem; align-items: center; justify-content: center; gap: 0.5rem; padding: 0 1.25rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: transparent; color: var(--foreground); font-family: var(--font-brand); font-size: 0.875rem; font-weight: 500; transition: color var(--duration-hover) var(--ease-standard), background-color var(--duration-hover) var(--ease-standard), border-color var(--duration-hover) var(--ease-standard), opacity var(--duration-hover) var(--ease-standard), transform var(--duration-hover) var(--ease-standard); } .ds-button-outline:hover { border-color: var(--primary); color: var(--primary); } .ds-button-outline:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; } .ds-button-outline:active { transform: translateY(1px); } .ds-button-outline:disabled { pointer-events: none; opacity: 0.45; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Raised navy action with a tonal hover response.",
+      "html": "<button class=\"ds-button-secondary\">View details</button>",
+      "css": ".ds-button-secondary { display: inline-flex; min-height: 2.75rem; min-width: 2.75rem; align-items: center; justify-content: center; gap: 0.5rem; padding: 0 1.25rem; border: 1px solid transparent; border-radius: var(--radius-md); background: var(--secondary); color: var(--secondary-foreground); font-family: var(--font-brand); font-size: 0.875rem; font-weight: 500; transition: color var(--duration-hover) var(--ease-standard), background-color var(--duration-hover) var(--ease-standard), border-color var(--duration-hover) var(--ease-standard), opacity var(--duration-hover) var(--ease-standard), transform var(--duration-hover) var(--ease-standard); } .ds-button-secondary:hover { background: var(--color-navy-hover); } .ds-button-secondary:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; } .ds-button-secondary:active { transform: translateY(1px); } .ds-button-secondary:disabled { pointer-events: none; opacity: 0.45; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Low-emphasis action that introduces a muted navy surface on hover.",
+      "html": "<button class=\"ds-button-ghost\">Learn more</button>",
+      "css": ".ds-button-ghost { display: inline-flex; min-height: 2.75rem; min-width: 2.75rem; align-items: center; justify-content: center; gap: 0.5rem; padding: 0 1.25rem; border: 1px solid transparent; border-radius: var(--radius-md); background: transparent; color: var(--foreground); font-family: var(--font-brand); font-size: 0.875rem; font-weight: 500; transition: color var(--duration-hover) var(--ease-standard), background-color var(--duration-hover) var(--ease-standard), border-color var(--duration-hover) var(--ease-standard), opacity var(--duration-hover) var(--ease-standard), transform var(--duration-hover) var(--ease-standard); } .ds-button-ghost:hover { background: var(--muted); color: var(--foreground); } .ds-button-ghost:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; } .ds-button-ghost:active { transform: translateY(1px); } .ds-button-ghost:disabled { pointer-events: none; opacity: 0.45; }"
+    },
+    {
+      "name": "Destructive Button",
+      "kind": "button",
+      "refersTo": "button-destructive",
+      "description": "Functional destructive action with a deep navy foreground.",
+      "html": "<button class=\"ds-button-destructive\">Remove</button>",
+      "css": ".ds-button-destructive { display: inline-flex; min-height: 2.75rem; min-width: 2.75rem; align-items: center; justify-content: center; gap: 0.5rem; padding: 0 1.25rem; border: 1px solid transparent; border-radius: var(--radius-md); background: var(--destructive); color: var(--destructive-foreground); font-family: var(--font-brand); font-size: 0.875rem; font-weight: 500; transition: color var(--duration-hover) var(--ease-standard), background-color var(--duration-hover) var(--ease-standard), border-color var(--duration-hover) var(--ease-standard), opacity var(--duration-hover) var(--ease-standard), transform var(--duration-hover) var(--ease-standard); } .ds-button-destructive:hover { opacity: 0.85; } .ds-button-destructive:focus-visible { outline: 2px solid var(--destructive); outline-offset: 4px; } .ds-button-destructive:active { transform: translateY(1px); } .ds-button-destructive:disabled { pointer-events: none; opacity: 0.45; }"
+    },
+    {
+      "name": "Link Button",
+      "kind": "button",
+      "refersTo": "button-link",
+      "description": "Copper text action that underlines on hover while retaining the shared touch target.",
+      "html": "<button class=\"ds-button-link\">Documentation</button>",
+      "css": ".ds-button-link { display: inline-flex; min-height: 2.75rem; min-width: 2.75rem; align-items: center; justify-content: center; gap: 0.5rem; padding: 0 1.25rem; border: 1px solid transparent; border-radius: var(--radius-md); background: transparent; color: var(--primary); font-family: var(--font-brand); font-size: 0.875rem; font-weight: 500; text-underline-offset: 4px; transition: color var(--duration-hover) var(--ease-standard), opacity var(--duration-hover) var(--ease-standard), transform var(--duration-hover) var(--ease-standard); } .ds-button-link:hover { text-decoration: underline; } .ds-button-link:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; } .ds-button-link:active { transform: translateY(1px); } .ds-button-link:disabled { pointer-events: none; opacity: 0.45; }"
+    },
+    {
+      "name": "Label",
+      "kind": "custom",
+      "refersTo": "label",
+      "description": "Compact medium-weight form label.",
+      "html": "<label class=\"ds-label\" for=\"ds-field\">Email</label>",
+      "css": ".ds-label { display: flex; align-items: center; gap: 0.5rem; color: var(--foreground); font-family: var(--font-brand); font-size: 0.875rem; font-weight: 500; line-height: 1.25rem; user-select: none; }"
+    },
+    {
+      "name": "Skip Link",
+      "kind": "nav",
+      "refersTo": "skip-link",
+      "description": "Keyboard-first route to the primary content that becomes visible on focus.",
+      "html": "<a class=\"ds-skip-link\" href=\"#main-content\">Skip to content</a>",
+      "css": ".ds-skip-link { position: fixed; inset-inline-start: 1.25rem; top: 1.25rem; z-index: 50; display: inline-flex; min-height: 2.75rem; align-items: center; padding: 0 1.25rem; transform: translateY(-6rem); border-radius: var(--radius-sm); background: var(--primary); color: var(--primary-foreground); font-family: var(--font-brand); font-weight: 500; transition: transform var(--duration-hover) var(--ease-enter); } .ds-skip-link:focus-visible { transform: translateY(0); outline: 2px solid var(--ring); outline-offset: 4px; } @media (prefers-reduced-motion: reduce) { .ds-skip-link { transition: none; } }"
+    },
+    {
+      "name": "Live Region",
+      "kind": "custom",
+      "refersTo": "live-region",
+      "description": "Atomic assistive status output, polite by default and assertive when rendered as an alert.",
+      "html": "<div class=\"ds-live-region\" role=\"status\" aria-atomic=\"true\" aria-live=\"polite\">Message sent.</div>",
+      "css": ".ds-live-region { color: var(--muted-foreground); font-family: var(--font-brand); font-size: 0.875rem; font-weight: 400; line-height: 1.25rem; }"
+    },
+    {
+      "name": "Design System Index",
+      "kind": "nav",
+      "refersTo": "design-system-index",
+      "description": "Sticky horizontal index for dense internal reference surfaces, with a semantic current-location state and direct touch overflow.",
+      "html": "<nav class=\"ds-system-index\" aria-label=\"Design system sections\"><ol><li><a href=\"#foundations\" aria-current=\"location\">Foundations</a></li><li><a href=\"#typography\">Typography</a></li><li><a href=\"#layout\">Layout</a></li><li><a href=\"#controls\">Controls</a></li></ol></nav>",
+      "css": ".ds-system-index { position: sticky; top: 0; background: var(--color-navy-deep); border-bottom: 1px solid var(--color-line-strong); } .ds-system-index ol { display: flex; gap: 2rem; max-width: none; margin: 0; padding: 0; overflow-x: auto; list-style: none; scrollbar-width: thin; } .ds-system-index a { display: inline-flex; min-height: 2.75rem; align-items: center; border-bottom: 2px solid transparent; color: var(--color-slate); font-family: var(--font-brand); font-size: 0.875rem; font-weight: 500; text-decoration: none; white-space: nowrap; transition: color var(--duration-hover) var(--ease-standard), border-color var(--duration-hover) var(--ease-standard); } .ds-system-index a:hover, .ds-system-index a:focus-visible, .ds-system-index a[aria-current=\"location\"] { border-bottom-color: var(--color-copper); color: var(--color-ivory); } .ds-system-index a:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; } @media (max-width: 35rem) { .ds-system-index ol { gap: 1.5rem; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Quiet Orbital Precision",
+    "overview": "Quiet Orbital Precision describes the visual world already established in code: deep navy fields, manuscript-toned ivory, measured spacing, thin structural rules, and a copper signal used with restraint. The atmosphere is editorial and cinematic, but the interface remains quiet enough for product evidence and technical content to lead.\n\nPrecision comes from a disciplined grid, light geometric type, compact geometry, and state changes that explain progress rather than decorate it. The eclipse idea may organize transformation and continuity, while every essential message, order, and action remains complete without motion.\n\nOn internal reference surfaces, this same world resolves into a dense “Instrument Bench”: compact section headers, thin calibration rules, and live production specimens arranged for comparison rather than presentation. This is a documentation expression of Quiet Orbital Precision, not a default composition for public narrative pages.",
+    "keyCharacteristics": [
+      "Deep navy-to-navy tonal fields with manuscript ivory text.",
+      "Copper reserved as the single signature accent.",
+      "Light geometric editorial type paired with restrained technical mono.",
+      "Predominantly left-aligned 12/8/4-column structure.",
+      "Motion expresses state or transformation and always has a static equivalent.",
+      "Internal reference surfaces favor dense calibration bands and live specimens over dashboard chrome or card catalogs."
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Rule",
+        "body": "Copper is the only interface accent, and it must not compete simultaneously across the eclipse thread, multiple headings, and multiple controls in one composition.",
+        "section": "colors"
+      },
+      {
+        "name": "The Measured Pairing Rule",
+        "body": "A canonical swatch is documented with function and pairing; accessibility claims come from measured contrast, never palette intuition.",
+        "section": "colors"
+      },
+      {
+        "name": "The Precision-Through-Type Rule",
+        "body": "Authority comes from light weight, generous scale, exact alignment, and restrained line length; avoid heavy display type and decorative font mixing.",
+        "section": "typography"
+      },
+      {
+        "name": "The Instrument, Not Dashboard Rule",
+        "body": "Internal reference surfaces use dense full-width calibration bands and live stages, not card catalogs, bento grids, or dashboard chrome.",
+        "section": "layout"
+      },
+      {
+        "name": "The Tonal Depth Rule",
+        "body": "Build hierarchy with adjacent navy tones and structural rules; editorial content remains shadow-free.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Compact Geometry Rule",
+        "body": "Corners stay nearly square so spacing, alignment, and the eclipse curve provide the visual character.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do use ivory instead of pure white for foreground content.",
+      "Do reserve copper for one dominant accent relationship per composition.",
+      "Do create hierarchy with the implemented navy tones, 1px rules, grid, spacing, and type scale.",
+      "Do preserve full content, order, focus access, and actions when reduced motion is active.",
+      "Do keep interactive targets at least 44 × 44px and keyboard focus visibly outlined.",
+      "Do document canonical colors with function, pairing, and measured contrast before making accessibility claims.",
+      "Do use production components in specimens; where implementation does not yet exist, document an honest contract instead of a visual clone.",
+      "Do keep an internal horizontal section index touch-scrollable and expose its active destination with both copper treatment and `aria-current`."
+    ],
+    "donts": [
+      "Don't introduce a second interface accent or blue/purple neon gradients.",
+      "Don't use elevation shadows on editorial content.",
+      "Don't turn the system into repeated rounded cards, pills, glass panels, or generic floating dashboards.",
+      "Don't use product-specific colors outside approved product screenshots, videos, or product-owned assets.",
+      "Don't communicate state through color, position, or motion alone.",
+      "Don't treat an internal design reference as a dashboard, bento layout, or catalog of floating cards.",
+      "Don't use screenshots in place of production controls, fabricate product media, or animate a contract beyond the behavior already implemented."
+    ]
+  }
+}
