@@ -10,7 +10,7 @@ export type DesignSystemSpecimenId =
   | "forms"
 
 export const foundationalSpecimens: ReadonlyArray<{
-  id: Exclude<DesignSystemSpecimenId, "forms">
+  id: DesignSystemSpecimenId
   label: string
 }> = [
   { id: "foundations", label: "Foundations" },
@@ -21,4 +21,5 @@ export const foundationalSpecimens: ReadonlyArray<{
   { id: "media", label: "Media" },
   { id: "motion", label: "Motion" },
   { id: "accessibility", label: "Accessibility" },
+  { id: "forms", label: "Forms" },
 ]

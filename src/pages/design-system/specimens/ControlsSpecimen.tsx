@@ -1,4 +1,7 @@
 import { Button } from "@/components/ui/button"
+import { CTAGroup } from "@/components/landing/hero/CTAGroup"
+import { LanguageSwitch } from "@/components/landing/navigation/LanguageSwitch"
+import { CompactNavigationMenu } from "@/components/landing/navigation/ProgressiveNav"
 import { Label } from "@/components/ui/label"
 import { LiveRegion } from "@/components/ui/LiveRegion"
 import {
@@ -34,6 +37,21 @@ export function ControlsSpecimen() {
             <Button variant="outline">Secondary</Button>
             <Button variant="link">Tertiary</Button>
           </div>
+          <CTAGroup
+            actions={[
+              { href: "#products", label: "Explore products" },
+              {
+                href: "#contact",
+                label: "Build with us",
+                variant: "outline",
+              },
+            ]}
+          />
+          <LanguageSwitch
+            currentLocale="en"
+            label="Language"
+            localeLabels={{ pt: "PT", en: "EN" }}
+          />
         </div>
 
         <div className="ds-control-group">
@@ -86,6 +104,31 @@ export function ControlsSpecimen() {
           <SkipLink targetId="controls-specimen-target">
             Skip to controls demo
           </SkipLink>
+        </div>
+
+        <div className="ds-control-group ds-control-group--wide">
+          <h3>Compact navigation</h3>
+          <div
+            className="ds-compact-navigation-preview"
+            role="group"
+            aria-label="Compact navigation at 320 pixels"
+          >
+            <CompactNavigationMenu
+              activeSectionId="products"
+              ariaLabel="Compact navigation"
+              id="design-system-compact-navigation"
+              links={[
+                { label: "Products", sectionId: "products" },
+                { label: "Open source", sectionId: "aegis" },
+                { label: "Build with us", sectionId: "contact" },
+              ]}
+              open
+            />
+          </div>
+          <p>
+            The production menu is held at 320px so wrapping, touch targets,
+            active location, and visible keyboard focus can be inspected.
+          </p>
         </div>
       </div>
     </section>

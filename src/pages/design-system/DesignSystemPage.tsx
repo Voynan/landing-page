@@ -5,6 +5,7 @@ import { AccessibilitySpecimen } from "@/pages/design-system/specimens/Accessibi
 import { ContentStressSpecimen } from "@/pages/design-system/specimens/ContentStressSpecimen"
 import { ControlsSpecimen } from "@/pages/design-system/specimens/ControlsSpecimen"
 import { FoundationsSpecimen } from "@/pages/design-system/specimens/FoundationsSpecimen"
+import { FormsSpecimen } from "@/pages/design-system/specimens/FormsSpecimen"
 import { LayoutSpecimen } from "@/pages/design-system/specimens/LayoutSpecimen"
 import { MediaSpecimen } from "@/pages/design-system/specimens/MediaSpecimen"
 import { MotionSpecimen } from "@/pages/design-system/specimens/MotionSpecimen"
@@ -35,6 +36,7 @@ export function DesignSystemPage() {
           <MediaSpecimen />
           <MotionSpecimen />
           <AccessibilitySpecimen />
+          <FormsSpecimen />
         </main>
       </div>
     </>

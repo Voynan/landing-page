@@ -9,6 +9,7 @@ import {
   screen,
   within,
 } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { afterEach, expect, it } from "vitest"
 
 import { DesignSystemHead } from "@/pages/design-system/DesignSystemHead"
@@ -28,6 +29,7 @@ it("renders every foundational specimen as a named region", () => {
     "Media",
     "Motion",
     "Accessibility",
+    "Forms",
   ]) {
     expect(screen.getByRole("region", { name })).toBeVisible()
   }
@@ -82,9 +84,23 @@ it("renders both official Voynan brand marks", () => {
 it("renders production controls inside the controls specimen", () => {
   render(<DesignSystemPage />)
 
+  const controls = screen.getByRole("region", { name: "Controls" })
+
   expect(screen.getByRole("button", { name: "Primary" })).toBeEnabled()
   expect(screen.getByRole("button", { name: "Open sheet" })).toBeEnabled()
-  expect(screen.getByRole("textbox", { name: "Email" })).toBeEnabled()
+  expect(within(controls).getByRole("textbox", { name: "Email" })).toBeEnabled()
+  expect(screen.getByRole("link", { name: "Explore products" })).toBeVisible()
+  expect(screen.getByRole("group", { name: "Language" })).toBeVisible()
+  expect(within(controls).getByRole("link", { name: "PT" })).toBeVisible()
+  expect(within(controls).getByRole("link", { name: "EN" })).toBeVisible()
+  expect(
+    within(controls).getByRole("group", {
+      name: "Compact navigation at 320 pixels",
+    }),
+  ).toBeVisible()
+  expect(
+    within(controls).getByRole("navigation", { name: "Compact navigation" }),
+  ).toBeVisible()
 })
 
 it("documents duration and easing contracts in the motion specimen", () => {
@@ -94,6 +110,43 @@ it("documents duration and easing contracts in the motion specimen", () => {
 
   expect(within(motion).getByText("--ease-standard")).toBeVisible()
   expect(within(motion).getByText("cubic-bezier(0.4, 0, 0.2, 1)")).toBeVisible()
+})
+
+it("exercises every eclipse state without scroll pin and compares reduced motion", async () => {
+  const user = userEvent.setup()
+  render(<DesignSystemPage />)
+
+  const motion = screen.getByRole("region", { name: "Motion" })
+  const states = within(motion).getByRole("list", {
+    name: "Eclipse thread states",
+  })
+  expect(within(states).getAllByTestId("eclipse-thread")).toHaveLength(8)
+
+  const controls = within(motion).getByRole("group", {
+    name: "Eclipse state controls",
+  })
+  const flow = within(controls).getByRole("button", { name: "Flow" })
+  await user.click(flow)
+  expect(flow).toHaveAttribute("aria-pressed", "true")
+
+  const comparison = within(motion).getByRole("group", {
+    name: "Motion comparison",
+  })
+  const [standard, reduced] =
+    within(comparison).getAllByTestId("eclipse-thread")
+  expect(standard).toHaveAttribute("data-state", "flow")
+  expect(standard).toHaveAttribute("data-motion", "enhanced")
+  expect(reduced).toHaveAttribute("data-state", "flow")
+  expect(reduced).toHaveAttribute("data-motion", "static")
+
+  const preview = within(comparison).getByTestId("motion-standard-preview")
+  const replay = within(motion).getByRole("button", {
+    name: "Replay selected state",
+  })
+  expect(preview).toHaveAttribute("data-replay", "0")
+  await user.click(replay)
+  expect(preview).toHaveAttribute("data-replay", "1")
+  expect(replay).toHaveFocus()
 })
 
 it("renders the production media component across its resilient states", () => {
@@ -107,6 +160,41 @@ it("renders the production media component across its resilient states", () => {
   expect(within(media).getByText("Ready")).toBeVisible()
   expect(within(media).getByText("Error")).toBeVisible()
   expect(within(media).getByText("Reduced data")).toBeVisible()
+})
+
+it("renders every production contact state in the forms specimen", () => {
+  render(<DesignSystemPage />)
+
+  const forms = screen.getByRole("region", { name: "Forms" })
+
+  for (const state of [
+    "Empty",
+    "Invalid",
+    "Submitting",
+    "Success",
+    "Failure",
+    "Clipboard fallback",
+  ]) {
+    expect(within(forms).getByText(state)).toBeVisible()
+  }
+
+  expect(forms.querySelectorAll("form")).toHaveLength(6)
+
+  expect(
+    within(forms)
+      .getAllByLabelText("Name")
+      .some((field) => !field.hasAttribute("disabled")),
+  ).toBe(true)
+  expect(
+    within(forms)
+      .getAllByLabelText("Email")
+      .some((field) => !field.hasAttribute("disabled")),
+  ).toBe(true)
+  expect(
+    within(forms)
+      .getAllByLabelText("Message")
+      .some((field) => !field.hasAttribute("disabled")),
+  ).toBe(true)
 })
 
 it("keeps the internal page out of search indexes", () => {
