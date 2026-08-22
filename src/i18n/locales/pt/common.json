@@ -5,6 +5,42 @@
     "buildWithUs": "Construa conosco",
     "language": "Idioma"
   },
+  "products": {
+    "sectionLabel": "Produtos SaaS",
+    "progressLabel": "Capítulos dos produtos",
+    "mediaPending": "Mídia aguardando captura aprovada",
+    "destinationPending": "Destino aguardando aprovação"
+  },
+  "credibility": {
+    "sectionLabel": "Credibilidade",
+    "pendingTitle": "Evidências em validação",
+    "pendingSupport": "Métricas e depoimentos verificados aparecerão após aprovação.",
+    "metricsLabel": "Métricas verificadas",
+    "testimonialsLabel": "Depoimentos"
+  },
+  "services": {
+    "sectionLabel": "Serviços",
+    "destinationPending": "O contato será habilitado na próxima etapa."
+  },
+  "aegis": {
+    "sectionLabel": "Open source",
+    "evidencePending": "Código e detalhes técnicos aguardando aprovação.",
+    "linkPending": "Destino aguardando aprovação",
+    "linksLabel": "Links técnicos do Aegis",
+    "copyCode": "Copiar código",
+    "copied": "Código copiado",
+    "copyFailed": "Não foi possível copiar; selecione o código manualmente.",
+    "releaseLabel": "Status da versão",
+    "licenseLabel": "Licença",
+    "environmentsLabel": "Ambientes",
+    "sourceLabel": "Fonte"
+  },
+  "founder": {
+    "sectionLabel": "Founder",
+    "profilePending": "Perfil do founder aguardando aprovação.",
+    "portraitPending": "Retrato aguardando aprovação",
+    "linkedInPending": "Destino aguardando aprovação"
+  },
   "form": {
     "fields": {
       "name": "Nome",
@@ -13,17 +49,22 @@
     },
     "validation": {
       "required": "Preencha este campo.",
-      "email": "Informe um e-mail válido."
+      "email": "Informe um e-mail válido.",
+      "summary": "Revise os campos indicados."
     },
-    "submit": "Iniciar conversa"
+    "submit": "Iniciar conversa",
+    "privacyNotice": "Usaremos estes dados somente para responder à sua mensagem; nenhum cadastro de marketing será realizado."
   },
   "status": {
     "submitting": "Enviando…",
     "success": "Mensagem enviada.",
-    "failure": "Não foi possível enviar a mensagem."
+    "failure": "Não foi possível enviar a mensagem. Tente novamente ou use o e-mail disponível.",
+    "timeout": "O envio demorou demais. Tente novamente ou use o e-mail disponível.",
+    "unavailable": "Envio aguardando configuração segura."
   },
   "accessibility": {
     "skipToContent": "Ir para o conteúdo",
+    "primaryNavigation": "Navegação principal",
     "openMenu": "Abrir menu",
     "closeMenu": "Fechar menu",
     "menuOpened": "Menu aberto",
@@ -31,7 +72,27 @@
   },
   "feedback": {
     "copyEmail": "Copiar e-mail",
-    "emailCopied": "E-mail copiado"
+    "emailCopied": "E-mail copiado",
+    "copyUnavailable": "Selecione o e-mail e copie manualmente.",
+    "emailPending": "E-mail público aguardando aprovação.",
+    "manualEmailLabel": "E-mail para cópia manual"
+  },
+  "contact": {
+    "sectionLabel": "Contato"
+  },
+  "footer": {
+    "sectionLabel": "Rodapé da Voynan",
+    "tagline": "Building Digital Products",
+    "products": "Produtos",
+    "openSource": "Open source",
+    "contact": "Contato",
+    "company": "Empresa",
+    "legal": "Legal",
+    "founder": "Founder",
+    "language": "Idioma",
+    "destinationPending": "Destino aguardando aprovação",
+    "profilePending": "Perfil do founder aguardando aprovação",
+    "copyrightPending": "Copyright aguardando aprovação"
   },
   "metadata": {
     "languageLabel": "Português"
