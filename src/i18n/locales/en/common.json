@@ -5,6 +5,42 @@
     "buildWithUs": "Build with us",
     "language": "Language"
   },
+  "products": {
+    "sectionLabel": "SaaS products",
+    "progressLabel": "Product chapters",
+    "mediaPending": "Media awaiting approved capture",
+    "destinationPending": "Destination awaiting approval"
+  },
+  "credibility": {
+    "sectionLabel": "Credibility",
+    "pendingTitle": "Evidence under review",
+    "pendingSupport": "Verified metrics and testimonials will appear after approval.",
+    "metricsLabel": "Verified metrics",
+    "testimonialsLabel": "Testimonials"
+  },
+  "services": {
+    "sectionLabel": "Services",
+    "destinationPending": "Contact will be enabled in the next phase."
+  },
+  "aegis": {
+    "sectionLabel": "Open source",
+    "evidencePending": "Code and technical details are awaiting approval.",
+    "linkPending": "Destination awaiting approval",
+    "linksLabel": "Aegis technical links",
+    "copyCode": "Copy code",
+    "copied": "Code copied",
+    "copyFailed": "Copy unavailable; select the code manually.",
+    "releaseLabel": "Release status",
+    "licenseLabel": "License",
+    "environmentsLabel": "Environments",
+    "sourceLabel": "Source"
+  },
+  "founder": {
+    "sectionLabel": "Founder",
+    "profilePending": "Founder profile awaiting approval.",
+    "portraitPending": "Portrait awaiting approval",
+    "linkedInPending": "Destination awaiting approval"
+  },
   "form": {
     "fields": {
       "name": "Name",
@@ -13,17 +49,22 @@
     },
     "validation": {
       "required": "Complete this field.",
-      "email": "Enter a valid email address."
+      "email": "Enter a valid email address.",
+      "summary": "Review the highlighted fields."
     },
-    "submit": "Start a conversation"
+    "submit": "Start a conversation",
+    "privacyNotice": "We use these details only to reply to your message; no marketing subscription is added."
   },
   "status": {
     "submitting": "Sending…",
     "success": "Message sent.",
-    "failure": "The message could not be sent."
+    "failure": "The message could not be sent. Try again or use the available email.",
+    "timeout": "The request took too long. Try again or use the available email.",
+    "unavailable": "Submission is awaiting secure configuration."
   },
   "accessibility": {
     "skipToContent": "Skip to content",
+    "primaryNavigation": "Primary navigation",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "menuOpened": "Menu opened",
@@ -31,7 +72,27 @@
   },
   "feedback": {
     "copyEmail": "Copy email",
-    "emailCopied": "Email copied"
+    "emailCopied": "Email copied",
+    "copyUnavailable": "Select the email and copy it manually.",
+    "emailPending": "Public email awaiting approval.",
+    "manualEmailLabel": "Email for manual copying"
+  },
+  "contact": {
+    "sectionLabel": "Contact"
+  },
+  "footer": {
+    "sectionLabel": "Voynan footer",
+    "tagline": "Building Digital Products",
+    "products": "Products",
+    "openSource": "Open source",
+    "contact": "Contact",
+    "company": "Company",
+    "legal": "Legal",
+    "founder": "Founder",
+    "language": "Language",
+    "destinationPending": "Destination awaiting approval",
+    "profilePending": "Founder profile awaiting approval",
+    "copyrightPending": "Copyright awaiting approval"
   },
   "metadata": {
     "languageLabel": "English"
