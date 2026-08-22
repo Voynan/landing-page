@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1254"
+     height="1254"
+     viewBox="0 0 1254 1254"
+     fill="none"
+     role="img"
+     aria-labelledby="title desc">
+  <title id="title">Constrully icon</title>
+  <desc id="desc">Four stacked architectural chevrons in a silver-to-slate gradient.</desc>
+
+  <defs>
+    <!-- The gradients use the full canvas so the whole mark becomes progressively
+         darker from the upper-left to the lower-right, as in the reference. -->
+    <linearGradient id="leftFace" x1="150" y1="100" x2="950" y2="778" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F5F4F5"/>
+      <stop offset="0.15" stop-color="#D7D9DE"/>
+      <stop offset="0.45" stop-color="#A5AFBE"/>
+      <stop offset="0.60" stop-color="#7E8CA1"/>
+      <stop offset="0.75" stop-color="#60718A"/>
+      <stop offset="0.90" stop-color="#485C76"/>
+      <stop offset="1" stop-color="#3B4F69"/>
+    </linearGradient>
+    <linearGradient id="rightFace" x1="650" y1="100" x2="1450" y2="650" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8090AA"/>
+      <stop offset="0.15" stop-color="#70809A"/>
+      <stop offset="0.30" stop-color="#5C6D87"/>
+      <stop offset="0.46" stop-color="#46566D"/>
+      <stop offset="0.58" stop-color="#39495F"/>
+      <stop offset="0.70" stop-color="#303E54"/>
+      <stop offset="0.82" stop-color="#29364B"/>
+      <stop offset="1" stop-color="#21344D"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Upper level -->
+  <path fill="url(#leftFace)" d="M763 113 204 315Q195 319 195 330V426Q195 440 209 437L763 262Z"/>
+  <path fill="url(#rightFace)" d="M763 113 1051 304Q1059 309 1059 319V405Q1059 421 1045 414L763 262Z"/>
+
+  <!-- Second level -->
+  <path fill="url(#leftFace)" d="M763 344 204 501Q195 504 195 515V614Q195 629 209 626L763 490Z"/>
+  <path fill="url(#rightFace)" d="M763 344 1051 480Q1059 484 1059 495V589Q1059 606 1044 600L763 490Z"/>
+
+  <!-- Third level -->
+  <path fill="url(#leftFace)" d="M763 573 204 693Q195 696 195 707V809Q195 825 210 822L763 725Z"/>
+  <path fill="url(#rightFace)" d="M763 573 1051 672Q1059 675 1059 686V794Q1059 811 1043 806L763 725Z"/>
+
+  <!-- Lower level -->
+  <path fill="url(#leftFace)" d="M763 807 204 896Q195 899 195 910V1018Q195 1034 211 1032L763 966Z"/>
+  <path fill="url(#rightFace)" d="M763 807 1051 879Q1059 882 1059 893V1016Q1059 1032 1043 1029L763 966Z"/>
+</svg>
