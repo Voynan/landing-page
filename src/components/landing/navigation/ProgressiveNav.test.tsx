@@ -2,11 +2,12 @@
 
 import "@testing-library/jest-dom/vitest"
 
-import { act, cleanup, render, screen } from "@testing-library/react"
+import { act, cleanup, render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { afterEach, expect, it, vi } from "vitest"
 
 import { ProgressiveNav } from "@/components/landing/navigation/ProgressiveNav"
+import { ScrollTrigger } from "@/lib/gsap"
 
 const navigationContent = {
   ariaLabel: "Primary navigation",
@@ -24,8 +25,43 @@ const navigationContent = {
 
 afterEach(() => {
   cleanup()
+  ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
   vi.unstubAllGlobals()
   window.location.hash = ""
+})
+
+it("fills the navigation progress line as the document approaches its end", async () => {
+  const { unmount } = render(
+    <ProgressiveNav content={navigationContent} currentLocale="en" />,
+  )
+
+  const track = document.querySelector<HTMLElement>(
+    ".landing-nav__scroll-track",
+  )
+  const indicator = track?.querySelector<HTMLElement>(
+    ".landing-nav__scroll-progress",
+  )
+
+  expect(track).toHaveAttribute("aria-hidden", "true")
+  expect(indicator).not.toBeNull()
+
+  await waitFor(() => {
+    expect(ScrollTrigger.getById("navigation-scroll-progress")).toBeDefined()
+  })
+
+  const trigger = ScrollTrigger.getById("navigation-scroll-progress")!
+
+  act(() => {
+    trigger.vars.onUpdate?.({
+      progress: 0.5,
+      scroll: () => 500,
+    } as unknown as ScrollTrigger)
+  })
+
+  expect(indicator).toHaveStyle({ transform: "scale(0.5, 1)" })
+
+  unmount()
+  expect(ScrollTrigger.getById("navigation-scroll-progress")).toBeUndefined()
 })
 
 it("opens the compact navigation with an exposed expanded state and focus", async () => {
@@ -95,80 +131,57 @@ it("preserves the current hash when section observation is unavailable", () => {
   )
 })
 
-it("keeps the full mark until the hero leaves the observer reading area", () => {
-  let observerCallback: IntersectionObserverCallback | undefined
-  const observedElements: Element[] = []
-  const disconnectObserver = vi.fn()
-
-  class IntersectionObserverStub implements IntersectionObserver {
-    readonly root = null
-    readonly rootMargin = ""
-    readonly thresholds = [0, 0.45, 1]
-
-    constructor(callback: IntersectionObserverCallback) {
-      observerCallback = callback
-    }
-
-    disconnect() {
-      disconnectObserver()
-    }
-    observe(element: Element) {
-      observedElements.push(element)
-    }
-    takeRecords() {
-      return []
-    }
-    unobserve() {}
-  }
-
-  vi.stubGlobal("IntersectionObserver", IntersectionObserverStub)
+it("keeps the wordmark at the top and through content, then retracts at the footer", async () => {
   const { unmount } = render(
     <>
       <ProgressiveNav content={navigationContent} currentLocale="en" />
-      <main>
-        <section id="hero" />
-      </main>
+      <main />
+      <footer className="atmospheric-footer" />
     </>,
   )
 
-  const hero = document.querySelector("section#hero")
+  const navigation = document.querySelector("header.landing-nav")
   const mark = screen.getByRole("link", { name: "Voynan — back to start" })
 
-  expect(hero).not.toBeNull()
-  expect(observedElements).toContain(hero)
-
-  act(() => {
-    observerCallback?.(
-      [
-        {
-          target: hero,
-          isIntersecting: true,
-          intersectionRatio: 0.2,
-          boundingClientRect: { bottom: 1_000, height: 1_000, top: 0 },
-        } as unknown as IntersectionObserverEntry,
-      ],
-      {} as IntersectionObserver,
-    )
+  await waitFor(() => {
+    expect(ScrollTrigger.getById("navigation-scroll-progress")).toBeDefined()
+    expect(ScrollTrigger.getById("navigation-footer-brand")).toBeDefined()
   })
 
+  const progressTrigger = ScrollTrigger.getById("navigation-scroll-progress")!
+  const footerTrigger = ScrollTrigger.getById("navigation-footer-brand")!
+
+  expect(navigation).toHaveAttribute("data-scrolled", "false")
   expect(mark).toHaveAttribute("data-collapsed", "false")
 
   act(() => {
-    observerCallback?.(
-      [
-        {
-          target: hero,
-          isIntersecting: false,
-          intersectionRatio: 0,
-          boundingClientRect: { bottom: 160, height: 1_000, top: -840 },
-        } as unknown as IntersectionObserverEntry,
-      ],
-      {} as IntersectionObserver,
-    )
+    progressTrigger.vars.onUpdate?.({
+      progress: 0.2,
+      scroll: () => 24,
+    } as unknown as ScrollTrigger)
+  })
+
+  expect(navigation).toHaveAttribute("data-scrolled", "true")
+  expect(mark).toHaveAttribute("data-collapsed", "false")
+
+  act(() => {
+    footerTrigger.vars.onToggle?.({
+      isActive: true,
+    } as unknown as ScrollTrigger)
   })
 
   expect(mark).toHaveAttribute("data-collapsed", "true")
 
+  act(() => {
+    progressTrigger.vars.onUpdate?.({
+      progress: 0,
+      scroll: () => 0,
+    } as unknown as ScrollTrigger)
+  })
+
+  expect(navigation).toHaveAttribute("data-scrolled", "false")
+  expect(mark).toHaveAttribute("data-collapsed", "false")
+
   unmount()
-  expect(disconnectObserver).toHaveBeenCalledOnce()
+  expect(ScrollTrigger.getById("navigation-footer-brand")).toBeUndefined()
 })

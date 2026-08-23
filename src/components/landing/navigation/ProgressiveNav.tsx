@@ -5,6 +5,7 @@ import { LanguageSwitch } from "@/components/landing/navigation/LanguageSwitch"
 import { RetractableVoynanMark } from "@/components/landing/navigation/RetractableVoynanMark"
 import { Button } from "@/components/ui/button"
 import { sectionIds, type Locale, type SectionId } from "@/content/contracts"
+import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap"
 
 type NavigationLink = {
   label: string
@@ -79,10 +80,53 @@ export function ProgressiveNav({
   currentLocale,
 }: ProgressiveNavProps) {
   const [activeSectionId, setActiveSectionId] = useState<SectionId>("hero")
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [hasScrolled, setHasScrolled] = useState(false)
+  const [footerReached, setFooterReached] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const navigationRef = useRef<HTMLElement>(null)
+  const scrollProgressRef = useRef<HTMLSpanElement>(null)
   const menuTriggerRef = useRef<HTMLButtonElement>(null)
   const firstCompactLinkRef = useRef<HTMLAnchorElement>(null)
+
+  useGSAP(
+    () => {
+      const scrollProgress = scrollProgressRef.current
+      if (!scrollProgress) return
+
+      gsap.set(scrollProgress, { scaleX: 0, transformOrigin: "left center" })
+
+      const progressTrigger = ScrollTrigger.create({
+        id: "navigation-scroll-progress",
+        start: 0,
+        end: "max",
+        onUpdate: (trigger) => {
+          const { progress } = trigger
+          gsap.set(scrollProgress, { scaleX: progress })
+          setHasScrolled(trigger.scroll() > 0)
+        },
+      })
+
+      setHasScrolled(progressTrigger.scroll() > 0)
+
+      const footer = document.querySelector<HTMLElement>(".atmospheric-footer")
+      if (!footer) return
+
+      const syncFooterState = (trigger: ScrollTrigger) => {
+        setFooterReached(trigger.isActive)
+      }
+      const footerTrigger = ScrollTrigger.create({
+        id: "navigation-footer-brand",
+        trigger: footer,
+        start: "top bottom",
+        end: "bottom top",
+        onRefresh: syncFooterState,
+        onToggle: syncFooterState,
+      })
+
+      syncFooterState(footerTrigger)
+    },
+    { scope: navigationRef },
+  )
 
   useEffect(() => {
     if (!("IntersectionObserver" in window)) return
@@ -91,13 +135,6 @@ export function ProgressiveNav({
       (entries) => {
         for (const entry of entries) {
           const sectionId = entry.target.id as SectionId
-
-          if (sectionId === "hero") {
-            const heroHasYielded =
-              entry.boundingClientRect.top <=
-              -entry.boundingClientRect.height * 0.7
-            setIsCollapsed(heroHasYielded)
-          }
 
           if (!entry.isIntersecting) continue
 
@@ -158,12 +195,25 @@ export function ProgressiveNav({
       </a>
     </li>
   ))
+  const isBrandCollapsed = hasScrolled && footerReached
 
   return (
-    <header className="landing-nav" data-collapsed={isCollapsed}>
+    <header
+      ref={navigationRef}
+      className="landing-nav"
+      data-scrolled={hasScrolled}
+      data-footer-reached={footerReached}
+    >
+      <div className="landing-nav__scroll-track" aria-hidden="true">
+        <span
+          ref={scrollProgressRef}
+          className="landing-nav__scroll-progress"
+        />
+      </div>
+
       <div className="landing-nav__bar">
         <RetractableVoynanMark
-          collapsed={isCollapsed}
+          collapsed={isBrandCollapsed}
           label={content.homeLabel}
         />
 
