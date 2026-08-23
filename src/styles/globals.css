@@ -1556,6 +1556,11 @@
     min-height: 100dvh;
   }
 
+  .landing-main > section {
+    position: relative;
+    isolation: isolate;
+  }
+
   .eclipse-thread-controller {
     position: fixed;
     z-index: 12;
@@ -1763,15 +1768,24 @@
   .landing-hero::after {
     position: absolute;
     z-index: 0;
-    background: linear-gradient(
-      90deg,
-      var(--color-navy-deep) 0%,
-      rgb(9 13 24 / 96%) 42%,
-      rgb(9 13 24 / 64%) 64%,
-      rgb(9 13 24 / 10%) 100%
-    );
+    background:
+      linear-gradient(
+        180deg,
+        var(--color-navy-deep) 0,
+        rgb(9 13 24 / 94%) 5.5rem,
+        rgb(9 13 24 / 52%) 8rem,
+        transparent 11rem
+      ),
+      linear-gradient(
+        90deg,
+        var(--color-navy-deep) 0%,
+        rgb(9 13 24 / 96%) 42%,
+        rgb(9 13 24 / 64%) 64%,
+        rgb(9 13 24 / 10%) 100%
+      );
     content: "";
-    inset: 0;
+    inset-block: 0;
+    inset-inline: calc(50% - 50vw);
     pointer-events: none;
   }
 
@@ -1817,47 +1831,6 @@
     margin-top: var(--space-8);
   }
 
-  .landing-hero__products {
-    position: absolute;
-    z-index: 1;
-    display: grid;
-    width: min(25rem, 32vw);
-    max-width: none;
-    gap: 0;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    inset: 50% 0 auto auto;
-    transform: translateY(-50%);
-  }
-
-  .landing-hero__products li {
-    display: grid;
-    min-height: 5.25rem;
-    grid-template-columns: minmax(6rem, auto) 1fr;
-    gap: var(--space-4);
-    align-items: center;
-    border-top: 1px solid var(--color-line-strong);
-  }
-
-  .landing-hero__products li:last-child {
-    border-bottom: 1px solid var(--color-line-strong);
-  }
-
-  .landing-hero__products span {
-    color: var(--color-copper-light);
-    font-family: var(--font-technical);
-    font-size: var(--text-kicker);
-    text-transform: uppercase;
-  }
-
-  .landing-hero__products strong {
-    color: var(--color-ivory);
-    font-size: 0.875rem;
-    font-weight: var(--font-weight-regular);
-    line-height: 1.35;
-  }
-
   .landing-hero__context {
     z-index: 2;
     display: grid;
@@ -1884,8 +1857,101 @@
 
   .landing-thesis {
     position: relative;
-    display: grid;
+    isolation: isolate;
     min-height: 84svh;
+    width: 100%;
+    overflow: clip;
+  }
+
+  .pearlescent-starfield {
+    position: absolute;
+    z-index: 0;
+    background:
+      radial-gradient(
+        ellipse at 73% 42%,
+        rgb(244 241 234 / 5%) 0,
+        rgb(138 147 166 / 3%) 30%,
+        transparent 64%
+      ),
+      radial-gradient(
+        ellipse at 22% 68%,
+        rgb(219 162 101 / 3%) 0,
+        transparent 50%
+      );
+    inset-block: 0;
+    inset-inline: calc(50% - 50vw);
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .landing-hero > .pearlescent-starfield {
+    z-index: 1;
+  }
+
+  .pearlescent-starfield__star {
+    position: absolute;
+    width: 0.125rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: currentColor;
+    color: var(--color-ivory);
+    box-shadow: 0 0 0.18rem currentColor;
+    will-change: opacity, transform;
+  }
+
+  .pearlescent-starfield__star::before,
+  .pearlescent-starfield__star::after {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+    content: "";
+    inset: 50% auto auto 50%;
+    opacity: 0.58;
+    transform: translate(-50%, -50%);
+  }
+
+  .pearlescent-starfield__star::before {
+    width: 0.65rem;
+    height: 1px;
+  }
+
+  .pearlescent-starfield__star::after {
+    width: 0.55rem;
+    height: 1px;
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .pearlescent-starfield__star[data-size="small"] {
+    width: 0.075rem;
+  }
+
+  .pearlescent-starfield__star[data-size="small"]::before,
+  .pearlescent-starfield__star[data-size="small"]::after {
+    opacity: 0.38;
+    scale: 0.7;
+  }
+
+  .pearlescent-starfield__star[data-size="large"] {
+    width: 0.175rem;
+    box-shadow: 0 0 0.22rem currentColor;
+  }
+
+  .pearlescent-starfield__star[data-size="large"]::before {
+    width: 0.9rem;
+  }
+
+  .pearlescent-starfield__star[data-size="large"]::after {
+    width: 0.75rem;
+  }
+
+  .pearlescent-starfield__star[data-tone="copper"] {
+    color: var(--color-copper-light);
+  }
+
+  .landing-thesis__inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    min-height: inherit;
     width: min(100%, var(--container-max));
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: var(--space-8);
@@ -1917,6 +1983,8 @@
   }
 
   .saas-story-stage__inner {
+    position: relative;
+    z-index: 1;
     display: grid;
     width: min(100%, var(--container-max));
     grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -2227,6 +2295,8 @@
   }
 
   .landing-chapter__frame {
+    position: relative;
+    z-index: 1;
     width: min(100%, var(--container-max));
     margin-inline: auto;
     padding: clamp(5rem, 10vw, 9rem) var(--page-pad);
@@ -2889,6 +2959,8 @@
   }
 
   .contact-section__intro {
+    position: relative;
+    z-index: 1;
     grid-column: 1 / span 4;
   }
 
@@ -2906,6 +2978,8 @@
   }
 
   .essential-contact-form {
+    position: relative;
+    z-index: 1;
     min-width: 0;
     grid-column: 6 / -1;
   }
@@ -3151,20 +3225,11 @@
     grid-column: 1 / span 6;
   }
 
-  .landing-hero__products {
-    width: min(18rem, 34vw);
-  }
-
-  .landing-hero__products li {
-    grid-template-columns: 1fr;
-    gap: var(--space-1);
-  }
-
   .landing-hero__context {
     grid-template-columns: 2fr 6fr;
   }
 
-  .landing-thesis {
+  .landing-thesis__inner {
     grid-template-columns: repeat(8, minmax(0, 1fr));
   }
 
@@ -3338,21 +3403,6 @@
     width: 100%;
   }
 
-  .landing-hero__products {
-    position: absolute;
-    width: 7rem;
-    inset: 7rem 0 auto auto;
-    transform: none;
-  }
-
-  .landing-hero__products li {
-    min-height: 2.75rem;
-  }
-
-  .landing-hero__products strong {
-    display: none;
-  }
-
   .landing-hero__context {
     grid-column: 1 / -1;
     grid-template-columns: 1fr;
@@ -3361,6 +3411,9 @@
 
   .landing-thesis {
     min-height: 74svh;
+  }
+
+  .landing-thesis__inner {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--space-6);
     padding-block: var(--space-16);

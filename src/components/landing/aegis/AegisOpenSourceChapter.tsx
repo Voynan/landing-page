@@ -8,6 +8,7 @@ import {
   TechnicalLinks,
   type TechnicalLinksLabels,
 } from "@/components/landing/aegis/TechnicalLinks"
+import { PearlescentStarfield } from "@/components/motion/PearlescentStarfield"
 import { useChapterMotion } from "@/components/motion/useChapterMotion"
 import type { LandingContentDraft } from "@/content"
 import { track, type AnalyticsTrack } from "@/lib/analytics"
@@ -91,6 +92,8 @@ export function AegisOpenSourceChapter({
       className="aegis-chapter landing-chapter"
       aria-labelledby="aegis-title"
     >
+      <PearlescentStarfield motionId="aegis-starfield-drift" variant={5} />
+
       <div className="landing-chapter__frame">
         <div className="aegis-chapter__layout">
           <div className="aegis-chapter__copy">

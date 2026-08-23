@@ -1,5 +1,6 @@
 import { useRef, type RefObject } from "react"
 
+import { PearlescentStarfield } from "@/components/motion/PearlescentStarfield"
 import { useChapterMotion } from "@/components/motion/useChapterMotion"
 import type { LandingContentDraft } from "@/content"
 import { gsap } from "@/lib/gsap"
@@ -63,6 +64,8 @@ export function FounderNote({ content, labels }: FounderNoteProps) {
       className="founder-note landing-chapter"
       aria-labelledby="founder-title"
     >
+      <PearlescentStarfield motionId="founder-starfield-drift" variant={6} />
+
       <div className="landing-chapter__frame">
         <div className="founder-note__layout">
           <div className="founder-note__copy">

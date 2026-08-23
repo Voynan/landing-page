@@ -33,7 +33,6 @@ import {
 } from "@/components/landing/services/BuildWithUsFlow"
 import { useContactRuntime } from "@/app/contactRuntimeContext"
 import { StudioThesis } from "@/components/landing/thesis/StudioThesis"
-import { EclipseThreadController } from "@/components/motion/EclipseThreadController"
 import { SkipLink } from "@/components/ui/SkipLink"
 import type { LandingContentDraft } from "@/content"
 
@@ -71,11 +70,7 @@ export function LandingShell({
         currentLocale={content.locale}
       />
       <main id="main-content" className="landing-main">
-        <EclipseThreadController />
-        <ProductStudioHero
-          content={content.hero}
-          products={content.products.items}
-        />
+        <ProductStudioHero content={content.hero} />
         <StudioThesis content={content.thesis} />
         <SaaSStoryStage
           labels={productStageLabels}

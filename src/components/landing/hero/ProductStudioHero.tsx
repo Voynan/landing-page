@@ -2,20 +2,16 @@ import { useRef, type RefObject } from "react"
 
 import voynanEclipse from "@/assets/brand/voynan.svg"
 import { CTAGroup } from "@/components/landing/hero/CTAGroup"
+import { PearlescentStarfield } from "@/components/motion/PearlescentStarfield"
 import { useChapterMotion } from "@/components/motion/useChapterMotion"
 import type { LandingContentDraft } from "@/content"
 import { track, type AnalyticsTrack } from "@/lib/analytics"
 import { gsap } from "@/lib/gsap"
 
 type HeroContent = LandingContentDraft["hero"]
-type ProductFragment = Pick<
-  LandingContentDraft["products"]["items"][number],
-  "id" | "title"
->
 
 type ProductStudioHeroProps = {
   content: HeroContent
-  products?: readonly ProductFragment[]
   trackEvent?: AnalyticsTrack
 }
 
@@ -56,7 +52,6 @@ function useHeroMotion(scope: RefObject<HTMLElement | null>) {
 
 export function ProductStudioHero({
   content,
-  products = [],
   trackEvent = track,
 }: ProductStudioHeroProps) {
   const sectionRef = useRef<HTMLElement>(null)
@@ -69,20 +64,11 @@ export function ProductStudioHero({
       className="landing-hero"
       aria-labelledby="landing-hero-title"
     >
+      <PearlescentStarfield motionId="hero-starfield-drift" variant={1} />
+
       <div className="landing-hero__eclipse" aria-hidden="true">
         <img src={voynanEclipse} alt="" width="100" height="100" />
       </div>
-
-      {products.length > 0 && (
-        <ul className="landing-hero__products" aria-hidden="true">
-          {products.map((product) => (
-            <li key={product.id} data-product={product.id}>
-              <span>{product.id}</span>
-              <strong>{product.title}</strong>
-            </li>
-          ))}
-        </ul>
-      )}
 
       <div className="landing-hero__content">
         <h1 id="landing-hero-title">{content.title}</h1>

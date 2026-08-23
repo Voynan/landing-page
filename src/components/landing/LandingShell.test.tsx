@@ -114,7 +114,7 @@ it("provides one page heading, a skip link, and stable chapter identifiers", () 
   vi.stubGlobal(
     "matchMedia",
     vi.fn((query: string) => ({
-      matches: query === motionQueries.isMobile,
+      matches: query === motionQueries.reduceMotion,
       media: query,
       onchange: null,
       addEventListener: vi.fn(),
@@ -147,7 +147,7 @@ it("provides one page heading, a skip link, and stable chapter identifiers", () 
     document.querySelector(
       "main#main-content > [data-testid='eclipse-thread-controller']",
     ),
-  ).toBeInTheDocument()
+  ).not.toBeInTheDocument()
   expect(
     screen.getByRole("contentinfo", { name: "Voynan footer" }),
   ).toBeInTheDocument()
@@ -168,18 +168,31 @@ it("provides one page heading, a skip link, and stable chapter identifiers", () 
     "founder",
     "contact",
   ])
+
+  const main = document.querySelector("main#main-content") as HTMLElement
+  const footer = screen.getByRole("contentinfo", { name: "Voynan footer" })
+
+  expect(within(main).getAllByTestId("pearlescent-starfield")).toHaveLength(8)
+  expect(within(footer).queryByTestId("pearlescent-starfield")).toBeNull()
+
+  const hero = document.querySelector("section#hero") as HTMLElement
+  for (const product of getLandingContent("en").products.items) {
+    expect(within(hero).queryByText(product.id)).toBeNull()
+    expect(within(hero).queryByText(product.title)).toBeNull()
+  }
+
   expect(
     Array.from(document.querySelectorAll("main > section")).map((section) =>
       section.getAttribute("data-motion-profile"),
     ),
   ).toEqual([
-    "mobile",
-    "mobile",
-    "mobile",
-    "mobile",
-    "mobile",
-    "mobile",
-    "mobile",
+    "reduced",
+    "reduced",
+    "reduced",
+    "reduced",
+    "reduced",
+    "reduced",
+    "reduced",
     null,
   ])
 

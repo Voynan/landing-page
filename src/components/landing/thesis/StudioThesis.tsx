@@ -1,5 +1,6 @@
 import { useRef, type RefObject } from "react"
 
+import { PearlescentStarfield } from "@/components/motion/PearlescentStarfield"
 import { useChapterMotion } from "@/components/motion/useChapterMotion"
 import type { LandingContentDraft } from "@/content"
 import { gsap } from "@/lib/gsap"
@@ -53,8 +54,11 @@ export function StudioThesis({ content }: StudioThesisProps) {
       className="landing-thesis"
       aria-labelledby="landing-thesis-title"
     >
-      <div className="landing-thesis__rule" aria-hidden="true" />
-      <h2 id="landing-thesis-title">{content.statement}</h2>
+      <PearlescentStarfield motionId="thesis-starfield-drift" />
+      <div className="landing-thesis__inner">
+        <div className="landing-thesis__rule" aria-hidden="true" />
+        <h2 id="landing-thesis-title">{content.statement}</h2>
+      </div>
     </section>
   )
 }

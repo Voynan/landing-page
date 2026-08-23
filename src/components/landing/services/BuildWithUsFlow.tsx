@@ -1,6 +1,7 @@
 import { useRef, type RefObject } from "react"
 
 import { CapabilityLayer } from "@/components/landing/services/CapabilityLayer"
+import { PearlescentStarfield } from "@/components/motion/PearlescentStarfield"
 import { useChapterMotion } from "@/components/motion/useChapterMotion"
 import type { LandingContentDraft } from "@/content"
 import { gsap } from "@/lib/gsap"
@@ -73,6 +74,8 @@ export function BuildWithUsFlow({ content, labels }: BuildWithUsFlowProps) {
       className="services-flow landing-chapter"
       aria-labelledby="services-title"
     >
+      <PearlescentStarfield motionId="services-starfield-drift" variant={4} />
+
       <div className="landing-chapter__frame">
         <header className="services-flow__header">
           <p className="services-flow__intent">{content.kicker}</p>

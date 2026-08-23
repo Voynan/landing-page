@@ -6,6 +6,7 @@ import {
   EssentialContactForm,
   type ContactFormLabels,
 } from "@/components/landing/contact/EssentialContactForm"
+import { PearlescentStarfield } from "@/components/motion/PearlescentStarfield"
 
 type ContactContent = LandingContentDraft["contact"]
 
@@ -44,6 +45,8 @@ export function ContactSection({
       className="contact-section"
       aria-label={labels.sectionLabel}
     >
+      <PearlescentStarfield motionId="contact-starfield-drift" variant={7} />
+
       <div className="contact-section__intro">
         <h2>{content.title}</h2>
         <p>{content.commercialNote}</p>

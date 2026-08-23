@@ -2,6 +2,7 @@ import { useRef, type RefObject } from "react"
 
 import { Testimonial } from "@/components/landing/credibility/Testimonial"
 import { VerifiedMetric } from "@/components/landing/credibility/VerifiedMetric"
+import { PearlescentStarfield } from "@/components/motion/PearlescentStarfield"
 import { useChapterMotion } from "@/components/motion/useChapterMotion"
 import type { LandingContentDraft } from "@/content"
 import { gsap } from "@/lib/gsap"
@@ -92,6 +93,11 @@ export function CredibilityField({ content, labels }: CredibilityFieldProps) {
       className="credibility-field landing-chapter"
       aria-labelledby="credibility-title"
     >
+      <PearlescentStarfield
+        motionId="credibility-starfield-drift"
+        variant={3}
+      />
+
       <div className="landing-chapter__frame">
         <h2 id="credibility-title" className="credibility-field__title">
           {labels.sectionLabel}

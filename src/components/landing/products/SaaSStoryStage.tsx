@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
 
 import { ProductChapter } from "@/components/landing/products/ProductChapter"
 import { ProgressOrbit } from "@/components/landing/products/ProgressOrbit"
+import { PearlescentStarfield } from "@/components/motion/PearlescentStarfield"
 import { useChapterMotion } from "@/components/motion/useChapterMotion"
 import type { LandingContentDraft, ProductId } from "@/content"
 import { useProductVisibility } from "@/hooks/useProductVisibility"
@@ -190,6 +191,8 @@ export function SaaSStoryStage({
       data-motion-mode={motionMode}
       aria-label={labels.sectionLabel}
     >
+      <PearlescentStarfield motionId="products-starfield-drift" variant={2} />
+
       <div className="saas-story-stage__inner">
         <ProgressOrbit
           activeProductId={activeProductId}

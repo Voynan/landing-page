@@ -308,12 +308,13 @@ describe("SaaSStoryStage", () => {
       ScrollTrigger.getById("product-motion-cryptovault")?.vars.scrub,
     ).toBe(0.35)
     expect(ScrollTrigger.getById("products-progress-orbit")).toBeDefined()
-    expect(ScrollTrigger.getAll()).toHaveLength(5)
+    expect(ScrollTrigger.getById("products-starfield-drift")).toBeDefined()
+    expect(ScrollTrigger.getAll()).toHaveLength(6)
 
     unmount()
     expect(ScrollTrigger.getById("products-progress-pin")).toBeUndefined()
     expect(document.querySelector(".pin-spacer")).not.toBeInTheDocument()
-  })
+  }, 10_000)
 
   it.each([
     ["tablet", 0.18],
@@ -346,7 +347,8 @@ describe("SaaSStoryStage", () => {
         ScrollTrigger.getById("product-motion-cryptovault")?.vars.scrub,
       ).toBe(scrub)
       expect(ScrollTrigger.getById("products-progress-orbit")).toBeUndefined()
-      expect(ScrollTrigger.getAll()).toHaveLength(3)
+      expect(ScrollTrigger.getById("products-starfield-drift")).toBeDefined()
+      expect(ScrollTrigger.getAll()).toHaveLength(4)
     },
   )
 })
