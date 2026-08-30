@@ -33,7 +33,7 @@ Success is measured in this order:
 1. Visitors reach the three SaaS products, with equal emphasis across CryptoVault, InvestFusion, and Constrully.
 2. Qualified prospects start a conversation about custom software.
 3. Visitors understand Voynan as a product studio capable of handling focused and complex work.
-4. Developers can discover Aegis after its public destinations and release facts are confirmed.
+4. Developers can discover the development-stage Aegis through its approved GitHub destination.
 
 ## Positioning
 
@@ -57,7 +57,7 @@ Documented direction:
 - Motion, media playback, analytics, and contact submission are independent progressive enhancements with meaningful failure states.
 - The contact form collects name, e-mail, and message, validates for usability, never retries submissions automatically, preserves values on failure, and offers manual e-mail copying.
 - Analytics accepts only the allowlisted conversion events and never receives form values, copied content, or sensitive financial information visible in product media.
-- Aegis remains described as coming soon until its release status, license, environments, example, GitHub URL, and documentation URL are confirmed.
+- Aegis launches in the `development` stage with only its approved logo, “Coming soon” status, title, description, and GitHub destination. Documentation, release metadata, environments, and real code become required only before changing the stage to `released`.
 - Authentication, protected routes, OAuth, financial logic, CMS, smooth scrolling, Three.js, WebGL, and a second animation library are outside v1.
 - Evidence, claims, external destinations, legal content, and media marked as release blockers must be approved in `docs/v1-content-inventory.md` before a public build.
 

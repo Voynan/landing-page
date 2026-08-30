@@ -1,3 +1,5 @@
+import aegisLogo from "@/assets/aegis/aegis-logo.svg"
+
 import type { LandingContentDraft } from "../contracts.js"
 
 export const englishLandingContent = {
@@ -142,15 +144,31 @@ export const englishLandingContent = {
   },
   aegis: {
     id: "aegis",
+    stage: "development",
     kicker: "Open source / Coming soon",
     title: "File encryption, without the friction.",
     support:
       "A library for encrypting and authenticating files of any format or size with AES-GCM, designed for straightforward implementation.",
-    github: { label: "View on GitHub", approval: "missing" },
-    documentation: { label: "Read the docs", approval: "missing" },
+    github: {
+      label: "View on GitHub",
+      href: "https://github.com/Voynan/aegis",
+      approval: "approved",
+    },
+    documentation: {
+      label: "Read the docs",
+      href: "https://github.com/Voynan/aegis/blob/main/README.md",
+      approval: "received",
+    },
     technicalEvidence: { approval: "missing" },
-    logo: { approval: "missing" },
-    copyApproval: "received",
+    logo: {
+      src: aegisLogo,
+      alt: "Aegis logo: the word αιγις in Greek letters, with a purple-to-magenta gradient.",
+      width: 649,
+      height: 262,
+      source: "src/assets/aegis/aegis-logo.svg — Voynan-owned asset",
+      approval: "approved",
+    },
+    copyApproval: "approved",
   },
   founder: {
     id: "founder",

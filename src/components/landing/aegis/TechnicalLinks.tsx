@@ -12,7 +12,7 @@ type TechnicalLinksLabels = {
 
 type TechnicalLinksProps = {
   labels: TechnicalLinksLabels
-  links: readonly [TechnicalLink, TechnicalLink]
+  links: readonly TechnicalLink[]
   trackEvent: AnalyticsTrack
 }
 

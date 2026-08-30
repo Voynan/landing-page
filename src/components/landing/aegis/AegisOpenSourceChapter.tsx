@@ -33,6 +33,7 @@ type AegisOpenSourceChapterProps = {
 function useAegisMotion(scope: RefObject<HTMLElement | null>) {
   useChapterMotion(scope, ({ profile, root, select }) => {
     const isMobile = profile === "mobile"
+    const calibrationBars = select(".aegis-chapter__calibration span")
     const timeline = gsap.timeline({
       scrollTrigger: {
         trigger: root,
@@ -61,8 +62,10 @@ function useAegisMotion(scope: RefObject<HTMLElement | null>) {
         },
         "-=0.28",
       )
-      .fromTo(
-        select(".aegis-chapter__calibration span"),
+
+    if (calibrationBars.length > 0) {
+      timeline.fromTo(
+        calibrationBars,
         { scaleX: 0, transformOrigin: "left center" },
         {
           scaleX: 1,
@@ -72,6 +75,7 @@ function useAegisMotion(scope: RefObject<HTMLElement | null>) {
         },
         "-=0.24",
       )
+    }
   })
 }
 
@@ -83,6 +87,10 @@ export function AegisOpenSourceChapter({
   const sectionRef = useRef<HTMLElement>(null)
   const technicalEvidence = content.technicalEvidence
   const hasApprovedLogo = content.logo.approval === "approved"
+  const isDevelopment = content.stage === "development"
+  const technicalLinks = isDevelopment
+    ? [content.github]
+    : [content.github, content.documentation]
   useAegisMotion(sectionRef)
 
   return (
@@ -102,7 +110,7 @@ export function AegisOpenSourceChapter({
             <p className="aegis-chapter__support">{content.support}</p>
             <TechnicalLinks
               labels={labels}
-              links={[content.github, content.documentation]}
+              links={technicalLinks}
               trackEvent={trackEvent}
             />
           </div>
@@ -113,22 +121,22 @@ export function AegisOpenSourceChapter({
             aria-label={labels.sectionLabel}
           >
             {hasApprovedLogo ? (
-              <picture className="aegis-chapter__logo">
-                <source
-                  media="(max-width: 560px)"
-                  srcSet={content.logo.mobileSrc}
-                />
-                <img
-                  src={content.logo.desktopSrc}
-                  alt={content.logo.alt}
-                  width={content.logo.width}
-                  height={content.logo.height}
-                  loading="lazy"
-                />
-              </picture>
+              <div className="aegis-chapter__brand">
+                <div className="aegis-chapter__brand-lockup">
+                  <img
+                    className="aegis-chapter__logo"
+                    src={content.logo.src}
+                    alt={content.logo.alt}
+                    width={content.logo.width}
+                    height={content.logo.height}
+                    loading="lazy"
+                  />
+                  <span className="aegis-chapter__latin-name">AEGIS</span>
+                </div>
+              </div>
             ) : null}
 
-            {technicalEvidence.approval === "approved" ? (
+            {!isDevelopment && technicalEvidence.approval === "approved" ? (
               <div className="aegis-chapter__approved-evidence">
                 <dl className="aegis-chapter__metadata">
                   <div>
@@ -150,7 +158,7 @@ export function AegisOpenSourceChapter({
                 </dl>
                 <RealCodeSample code={technicalEvidence.code} labels={labels} />
               </div>
-            ) : (
+            ) : !isDevelopment ? (
               <div className="aegis-chapter__pending">
                 <div className="aegis-chapter__calibration" aria-hidden="true">
                   <span />
@@ -160,7 +168,7 @@ export function AegisOpenSourceChapter({
                 </div>
                 <p>{labels.evidencePending}</p>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

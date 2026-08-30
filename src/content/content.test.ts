@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import {
   assertPublishableContent,
+  getPublicationBlockers,
   landingContentDraftSchema,
 } from "@/content/contracts"
 import { getLandingContent } from "@/content"
@@ -57,6 +58,24 @@ describe("landing content contracts", () => {
   it("reports all publication blockers instead of stopping at the first", () => {
     expect(() => assertPublishableContent(getLandingContent("en"))).toThrow(
       /products\.items\.0\.destination[\s\S]*products\.items\.1\.destination[\s\S]*products\.items\.2\.destination/i,
+    )
+  })
+
+  it("does not require release-only Aegis evidence during development", () => {
+    const content = getLandingContent("en")
+    const blockers = getPublicationBlockers({
+      ...content,
+      aegis: {
+        ...content.aegis,
+        stage: "development",
+      },
+    })
+
+    expect(blockers).not.toContain(
+      "aegis.documentation must be approved (currently received)",
+    )
+    expect(blockers).not.toContain(
+      "aegis.technicalEvidence must be approved (currently missing)",
     )
   })
 

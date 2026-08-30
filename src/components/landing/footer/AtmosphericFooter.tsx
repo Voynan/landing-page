@@ -145,15 +145,17 @@ export function AtmosphericFooter({
                   trackEvent={trackEvent}
                 />
               </li>
-              <li>
-                <Destination
-                  event={{ name: "aegis_docs_click" }}
-                  item={content.aegis.documentation}
-                  pendingId={`${pendingId}-docs`}
-                  pendingLabel={labels.destinationPending}
-                  trackEvent={trackEvent}
-                />
-              </li>
+              {content.aegis.stage === "released" ? (
+                <li>
+                  <Destination
+                    event={{ name: "aegis_docs_click" }}
+                    item={content.aegis.documentation}
+                    pendingId={`${pendingId}-docs`}
+                    pendingLabel={labels.destinationPending}
+                    trackEvent={trackEvent}
+                  />
+                </li>
+              ) : null}
             </ul>
           </nav>
 

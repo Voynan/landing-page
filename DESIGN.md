@@ -200,6 +200,8 @@ On internal foundation specimens, each canonical swatch is accompanied by its to
 
 **The One Accent Rule.** Copper is the only interface accent, and it must not compete simultaneously across the eclipse thread, multiple headings, and multiple controls in one composition.
 
+**The Product Mark Exception.** An open-source or product sub-brand keeps its own colors inside its own lockup — the Aegis wordmark carries a purple-to-magenta gradient (#6D28D9 → #A21CAF → #EC4899) and is exempt from the One Accent Rule. The exemption covers the lockup and nothing else: no product-brand color may be applied to running text, links, borders, focus rings, hover states, or any other UI affordance anywhere on the site. A product mark must also stay below the optical weight of the copper signals in the same viewport, so the reader never learns a second accent that the interface does not honor. A sub-brand color with no written exception is drift, not identity.
+
 **The Measured Pairing Rule.** A canonical swatch is documented with function and pairing; accessibility claims come from measured contrast, never palette intuition.
 
 ## Typography

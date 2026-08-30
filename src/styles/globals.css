@@ -2609,33 +2609,25 @@
 
   .aegis-chapter__layout {
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: var(--space-8);
-    align-items: center;
+    min-height: clamp(32rem, 52vw, 42rem);
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    gap: clamp(var(--space-8), 5vw, var(--space-16));
+    align-items: stretch;
   }
 
   .aegis-chapter__copy {
-    display: grid;
+    display: flex;
     min-width: 0;
-    grid-column: 1 / span 6;
-    grid-template-columns: 6.5rem minmax(0, 1fr);
-    column-gap: var(--space-6);
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-block: var(--space-8);
   }
 
   .aegis-chapter__status {
-    grid-column: 1;
-    grid-row: 1 / span 4;
-    margin: 0;
-    padding-top: var(--space-2);
+    margin: 0 auto auto 0;
     color: var(--color-copper-light);
     font-family: var(--font-technical);
     font-size: var(--text-kicker);
-  }
-
-  .aegis-chapter h2,
-  .aegis-chapter__support,
-  .technical-links {
-    grid-column: 2;
   }
 
   .aegis-chapter h2 {
@@ -2675,8 +2667,36 @@
   }
 
   .aegis-chapter__evidence {
+    position: relative;
+    display: grid;
     min-width: 0;
-    grid-column: 8 / -1;
+    align-content: center;
+    padding-left: clamp(var(--space-8), 5vw, var(--space-16));
+    border-left: 1px solid var(--color-line);
+  }
+
+  .aegis-chapter__brand {
+    position: relative;
+    display: grid;
+    min-height: clamp(22rem, 38vw, 34rem);
+    place-items: center;
+  }
+
+  .aegis-chapter__brand::before {
+    position: absolute;
+    width: min(82%, 28rem);
+    aspect-ratio: 1;
+    border: 1px solid var(--color-line);
+    border-radius: 50%;
+    content: "";
+  }
+
+  .aegis-chapter__brand-lockup {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: min(84%, 31rem);
+    justify-items: center;
   }
 
   .aegis-chapter__pending {
@@ -2749,11 +2769,18 @@
   }
 
   .aegis-chapter__logo {
-    margin-bottom: var(--space-6);
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
-  .aegis-chapter__logo img {
-    width: 100%;
+  .aegis-chapter__latin-name {
+    margin-top: var(--space-3);
+    color: var(--color-ivory);
+    font-size: clamp(0.875rem, 1.35vw, 1.125rem);
+    font-weight: var(--font-weight-regular);
+    letter-spacing: 0.28em;
+    line-height: 1;
   }
 
   .aegis-chapter__metadata {
@@ -3322,17 +3349,7 @@
   }
 
   .aegis-chapter__layout {
-    grid-template-columns: repeat(8, minmax(0, 1fr));
-  }
-
-  .aegis-chapter__copy {
-    grid-column: 1 / span 4;
-    grid-template-columns: 5.5rem minmax(0, 1fr);
-    column-gap: var(--space-4);
-  }
-
-  .aegis-chapter__evidence {
-    grid-column: 5 / -1;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   }
 
   .founder-note__copy {
@@ -3559,36 +3576,39 @@
   }
 
   .aegis-chapter__layout {
-    display: block;
+    display: flex;
+    min-height: auto;
+    flex-direction: column;
+    gap: 0;
   }
 
   .aegis-chapter__copy {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .aegis-chapter h2 {
-    order: 1;
-  }
-
-  .aegis-chapter__support {
     order: 2;
+    padding: var(--space-12) 0 0;
   }
 
   .aegis-chapter__status {
-    order: 3;
-    margin-top: var(--space-6);
-    padding-top: 0;
+    margin: 0 0 var(--space-8);
   }
 
   .technical-links {
-    order: 4;
     display: grid;
     margin-top: var(--space-6);
   }
 
   .aegis-chapter__evidence {
-    margin-top: var(--space-12);
+    order: 1;
+    padding: 0 0 var(--space-8);
+    border-bottom: 1px solid var(--color-line);
+    border-left: 0;
+  }
+
+  .aegis-chapter__brand {
+    min-height: clamp(16rem, 76vw, 23rem);
+  }
+
+  .aegis-chapter__brand-lockup {
+    width: min(80%, 24rem);
   }
 
   .aegis-chapter__metadata {

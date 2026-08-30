@@ -3,7 +3,7 @@
 import "@testing-library/jest-dom/vitest"
 
 import userEvent from "@testing-library/user-event"
-import { cleanup, render, screen } from "@testing-library/react"
+import { cleanup, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, expect, it, vi } from "vitest"
 
 import { AegisOpenSourceChapter } from "@/components/landing/aegis/AegisOpenSourceChapter"
@@ -28,32 +28,78 @@ const labels = {
 afterEach(() => {
   cleanup()
   vi.restoreAllMocks()
+  vi.unstubAllGlobals()
 })
 
-it("renders coming soon without a fake terminal or invented code", () => {
+it("renders only approved development-stage facts and the GitHub destination", () => {
+  const base = getLandingContent("en").aegis
+
   render(
     <AegisOpenSourceChapter
-      content={getLandingContent("en").aegis}
+      content={{ ...base, stage: "development" }}
       labels={labels}
     />,
   )
 
   expect(screen.getByText(/Coming soon/i)).toBeInTheDocument()
-  expect(screen.getByText(labels.evidencePending)).toBeInTheDocument()
+  expect(
+    screen.getByRole("heading", {
+      name: "File encryption, without the friction.",
+    }),
+  ).toBeInTheDocument()
+  expect(
+    screen.getByText(
+      "A library for encrypting and authenticating files of any format or size with AES-GCM, designed for straightforward implementation.",
+    ),
+  ).toBeInTheDocument()
+  expect(screen.getByRole("img", { name: /Aegis logo/i })).toBeInTheDocument()
+  expect(screen.getByText("AEGIS")).toBeVisible()
   expect(document.querySelector("code")).not.toBeInTheDocument()
   expect(
     screen.getByRole("navigation", { name: labels.linksLabel }),
   ).toBeInTheDocument()
-  const githubLink = screen.getByRole("link", { name: "View on GitHub" })
-  expect(githubLink).toHaveAttribute("aria-disabled", "true")
-  const pendingDescriptionId = githubLink.getAttribute("aria-describedby")
-  expect(pendingDescriptionId).toBeTruthy()
-  expect(document.getElementById(pendingDescriptionId ?? "")).toHaveTextContent(
-    labels.linkPending,
+  expect(screen.getByRole("link", { name: "View on GitHub" })).toHaveAttribute(
+    "href",
+    "https://github.com/Voynan/aegis",
   )
   expect(
-    screen.getByRole("link", { name: "Read the docs" }),
-  ).not.toHaveAttribute("href")
+    screen.queryByRole("link", { name: "Read the docs" }),
+  ).not.toBeInTheDocument()
+  expect(screen.queryByText(labels.evidencePending)).not.toBeInTheDocument()
+})
+
+it("does not target absent technical evidence during development motion", async () => {
+  vi.stubGlobal(
+    "matchMedia",
+    vi.fn((query: string) => ({
+      matches: query === "(min-width: 61.3125rem)",
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(() => true),
+    })),
+  )
+  const consoleWarn = vi.spyOn(console, "warn").mockImplementation(() => {})
+
+  render(
+    <AegisOpenSourceChapter
+      content={{ ...getLandingContent("en").aegis, stage: "development" }}
+      labels={labels}
+    />,
+  )
+
+  await waitFor(() => {
+    expect(document.querySelector("#aegis")).toHaveAttribute(
+      "data-motion-profile",
+      "desktop",
+    )
+  })
+  expect(consoleWarn).not.toHaveBeenCalledWith(
+    expect.stringContaining("GSAP target"),
+  )
 })
 
 it("renders approved technical evidence and destinations", () => {
@@ -64,6 +110,7 @@ it("renders approved technical evidence and destinations", () => {
       labels={labels}
       content={{
         ...base,
+        stage: "released",
         github: {
           label: "View on GitHub",
           href: "https://github.com/voynan/aegis",
@@ -111,6 +158,7 @@ it("reports each approved Aegis destination", async () => {
       trackEvent={(event) => events.push(event)}
       content={{
         ...base,
+        stage: "released",
         github: {
           label: "View on GitHub",
           href: "https://github.com/voynan/aegis",

@@ -1,3 +1,5 @@
+import aegisLogo from "@/assets/aegis/aegis-logo.svg"
+
 import type { LandingContentDraft } from "../contracts.js"
 
 export const portugueseLandingContent = {
@@ -146,15 +148,31 @@ export const portugueseLandingContent = {
   },
   aegis: {
     id: "aegis",
+    stage: "development",
     kicker: "Open source / Em breve",
     title: "Criptografia de arquivos, sem atrito.",
     support:
       "Uma biblioteca para criptografar e autenticar arquivos de qualquer formato ou tamanho com AES-GCM, com implementação direta para desenvolvedores.",
-    github: { label: "Ver no GitHub", approval: "missing" },
-    documentation: { label: "Ler a documentação", approval: "missing" },
+    github: {
+      label: "Ver no GitHub",
+      href: "https://github.com/Voynan/aegis",
+      approval: "approved",
+    },
+    documentation: {
+      label: "Ler a documentação",
+      href: "https://github.com/Voynan/aegis/blob/main/README.md",
+      approval: "received",
+    },
     technicalEvidence: { approval: "missing" },
-    logo: { approval: "missing" },
-    copyApproval: "received",
+    logo: {
+      src: aegisLogo,
+      alt: "Logotipo do Aegis: a palavra αιγις em letras gregas, com gradiente do roxo ao magenta.",
+      width: 649,
+      height: 262,
+      source: "src/assets/aegis/aegis-logo.svg — ativo próprio da Voynan",
+      approval: "approved",
+    },
+    copyApproval: "approved",
   },
   founder: {
     id: "founder",

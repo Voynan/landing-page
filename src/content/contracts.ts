@@ -157,6 +157,29 @@ const mediaDraftSchema = z.discriminatedUnion("approval", [
   approvedMediaSchema,
 ])
 
+const pendingBrandLogoSchema = z.object({
+  src: optionalNonEmptyString,
+  alt: optionalNonEmptyString,
+  width: z.number().int().positive().optional(),
+  height: z.number().int().positive().optional(),
+  source: optionalNonEmptyString,
+  approval: pendingApprovalSchema,
+})
+
+const approvedBrandLogoSchema = z.object({
+  src: nonEmptyString,
+  alt: nonEmptyString,
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+  source: nonEmptyString,
+  approval: z.literal("approved"),
+})
+
+const brandLogoDraftSchema = z.discriminatedUnion("approval", [
+  pendingBrandLogoSchema,
+  approvedBrandLogoSchema,
+])
+
 const pendingAegisEvidenceSchema = z.object({
   releaseStatus: optionalNonEmptyString,
   license: optionalNonEmptyString,
@@ -312,13 +335,14 @@ const servicesSchema = z.object({
 
 const aegisSchema = z.object({
   id: z.literal("aegis"),
+  stage: z.enum(["development", "released"]),
   kicker: nonEmptyString,
   title: nonEmptyString,
   support: nonEmptyString,
   github: linkDraftSchema,
   documentation: linkDraftSchema,
   technicalEvidence: aegisEvidenceDraftSchema,
-  logo: mediaDraftSchema,
+  logo: brandLogoDraftSchema,
   copyApproval: approvalSchema,
 })
 
@@ -413,16 +437,18 @@ export function getPublicationBlockers(input: LandingContentDraft): string[] {
     approval: content.aegis.copyApproval,
   })
   addApprovalBlocker(blockers, "aegis.github", content.aegis.github)
-  addApprovalBlocker(
-    blockers,
-    "aegis.documentation",
-    content.aegis.documentation,
-  )
-  addApprovalBlocker(
-    blockers,
-    "aegis.technicalEvidence",
-    content.aegis.technicalEvidence,
-  )
+  if (content.aegis.stage === "released") {
+    addApprovalBlocker(
+      blockers,
+      "aegis.documentation",
+      content.aegis.documentation,
+    )
+    addApprovalBlocker(
+      blockers,
+      "aegis.technicalEvidence",
+      content.aegis.technicalEvidence,
+    )
+  }
   addApprovalBlocker(blockers, "aegis.logo", content.aegis.logo)
   addApprovalBlocker(blockers, "founder.profile", content.founder.profile)
   addApprovalBlocker(blockers, "founder.linkedIn", content.founder.linkedIn)
