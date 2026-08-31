@@ -398,7 +398,7 @@
   .legal-footer__frame {
     align-items: flex-start;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
     padding-block: var(--space-8);
   }
 }
