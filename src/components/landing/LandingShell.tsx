@@ -73,9 +73,9 @@ export function LandingShell({
         <ProductStudioHero content={content.hero} />
         <StudioThesis content={content.thesis} />
         <SaaSStoryStage
+          content={content.products}
           labels={productStageLabels}
           motionMode="auto"
-          products={content.products.items}
         />
         <CredibilityField
           content={content.credibility}

@@ -8,8 +8,17 @@
   "products": {
     "sectionLabel": "Produtos SaaS",
     "progressLabel": "Capítulos dos produtos",
-    "mediaPending": "Mídia aguardando captura aprovada",
-    "destinationPending": "Destino aguardando aprovação"
+    "conceptualEvidence": "Representação conceitual",
+    "destinationPending": "Destino aguardando aprovação",
+    "productionStatus": "Em produção",
+    "developmentStatus": "Em desenvolvimento",
+    "productionShortStatus": "Prod.",
+    "developmentShortStatus": "Desenv.",
+    "mobileGridLabel": "Escolha um produto",
+    "mobileInteractionHint": "Toque em um produto para ver detalhes",
+    "collapseProduct": "Fechar detalhes",
+    "previousProduct": "Produto anterior",
+    "nextProduct": "Próximo produto"
   },
   "credibility": {
     "sectionLabel": "Credibilidade",
@@ -92,7 +101,8 @@
     "founder": "Founder",
     "language": "Idioma",
     "destinationPending": "Destino aguardando aprovação",
-    "creatorNoticePending": "Nota de autoria aguardando aprovação"
+    "creatorNoticePending": "Nota de autoria aguardando aprovação",
+    "developmentStatus": "Em desenvolvimento"
   },
   "metadata": {
     "languageLabel": "Português"

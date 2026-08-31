@@ -1,6 +1,12 @@
 import { z } from "zod"
 
-export const productIds = ["cryptovault", "investfusion", "constrully"] as const
+export const productIds = [
+  "cryptovault",
+  "bullledger",
+  "safenumber",
+  "constrully",
+] as const
+export const productStages = ["production", "development"] as const
 export const locales = ["pt", "en"] as const
 export const sectionIds = [
   "hero",
@@ -14,6 +20,7 @@ export const sectionIds = [
 ] as const
 
 export type ProductId = (typeof productIds)[number]
+export type ProductStage = (typeof productStages)[number]
 export type Locale = (typeof locales)[number]
 export type SectionId = (typeof sectionIds)[number]
 
@@ -342,6 +349,8 @@ const thesisSchema = z.object({
 
 const productSchema = z.object({
   id: z.enum(productIds),
+  name: nonEmptyString,
+  stage: z.enum(productStages),
   kicker: nonEmptyString,
   title: nonEmptyString,
   support: nonEmptyString,
@@ -354,8 +363,12 @@ const productSchema = z.object({
 
 const productsSchema = z.object({
   id: z.literal("products"),
+  kicker: nonEmptyString,
+  title: nonEmptyString,
+  summary: nonEmptyString,
+  closing: nonEmptyString,
   items: z
-    .tuple([productSchema, productSchema, productSchema])
+    .tuple([productSchema, productSchema, productSchema, productSchema])
     .superRefine((items, context) => {
       const expectedIds: ProductId[] = [...productIds]
 
@@ -479,9 +492,11 @@ export function getPublicationBlockers(input: LandingContentDraft): string[] {
     addApprovalBlocker(blockers, `${path}.copyApproval`, {
       approval: product.copyApproval,
     })
-    addApprovalBlocker(blockers, `${path}.destination`, product.destination)
     addApprovalBlocker(blockers, `${path}.claimReview`, product.claimReview)
-    addApprovalBlocker(blockers, `${path}.media`, product.media)
+    if (product.stage === "production") {
+      addApprovalBlocker(blockers, `${path}.destination`, product.destination)
+      addApprovalBlocker(blockers, `${path}.media`, product.media)
+    }
   })
 
   content.credibility.metrics.forEach((metric, index) => {

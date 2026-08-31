@@ -1,187 +1,150 @@
-import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
-import { ProductChapter } from "@/components/landing/products/ProductChapter"
-import { ProgressOrbit } from "@/components/landing/products/ProgressOrbit"
+import { MobileProductExplorer } from "@/components/landing/products/MobileProductExplorer"
+import { ProductPanel } from "@/components/landing/products/ProductPanel"
+import { ProductProgressIndex } from "@/components/landing/products/ProductProgressIndex"
+import { useProductObservatory } from "@/components/landing/products/useProductObservatory"
 import { PearlescentStarfield } from "@/components/motion/PearlescentStarfield"
+import {
+  motionQueries,
+  type MotionProfile,
+} from "@/components/motion/motionQueries"
 import { useChapterMotion } from "@/components/motion/useChapterMotion"
 import type { LandingContentDraft, ProductId } from "@/content"
 import { useProductVisibility } from "@/hooks/useProductVisibility"
 import { track, type AnalyticsTrack } from "@/lib/analytics"
-import { gsap, ScrollTrigger } from "@/lib/gsap"
 
 type SaaSStoryStageLabels = {
   sectionLabel: string
   progressLabel: string
-  mediaPending: string
+  conceptualEvidence: string
   destinationPending: string
+  productionStatus: string
+  developmentStatus: string
+  productionShortStatus: string
+  developmentShortStatus: string
+  mobileGridLabel: string
+  mobileInteractionHint: string
+  collapseProduct: string
+  previousProduct: string
+  nextProduct: string
 }
 
 type SaaSStoryStageProps = {
+  content: LandingContentDraft["products"]
   labels: SaaSStoryStageLabels
   motionMode: "auto" | "static"
-  products: LandingContentDraft["products"]["items"]
   onActiveProductChange?: (productId: ProductId) => void
   trackEvent?: AnalyticsTrack
 }
 
-function useProductStoryMotion(
-  scope: RefObject<HTMLElement | null>,
-  enabled: boolean,
-) {
-  useChapterMotion(
-    scope,
-    ({ profile, root, select }) => {
-      const isMobile = profile === "mobile"
-      const chapters = gsap.utils.toArray<HTMLElement>(".product-chapter", root)
+function useMobileViewport() {
+  const [state, setState] = useState({ matches: false, resolved: false })
 
-      chapters.forEach((chapter) => {
-        const copy = chapter.querySelector(".product-chapter__copy")
-        const media = chapter.querySelector(".product-chapter__media")
-        const productId = chapter.dataset.product
-        const timeline = gsap.timeline({
-          scrollTrigger: {
-            id: `product-motion-${productId}`,
-            trigger: chapter,
-            start: isMobile ? "top 84%" : "top 74%",
-            end: isMobile ? "center 60%" : "bottom 46%",
-            scrub: isMobile ? false : profile === "desktop" ? 0.35 : 0.18,
-            toggleActions: isMobile ? "play none none reverse" : undefined,
-          },
-        })
+  useEffect(() => {
+    const query = window.matchMedia(motionQueries.isMobile)
+    const update = () => setState({ matches: query.matches, resolved: true })
 
-        timeline
-          .fromTo(
-            copy,
-            { opacity: 0, x: isMobile ? 0 : -32, y: isMobile ? 18 : 0 },
-            { opacity: 1, x: 0, y: 0, duration: 0.5, ease: "power3.out" },
-          )
-          .fromTo(
-            media,
-            { opacity: 0, scale: 0.97, x: isMobile ? 0 : 24 },
-            {
-              opacity: 1,
-              scale: 1,
-              x: 0,
-              duration: 0.64,
-              ease: "power2.out",
-            },
-            "-=0.28",
-          )
-      })
+    update()
+    query.addEventListener("change", update)
+    return () => query.removeEventListener("change", update)
+  }, [])
 
-      if (profile === "desktop") {
-        const [progress] = select(".product-progress") as HTMLElement[]
-
-        if (progress) {
-          ScrollTrigger.create({
-            id: "products-progress-pin",
-            trigger: root,
-            start: "top 96px",
-            end: () =>
-              `+=${Math.round(Math.min(window.innerHeight * 0.72, 680))}`,
-            pin: progress,
-            pinSpacing: false,
-            anticipatePin: 1,
-          })
-        }
-      }
-
-      if (profile === "desktop") {
-        gsap.to(select(".product-progress__orbit"), {
-          rotation: 180,
-          ease: "none",
-          scrollTrigger: {
-            id: "products-progress-orbit",
-            trigger: root,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 0.5,
-          },
-        })
-      }
-    },
-    { enabled },
-  )
+  return state
 }
 
 export function SaaSStoryStage({
+  content,
   labels,
   motionMode,
-  products,
   onActiveProductChange,
   trackEvent = track,
 }: SaaSStoryStageProps) {
   const sectionRef = useRef<HTMLElement>(null)
-  const initialProductId = products[0]?.id ?? "cryptovault"
-  const [activeProductId, setActiveProductId] =
-    useState<ProductId>(initialProductId)
-  const activeProductRef = useRef<ProductId>(initialProductId)
-  const lastReportedProductRef = useRef<ProductId | undefined>(undefined)
-  const chapterNodes = useRef(new Map<ProductId, HTMLElement>())
-  const intersectionRatios = useRef(new Map<ProductId, number>())
-  useProductVisibility(activeProductId, trackEvent)
-  useProductStoryMotion(sectionRef, motionMode === "auto")
-  const activateProduct = useCallback(
+  const [motionProfile, setMotionProfile] = useState<MotionProfile>("static")
+  const [mobileProductId, setMobileProductId] = useState<ProductId | null>(null)
+  const mobileViewport = useMobileViewport()
+  const orderedProductIds = useMemo(
+    () => content.items.map((product) => product.id),
+    [content.items],
+  )
+  const { activeProductId, activateProduct, segmentRef } =
+    useProductObservatory({
+      productIds: orderedProductIds,
+      onActiveProductChange,
+    })
+  const enhanced = motionMode === "auto" && motionProfile === "desktop"
+  const mobilePresentation =
+    motionMode === "auto" &&
+    (motionProfile === "mobile" ||
+      (motionProfile === "reduced" &&
+        mobileViewport.resolved &&
+        mobileViewport.matches))
+  const selectProduct = useCallback(
     (productId: ProductId) => {
-      if (activeProductRef.current !== productId) {
-        activeProductRef.current = productId
-        setActiveProductId(productId)
-      }
+      activateProduct(productId)
+      const targetId = enhanced
+        ? `product-${productId}-segment`
+        : `product-${productId}`
 
-      if (
-        onActiveProductChange &&
-        lastReportedProductRef.current !== productId
-      ) {
-        lastReportedProductRef.current = productId
-        onActiveProductChange(productId)
-      }
+      document.getElementById(targetId)?.scrollIntoView({ block: "start" })
+    },
+    [activateProduct, enhanced],
+  )
+
+  const selectMobileProduct = useCallback(
+    (productId: ProductId | null) => {
+      setMobileProductId(productId)
+      if (productId) onActiveProductChange?.(productId)
     },
     [onActiveProductChange],
   )
 
   useEffect(() => {
-    if (typeof IntersectionObserver === "undefined") return
+    const syncProductFromHash = () => {
+      const productId = orderedProductIds.find(
+        (candidate) => window.location.hash === `#product-${candidate}`,
+      )
 
-    intersectionRatios.current = new Map(
-      products.map((product) => [product.id, 0]),
-    )
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          const productId = entry.target.getAttribute(
-            "data-product",
-          ) as ProductId | null
+      if (!productId) return
 
-          if (productId && intersectionRatios.current.has(productId)) {
-            intersectionRatios.current.set(
-              productId,
-              entry.isIntersecting ? entry.intersectionRatio : 0,
-            )
-          }
-        }
+      if (mobilePresentation) {
+        selectMobileProduct(productId)
+        window.requestAnimationFrame(() => {
+          document
+            .getElementById(`mobile-product-${productId}`)
+            ?.scrollIntoView({ block: "start" })
+        })
+        return
+      }
 
-        let productId = activeProductRef.current
-        let highestRatio = intersectionRatios.current.get(productId) ?? 0
+      selectProduct(productId)
+    }
 
-        for (const product of products) {
-          const productRatio = intersectionRatios.current.get(product.id) ?? 0
+    syncProductFromHash()
+    window.addEventListener("hashchange", syncProductFromHash)
+    return () => window.removeEventListener("hashchange", syncProductFromHash)
+  }, [
+    mobilePresentation,
+    orderedProductIds,
+    selectMobileProduct,
+    selectProduct,
+  ])
 
-          if (productRatio > highestRatio) {
-            productId = product.id
-            highestRatio = productRatio
-          }
-        }
+  const visibleProductId =
+    motionMode === "auto" && motionProfile === "static"
+      ? null
+      : motionProfile === "reduced" && !mobileViewport.resolved
+        ? null
+        : mobilePresentation
+          ? mobileProductId
+          : activeProductId
 
-        if (highestRatio > 0) {
-          activateProduct(productId)
-        }
-      },
-      { rootMargin: "-34% 0px -46%", threshold: [0, 0.05, 0.12, 0.2] },
-    )
-
-    chapterNodes.current.forEach((node) => observer.observe(node))
-    return () => observer.disconnect()
-  }, [activateProduct, products])
+  useProductVisibility(visibleProductId, trackEvent)
+  useChapterMotion(sectionRef, () => undefined, {
+    enabled: motionMode === "auto",
+    onProfileChange: setMotionProfile,
+  })
 
   return (
     <section
@@ -193,29 +156,63 @@ export function SaaSStoryStage({
     >
       <PearlescentStarfield motionId="products-starfield-drift" variant={2} />
 
-      <div className="saas-story-stage__inner">
-        <ProgressOrbit
-          activeProductId={activeProductId}
-          label={labels.progressLabel}
-          productIds={products.map((product) => product.id)}
-        />
+      <header className="product-observatory__overture">
+        <span>{content.kicker}</span>
+        <h2>{content.title}</h2>
+        <p>{content.summary}</p>
+      </header>
 
-        <div className="saas-story-stage__chapters">
-          {products.map((product) => (
-            <ProductChapter
-              key={product.id}
-              active={product.id === activeProductId}
-              articleRef={(node) => {
-                if (node) chapterNodes.current.set(product.id, node)
-                else chapterNodes.current.delete(product.id)
-              }}
-              labels={labels}
-              onActivate={activateProduct}
-              product={product}
-              trackEvent={trackEvent}
+      {mobilePresentation ? (
+        <MobileProductExplorer
+          activeProductId={mobileProductId}
+          labels={labels}
+          onProductSelect={selectMobileProduct}
+          products={content.items}
+          reducedMotion={motionProfile === "reduced"}
+          trackEvent={trackEvent}
+        />
+      ) : (
+        <div className="product-observatory">
+          <div className="product-observatory__stage">
+            <ProductProgressIndex
+              activeProductId={activeProductId}
+              developmentStatus={labels.developmentStatus}
+              label={labels.progressLabel}
+              onSelect={selectProduct}
+              productionStatus={labels.productionStatus}
+              products={content.items}
             />
-          ))}
+
+            <div className="product-observatory__panels">
+              {content.items.map((product) => (
+                <ProductPanel
+                  key={product.id}
+                  active={product.id === activeProductId}
+                  enhanced={enhanced}
+                  labels={labels}
+                  product={product}
+                  trackEvent={trackEvent}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="product-observatory__segments" aria-hidden="true">
+            {content.items.map((product) => (
+              <div
+                key={product.id}
+                id={`product-${product.id}-segment`}
+                ref={segmentRef(product.id)}
+                className="product-observatory__segment"
+                data-product={product.id}
+              />
+            ))}
+          </div>
         </div>
+      )}
+
+      <div className="product-observatory__release">
+        <p>{content.closing}</p>
       </div>
     </section>
   )

@@ -1,8 +1,9 @@
 import { z } from "zod"
 
 import { publicConfig } from "@/config/publicConfig"
+import { productIds } from "@/content/contracts"
 
-const productIdSchema = z.enum(["cryptovault", "investfusion", "constrully"])
+const productIdSchema = z.enum(productIds)
 const contactErrorSchema = z.enum([
   "validation",
   "timeout",

@@ -29,8 +29,17 @@ const navigationContent = {
 const productStageLabels = {
   sectionLabel: "Products",
   progressLabel: "Product chapters",
-  mediaPending: "Media awaiting approved capture",
+  conceptualEvidence: "Conceptual representation",
   destinationPending: "Destination awaiting approval",
+  productionStatus: "In production",
+  developmentStatus: "In development",
+  productionShortStatus: "Live",
+  developmentShortStatus: "Dev.",
+  mobileGridLabel: "Choose a product",
+  mobileInteractionHint: "Tap a product to see details",
+  collapseProduct: "Close details",
+  previousProduct: "Previous product",
+  nextProduct: "Next product",
 } as const
 
 const supportingChapterLabels = {
@@ -101,6 +110,7 @@ const supportingChapterLabels = {
     language: "Language",
     destinationPending: "Destination awaiting approval",
     creatorNoticePending: "Creator notice awaiting approval",
+    developmentStatus: "In development",
   },
 } as const
 
@@ -200,5 +210,5 @@ it("provides one page heading, a skip link, and stable chapter identifiers", () 
   expect(productSection).toBeInTheDocument()
   expect(
     within(productSection as HTMLElement).getAllByRole("article"),
-  ).toHaveLength(3)
+  ).toHaveLength(4)
 })

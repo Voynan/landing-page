@@ -21,7 +21,7 @@ export const englishLandingContent = {
     support:
       "Our own SaaS products and software engineering that turn ideas into systems built for the real world.",
     contextLine:
-      "3 SaaS products in production · 1 open-source project on the way · end-to-end development",
+      "3 SaaS products in production · 1 product in development · 1 open-source project in development",
     productCta: { label: "Explore our products", sectionId: "products" },
     contactCta: { label: "Build with us", sectionId: "contact" },
     approval: "received",
@@ -34,9 +34,16 @@ export const englishLandingContent = {
   },
   products: {
     id: "products",
+    kicker: "Our products",
+    title: "Products we build, operate, and continue to evolve.",
+    summary: "3 SaaS products in production · 1 product in development",
+    closing:
+      "The experience of operating these products is the same experience we bring to every client project.",
     items: [
       {
         id: "cryptovault",
+        name: "CryptoVault",
+        stage: "production",
         kicker: "01 / SaaS",
         title: "Protect files. Prove their integrity.",
         support:
@@ -59,7 +66,9 @@ export const englishLandingContent = {
         copyApproval: "received",
       },
       {
-        id: "investfusion",
+        id: "bullledger",
+        name: "BullLedger",
+        stage: "production",
         kicker: "02 / SaaS",
         title: "Your investments, beyond spreadsheets.",
         support:
@@ -70,7 +79,7 @@ export const englishLandingContent = {
           "Organization of information for income tax reporting",
         ],
         destination: {
-          label: "Explore InvestFusion",
+          label: "Explore BullLedger",
           approval: "missing",
         },
         claimReview: {
@@ -82,8 +91,35 @@ export const englishLandingContent = {
         copyApproval: "received",
       },
       {
-        id: "constrully",
+        id: "safenumber",
+        name: "SafeNumber",
+        stage: "production",
         kicker: "03 / SaaS",
+        title: "Verify contacts. Organize fraud evidence.",
+        support:
+          "Centralize reports about phone numbers and email addresses used to impersonate company professionals, with a verification portal built for their clients.",
+        capabilities: [
+          "Cross-referenced reports on scam attempts",
+          "Contact verification and reporting portal",
+          "Submission of Pix keys, screenshots, and a dedicated email address for potential legal action",
+        ],
+        destination: {
+          label: "Explore SafeNumber",
+          approval: "missing",
+        },
+        claimReview: {
+          text: "Organization of reports and evidence of professional identity fraud attempts",
+          category: "legal",
+          approval: "missing",
+        },
+        media: { approval: "missing" },
+        copyApproval: "received",
+      },
+      {
+        id: "constrully",
+        name: "Constrully",
+        stage: "development",
+        kicker: "04 / SaaS",
         title: "Every construction cost, under control.",
         support:
           "Manage expenses, track taxes and generate reports with an up-to-date view of every construction project.",

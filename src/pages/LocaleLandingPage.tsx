@@ -26,8 +26,17 @@ function LocalizedLandingPage({ locale }: LocaleLandingPageProps) {
       productStageLabels={{
         sectionLabel: t("products.sectionLabel"),
         progressLabel: t("products.progressLabel"),
-        mediaPending: t("products.mediaPending"),
+        conceptualEvidence: t("products.conceptualEvidence"),
         destinationPending: t("products.destinationPending"),
+        productionStatus: t("products.productionStatus"),
+        developmentStatus: t("products.developmentStatus"),
+        productionShortStatus: t("products.productionShortStatus"),
+        developmentShortStatus: t("products.developmentShortStatus"),
+        mobileGridLabel: t("products.mobileGridLabel"),
+        mobileInteractionHint: t("products.mobileInteractionHint"),
+        collapseProduct: t("products.collapseProduct"),
+        previousProduct: t("products.previousProduct"),
+        nextProduct: t("products.nextProduct"),
       }}
       skipLinkLabel={t("accessibility.skipToContent")}
       supportingChapterLabels={{
@@ -102,6 +111,7 @@ function LocalizedLandingPage({ locale }: LocaleLandingPageProps) {
           language: t("footer.language"),
           destinationPending: t("footer.destinationPending"),
           creatorNoticePending: t("footer.creatorNoticePending"),
+          developmentStatus: t("footer.developmentStatus"),
         },
       }}
       navigationContent={{

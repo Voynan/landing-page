@@ -20,12 +20,13 @@ type ChapterMotionSetup = (context: ChapterMotionContext) => void
 
 type ChapterMotionOptions = {
   enabled?: boolean
+  onProfileChange?: (profile: MotionProfile) => void
 }
 
 function useChapterMotion(
   scope: RefObject<HTMLElement | null>,
   setup: ChapterMotionSetup,
-  { enabled = true }: ChapterMotionOptions = {},
+  { enabled = true, onProfileChange }: ChapterMotionOptions = {},
 ) {
   useGSAP(
     () => {
@@ -34,6 +35,7 @@ function useChapterMotion(
 
       if (!enabled) {
         gsap.set(root, { attr: { "data-motion-profile": "static" } })
+        onProfileChange?.("static")
         return
       }
 
@@ -46,6 +48,7 @@ function useChapterMotion(
             context.conditions as MotionConditions,
           )
           gsap.set(root, { attr: { "data-motion-profile": profile } })
+          onProfileChange?.(profile)
 
           if (profile === "reduced" || profile === "static") return
 
@@ -62,7 +65,11 @@ function useChapterMotion(
         matchMedia.revert()
       }
     },
-    { dependencies: [enabled], revertOnUpdate: true, scope },
+    {
+      dependencies: [enabled, onProfileChange],
+      revertOnUpdate: true,
+      scope,
+    },
   )
 }
 

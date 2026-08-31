@@ -16,6 +16,7 @@ export type {
   LandingContentDraft,
   Locale,
   ProductId,
+  ProductStage,
   PublishedLandingContent,
   SectionId,
   SocialPlatform,

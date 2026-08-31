@@ -6,10 +6,11 @@ import { track, type AllowedEvent } from "@/lib/analytics"
 type AnalyticsTrack = (event: AllowedEvent) => unknown
 
 export function useProductVisibility(
-  productId: ProductId,
+  productId: ProductId | null,
   record: AnalyticsTrack = track,
 ) {
   useEffect(() => {
+    if (!productId) return
     record({ name: "product_view", productId })
   }, [productId, record])
 }

@@ -28,16 +28,26 @@ function installMatchMedia({ reduced = false } = {}) {
   )
 }
 
-function ChapterHarness({ onEnhance }: { onEnhance: () => void }) {
+function ChapterHarness({
+  onEnhance,
+  onProfileChange,
+}: {
+  onEnhance: () => void
+  onProfileChange?: (profile: string) => void
+}) {
   const scope = useRef<HTMLElement>(null)
 
-  useChapterMotion(scope, ({ root, select }) => {
-    onEnhance()
-    gsap.to(select("[data-motion-target]"), {
-      x: 12,
-      scrollTrigger: { id: "chapter-test", trigger: root },
-    })
-  })
+  useChapterMotion(
+    scope,
+    ({ root, select }) => {
+      onEnhance()
+      gsap.to(select("[data-motion-target]"), {
+        x: 12,
+        scrollTrigger: { id: "chapter-test", trigger: root },
+      })
+    },
+    { onProfileChange },
+  )
 
   return (
     <section ref={scope} data-testid="chapter">
@@ -88,4 +98,18 @@ it("keeps semantic content visible and skips authored motion when reduced", asyn
   expect(onEnhance).not.toHaveBeenCalled()
   expect(screen.getByText("Visible without motion")).toBeVisible()
   expect(ScrollTrigger.getAll()).toHaveLength(0)
+})
+
+it.each([
+  [false, "desktop"],
+  [true, "reduced"],
+] as const)("reports the resolved %s profile", async (reduced, profile) => {
+  installMatchMedia({ reduced })
+  const onProfileChange = vi.fn()
+
+  render(
+    <ChapterHarness onEnhance={vi.fn()} onProfileChange={onProfileChange} />,
+  )
+
+  await waitFor(() => expect(onProfileChange).toHaveBeenCalledWith(profile))
 })

@@ -20,6 +20,7 @@ const labels = {
   language: "Language",
   destinationPending: "Destination awaiting approval",
   creatorNoticePending: "Creator notice awaiting approval",
+  developmentStatus: "In development",
 } as const
 
 afterEach(cleanup)
@@ -36,8 +37,13 @@ it("renders every footer group without inventing pending destinations", () => {
   expect(within(footer).getByText("Voynan")).toBeVisible()
   expect(within(footer).getByText(labels.tagline)).toBeVisible()
   expect(within(footer).getByText("CryptoVault")).toBeVisible()
-  expect(within(footer).getByText("InvestFusion")).toBeVisible()
-  expect(within(footer).getByText("Constrully")).toBeVisible()
+  expect(within(footer).getByText("BullLedger")).toBeVisible()
+  expect(within(footer).getByText("SafeNumber")).toBeVisible()
+  expect(
+    within(footer).getByRole("link", {
+      name: "Constrully — In development",
+    }),
+  ).toBeVisible()
   expect(within(footer).getByText("Aegis")).toBeVisible()
   const company = within(footer).getByRole("navigation", {
     name: labels.company,

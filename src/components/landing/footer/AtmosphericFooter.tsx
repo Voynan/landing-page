@@ -1,14 +1,8 @@
 import { useId } from "react"
 
 import { LanguageSwitch } from "@/components/landing/navigation/LanguageSwitch"
-import type { LandingContentDraft, ProductId } from "@/content"
+import type { LandingContentDraft } from "@/content"
 import { track, type AllowedEvent, type AnalyticsTrack } from "@/lib/analytics"
-
-const productNames: Record<ProductId, string> = {
-  cryptovault: "CryptoVault",
-  investfusion: "InvestFusion",
-  constrully: "Constrully",
-}
 
 type FooterLink =
   | LandingContentDraft["contact"]["privacyPolicy"]
@@ -26,6 +20,7 @@ type AtmosphericFooterLabels = {
   language: string
   destinationPending: string
   creatorNoticePending: string
+  developmentStatus: string
 }
 
 type AtmosphericFooterProps = {
@@ -112,6 +107,11 @@ export function AtmosphericFooter({
                   {product.destination.approval === "approved" ? (
                     <a
                       href={product.destination.href}
+                      aria-label={
+                        product.stage === "development"
+                          ? `${product.name} — ${labels.developmentStatus}`
+                          : undefined
+                      }
                       target="_blank"
                       rel="noreferrer"
                       onClick={() =>
@@ -121,11 +121,24 @@ export function AtmosphericFooter({
                         })
                       }
                     >
-                      {productNames[product.id]}
+                      <span>{product.name}</span>
+                      {product.stage === "development" ? (
+                        <small>{labels.developmentStatus}</small>
+                      ) : null}
                     </a>
                   ) : (
-                    <a href={`#product-${product.id}`}>
-                      {productNames[product.id]}
+                    <a
+                      href={`#product-${product.id}`}
+                      aria-label={
+                        product.stage === "development"
+                          ? `${product.name} — ${labels.developmentStatus}`
+                          : undefined
+                      }
+                    >
+                      <span>{product.name}</span>
+                      {product.stage === "development" ? (
+                        <small>{labels.developmentStatus}</small>
+                      ) : null}
                     </a>
                   )}
                 </li>
