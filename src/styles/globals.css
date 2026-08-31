@@ -2938,6 +2938,7 @@
 
   .product-observatory__segments {
     display: none;
+    pointer-events: none;
   }
 
   .product-observatory__release {
