@@ -47,7 +47,7 @@ export function ProductPanel({
       aria-labelledby={headingId}
       inert={inactive || undefined}
     >
-      <div className="product-panel__copy">
+      <header className="product-panel__intro">
         <div className="product-panel__identity">
           <span>{product.kicker}</span>
           <strong>{product.name}</strong>
@@ -56,12 +56,6 @@ export function ProductPanel({
 
         <h3 id={headingId}>{product.title}</h3>
         <p className="product-panel__support">{product.support}</p>
-
-        <ul className="product-panel__capabilities">
-          {product.capabilities.map((capability) => (
-            <li key={capability}>{capability}</li>
-          ))}
-        </ul>
 
         {product.destination.approval === "approved" ? (
           <a
@@ -83,7 +77,15 @@ export function ProductPanel({
             <small>{labels.destinationPending}</small>
           </span>
         )}
-      </div>
+      </header>
+
+      <footer className="product-panel__details">
+        <ul className="product-panel__capabilities">
+          {product.capabilities.map((capability) => (
+            <li key={capability}>{capability}</li>
+          ))}
+        </ul>
+      </footer>
 
       <div className="product-panel__evidence">
         <ProductEvidence
