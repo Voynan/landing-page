@@ -401,15 +401,14 @@ const contactSchema = z.object({
   commercialNote: nonEmptyString,
   ctaLabel: nonEmptyString,
   publicEmail: emailDraftSchema,
-  linkedIn: linkDraftSchema,
+  social: socialProfilesSchema,
   privacyPolicy: linkDraftSchema,
   terms: linkDraftSchema,
   copyApproval: approvalSchema,
 })
 
 const footerSchema = z.object({
-  copyrightHolder: optionalNonEmptyString,
-  copyrightNotice: optionalNonEmptyString,
+  creatorNotice: optionalNonEmptyString,
   approval: approvalSchema,
 })
 
@@ -505,7 +504,9 @@ export function getPublicationBlockers(input: LandingContentDraft): string[] {
     "contact.publicEmail",
     content.contact.publicEmail,
   )
-  addApprovalBlocker(blockers, "contact.linkedIn", content.contact.linkedIn)
+  content.contact.social.forEach((profile, index) => {
+    addApprovalBlocker(blockers, `contact.social.${index}`, profile)
+  })
   addApprovalBlocker(
     blockers,
     "contact.privacyPolicy",

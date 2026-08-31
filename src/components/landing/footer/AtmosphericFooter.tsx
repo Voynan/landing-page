@@ -10,7 +10,9 @@ const productNames: Record<ProductId, string> = {
   constrully: "Constrully",
 }
 
-type FooterLink = LandingContentDraft["contact"]["linkedIn"]
+type FooterLink =
+  | LandingContentDraft["contact"]["privacyPolicy"]
+  | LandingContentDraft["contact"]["social"][number]
 
 type AtmosphericFooterLabels = {
   sectionLabel: string
@@ -23,8 +25,7 @@ type AtmosphericFooterLabels = {
   founder: string
   language: string
   destinationPending: string
-  profilePending: string
-  copyrightPending: string
+  creatorNoticePending: string
 }
 
 type AtmosphericFooterProps = {
@@ -75,12 +76,12 @@ export function AtmosphericFooter({
   trackEvent = track,
 }: AtmosphericFooterProps) {
   const pendingId = useId()
-  const founderApproved = content.founder.profile.approval === "approved"
-  const founderLinkedInApproved =
-    content.founder.linkedIn.approval === "approved"
-  const copyrightApproved =
+  const companyGithub = content.contact.social.find(
+    (profile) => profile.platform === "github",
+  )
+  const creatorNoticeApproved =
     content.footer.approval === "approved" &&
-    Boolean(content.footer.copyrightNotice)
+    Boolean(content.footer.creatorNotice)
 
   return (
     <footer className="atmospheric-footer" aria-label={labels.sectionLabel}>
@@ -188,44 +189,39 @@ export function AtmosphericFooter({
                   </span>
                 )}
               </li>
-              <li>
-                <Destination
-                  item={content.contact.linkedIn}
-                  pendingId={`${pendingId}-contact-linkedin`}
-                  pendingLabel={labels.destinationPending}
-                  trackEvent={trackEvent}
-                />
-              </li>
+              {content.contact.social
+                .filter((profile) => profile.platform !== "github")
+                .map((profile) => (
+                  <li key={profile.platform}>
+                    <Destination
+                      item={profile}
+                      pendingId={`${pendingId}-contact-${profile.platform}`}
+                      pendingLabel={labels.destinationPending}
+                      trackEvent={trackEvent}
+                    />
+                  </li>
+                ))}
             </ul>
           </nav>
 
-          <section aria-labelledby={`${pendingId}-company-heading`}>
-            <h2 id={`${pendingId}-company-heading`}>{labels.company}</h2>
-            <div
-              className="atmospheric-footer__founder"
-              aria-label={labels.founder}
-            >
-              <strong>
-                {founderApproved
-                  ? content.founder.profile.name
-                  : content.founder.profile.role}
-              </strong>
-              {founderApproved ? (
-                <span>{content.founder.profile.role}</span>
-              ) : (
-                <small>{labels.profilePending}</small>
-              )}
-              {founderLinkedInApproved ? (
-                <a
-                  href={content.founder.linkedIn.href}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {content.founder.linkedIn.label}
-                </a>
+          <nav aria-label={labels.company}>
+            <h2>{labels.company}</h2>
+            <ul>
+              <li>
+                <a href="#founder">{labels.founder}</a>
+              </li>
+              {companyGithub ? (
+                <li>
+                  <Destination
+                    item={companyGithub}
+                    pendingId={`${pendingId}-company-github`}
+                    pendingLabel={labels.destinationPending}
+                    trackEvent={trackEvent}
+                  />
+                </li>
               ) : null}
-            </div>
-          </section>
+            </ul>
+          </nav>
 
           <nav aria-label={labels.legal}>
             <h2>{labels.legal}</h2>
@@ -262,9 +258,9 @@ export function AtmosphericFooter({
 
         <div className="atmospheric-footer__base">
           <p>
-            {copyrightApproved
-              ? content.footer.copyrightNotice
-              : labels.copyrightPending}
+            {creatorNoticeApproved
+              ? content.footer.creatorNotice
+              : labels.creatorNoticePending}
           </p>
         </div>
       </div>

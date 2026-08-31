@@ -92,8 +92,7 @@
     "founder": "Founder",
     "language": "Idioma",
     "destinationPending": "Destino aguardando aprovação",
-    "profilePending": "Perfil do founder aguardando aprovação",
-    "copyrightPending": "Copyright aguardando aprovação"
+    "creatorNoticePending": "Nota de autoria aguardando aprovação"
   },
   "metadata": {
     "languageLabel": "Português"

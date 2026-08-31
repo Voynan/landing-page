@@ -215,14 +215,47 @@ export const portugueseLandingContent = {
     commercialNote:
       "A conversa inicial é gratuita. A maioria dos orçamentos também não tem custo. Se o seu projeto exigir uma etapa paga de diagnóstico, avisaremos antes de qualquer compromisso.",
     ctaLabel: "Iniciar conversa",
-    publicEmail: { label: "E-mail", approval: "missing" },
-    linkedIn: { label: "LinkedIn", approval: "missing" },
+    publicEmail: {
+      label: "E-mail",
+      address: "contact@voynan.com",
+      approval: "approved",
+    },
+    social: [
+      {
+        platform: "linkedin",
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/company/voynan/",
+        approval: "approved",
+      },
+      {
+        platform: "instagram",
+        label: "Instagram",
+        href: "https://www.instagram.com/voynan_/",
+        approval: "approved",
+      },
+      {
+        platform: "x",
+        label: "X",
+        href: "https://x.com/voynan_",
+        approval: "approved",
+      },
+      {
+        platform: "github",
+        label: "GitHub",
+        href: "https://github.com/Voynan",
+        approval: "approved",
+      },
+    ],
     privacyPolicy: {
       label: "Política de privacidade",
       approval: "missing",
     },
     terms: { label: "Termos", approval: "missing" },
-    copyApproval: "received",
+    copyApproval: "approved",
   },
-  footer: { approval: "missing" },
+  footer: {
+    creatorNotice:
+      "Todos os produtos e serviços apresentados são criados e mantidos por Voynan.",
+    approval: "approved",
+  },
 } satisfies LandingContentDraft

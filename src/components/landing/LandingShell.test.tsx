@@ -100,8 +100,7 @@ const supportingChapterLabels = {
     founder: "Founder",
     language: "Language",
     destinationPending: "Destination awaiting approval",
-    profilePending: "Founder profile awaiting approval",
-    copyrightPending: "Copyright awaiting approval",
+    creatorNoticePending: "Creator notice awaiting approval",
   },
 } as const
 

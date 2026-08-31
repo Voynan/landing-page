@@ -101,8 +101,7 @@ function LocalizedLandingPage({ locale }: LocaleLandingPageProps) {
           founder: t("footer.founder"),
           language: t("footer.language"),
           destinationPending: t("footer.destinationPending"),
-          profilePending: t("footer.profilePending"),
-          copyrightPending: t("footer.copyrightPending"),
+          creatorNoticePending: t("footer.creatorNoticePending"),
         },
       }}
       navigationContent={{

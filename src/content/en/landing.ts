@@ -211,11 +211,44 @@ export const englishLandingContent = {
     commercialNote:
       "The initial conversation is free. Most estimates are free as well. If your project requires a paid discovery phase, we will tell you before any commitment is made.",
     ctaLabel: "Start a conversation",
-    publicEmail: { label: "Email", approval: "missing" },
-    linkedIn: { label: "LinkedIn", approval: "missing" },
+    publicEmail: {
+      label: "Email",
+      address: "contact@voynan.com",
+      approval: "approved",
+    },
+    social: [
+      {
+        platform: "linkedin",
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/company/voynan/",
+        approval: "approved",
+      },
+      {
+        platform: "instagram",
+        label: "Instagram",
+        href: "https://www.instagram.com/voynan_/",
+        approval: "approved",
+      },
+      {
+        platform: "x",
+        label: "X",
+        href: "https://x.com/voynan_",
+        approval: "approved",
+      },
+      {
+        platform: "github",
+        label: "GitHub",
+        href: "https://github.com/Voynan",
+        approval: "approved",
+      },
+    ],
     privacyPolicy: { label: "Privacy policy", approval: "missing" },
     terms: { label: "Terms", approval: "missing" },
-    copyApproval: "received",
+    copyApproval: "approved",
   },
-  footer: { approval: "missing" },
+  footer: {
+    creatorNotice:
+      "All featured products and services are created and maintained by Voynan.",
+    approval: "approved",
+  },
 } satisfies LandingContentDraft

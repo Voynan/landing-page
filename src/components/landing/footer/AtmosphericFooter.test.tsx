@@ -19,8 +19,7 @@ const labels = {
   founder: "Founder",
   language: "Language",
   destinationPending: "Destination awaiting approval",
-  profilePending: "Founder profile awaiting approval",
-  copyrightPending: "Copyright awaiting approval",
+  creatorNoticePending: "Creator notice awaiting approval",
 } as const
 
 afterEach(cleanup)
@@ -40,20 +39,57 @@ it("renders every footer group without inventing pending destinations", () => {
   expect(within(footer).getByText("InvestFusion")).toBeVisible()
   expect(within(footer).getByText("Constrully")).toBeVisible()
   expect(within(footer).getByText("Aegis")).toBeVisible()
-  expect(within(footer).getByText(labels.profilePending)).toBeVisible()
-  expect(within(footer).getByText(labels.copyrightPending)).toBeVisible()
+  const company = within(footer).getByRole("navigation", {
+    name: labels.company,
+  })
+  const contact = within(footer).getByRole("navigation", {
+    name: labels.contact,
+  })
+
+  expect(
+    within(company).getByRole("link", { name: labels.founder }),
+  ).toHaveAttribute("href", "#founder")
+  expect(within(company).getByRole("link", { name: "GitHub" })).toHaveAttribute(
+    "href",
+    "https://github.com/Voynan",
+  )
+  expect(
+    within(contact).queryByRole("link", { name: "GitHub" }),
+  ).not.toBeInTheDocument()
+  expect(within(footer).queryByText("Kaio Vinícios")).not.toBeInTheDocument()
+  expect(
+    within(footer).queryByText("Founder and principal engineer"),
+  ).not.toBeInTheDocument()
+  expect(
+    within(footer).getByText(
+      "All featured products and services are created and maintained by Voynan.",
+    ),
+  ).toBeVisible()
   expect(
     within(footer).getByRole("link", { name: "Privacy policy" }),
   ).toHaveAttribute("aria-disabled", "true")
   expect(
+    within(footer).getByRole("link", { name: "Terms" }),
+  ).toHaveAttribute("aria-disabled", "true")
+  expect(
     within(footer).getByRole("link", { name: "View on GitHub" }),
-  ).not.toHaveAttribute("href")
+  ).toHaveAttribute("href", "https://github.com/Voynan/aegis")
+  expect(
+    within(footer).queryByRole("link", { name: "Read the docs" }),
+  ).not.toBeInTheDocument()
+  expect(within(footer).getByRole("link", { name: "GitHub" })).toHaveAttribute(
+    "href",
+    "https://github.com/Voynan",
+  )
+  expect(
+    within(footer).getByRole("link", { name: "Instagram" }),
+  ).toHaveAttribute("href", "https://www.instagram.com/voynan_/")
   expect(
     within(footer).getByRole("group", { name: labels.language }),
   ).toBeInTheDocument()
 })
 
-it("uses approved legal, contact, founder, and copyright facts completely", () => {
+it("uses approved legal, contact, and creator facts completely", () => {
   const base = getLandingContent("en")
 
   render(
@@ -68,11 +104,14 @@ it("uses approved legal, contact, founder, and copyright facts completely", () =
             address: "hello@voynan.com",
             approval: "approved",
           },
-          linkedIn: {
-            label: "LinkedIn",
-            href: "https://www.linkedin.com/company/voynan",
-            approval: "approved",
-          },
+          social: [
+            {
+              platform: "linkedin",
+              label: "LinkedIn",
+              href: "https://www.linkedin.com/company/voynan",
+              approval: "approved",
+            },
+          ],
           privacyPolicy: {
             label: "Privacy policy",
             href: "https://voynan.com/privacy",
@@ -95,15 +134,18 @@ it("uses approved legal, contact, founder, and copyright facts completely", () =
             source: "Founder approval",
             approval: "approved",
           },
-          linkedIn: {
-            label: "Founder LinkedIn",
-            href: "https://www.linkedin.com/in/approved-founder",
-            approval: "approved",
-          },
+          social: [
+            {
+              platform: "linkedin",
+              label: "LinkedIn",
+              href: "https://www.linkedin.com/in/approved-founder",
+              approval: "approved",
+            },
+          ],
         },
         footer: {
-          copyrightHolder: "Voynan",
-          copyrightNotice: "© 2026 Voynan. All rights reserved.",
+          creatorNotice:
+            "All featured products and services are created and maintained by Voynan.",
           approval: "approved",
         },
       }}
@@ -118,6 +160,10 @@ it("uses approved legal, contact, founder, and copyright facts completely", () =
     "href",
     "https://voynan.com/privacy",
   )
-  expect(screen.getByText("Approved founder")).toBeVisible()
-  expect(screen.getByText("© 2026 Voynan. All rights reserved.")).toBeVisible()
+  expect(screen.queryByText("Approved founder")).not.toBeInTheDocument()
+  expect(
+    screen.getByText(
+      "All featured products and services are created and maintained by Voynan.",
+    ),
+  ).toBeVisible()
 })
