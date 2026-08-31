@@ -212,6 +212,7 @@ export function SaaSStoryStage({
       )}
 
       <div className="product-observatory__release">
+        <div className="product-observatory__release-rule" aria-hidden="true" />
         <p>{content.closing}</p>
       </div>
     </section>

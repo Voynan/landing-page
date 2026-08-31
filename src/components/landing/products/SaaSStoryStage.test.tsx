@@ -99,7 +99,13 @@ describe("SaaSStoryStage", () => {
       screen.getByRole("heading", { level: 2, name: baseContent.title }),
     ).toBeVisible()
     expect(screen.getByText(baseContent.summary)).toBeVisible()
-    expect(screen.getByText(baseContent.closing)).toBeVisible()
+    const closing = screen.getByText(baseContent.closing)
+    expect(closing).toBeVisible()
+    expect(
+      closing.parentElement?.querySelector(
+        ".product-observatory__release-rule",
+      ),
+    ).toHaveAttribute("aria-hidden", "true")
     expect(
       screen.getByRole("navigation", { name: labels.progressLabel }),
     ).toBeVisible()
