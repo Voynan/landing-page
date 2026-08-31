@@ -2470,7 +2470,7 @@
     font-size: var(--text-kicker);
     letter-spacing: 0.04em;
     line-height: var(--leading-kicker);
-    text-align: right;
+    text-align: center;
     text-transform: uppercase;
   }
 
