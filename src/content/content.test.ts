@@ -79,6 +79,15 @@ describe("landing content contracts", () => {
     )
   })
 
+  it.each(["pt", "en"] as const)(
+    "does not report the approved %s founder profile as a publication blocker",
+    (locale) => {
+      expect(getPublicationBlockers(getLandingContent(locale))).not.toContain(
+        "founder.profile must be approved (currently received)",
+      )
+    },
+  )
+
   it("keeps short interface strings in i18n without duplicating editorial copy", () => {
     const portuguese = createI18n("pt")
     const english = createI18n("en")

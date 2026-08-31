@@ -39,7 +39,8 @@
     "sectionLabel": "Founder",
     "profilePending": "Perfil do founder aguardando aprovação.",
     "portraitPending": "Retrato aguardando aprovação",
-    "linkedInPending": "Destino aguardando aprovação"
+    "socialLabel": "Perfis do founder",
+    "socialPending": "Destino aguardando aprovação"
   },
   "form": {
     "fields": {

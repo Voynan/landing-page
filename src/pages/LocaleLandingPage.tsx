@@ -59,7 +59,8 @@ function LocalizedLandingPage({ locale }: LocaleLandingPageProps) {
           sectionLabel: t("founder.sectionLabel"),
           profilePending: t("founder.profilePending"),
           portraitPending: t("founder.portraitPending"),
-          linkedInPending: t("founder.linkedInPending"),
+          socialLabel: t("founder.socialLabel"),
+          socialPending: t("founder.socialPending"),
         },
         contact: {
           sectionLabel: t("contact.sectionLabel"),

@@ -49,6 +49,49 @@ export const linkDraftSchema = z.discriminatedUnion("approval", [
 
 export type ApprovedLink = z.infer<typeof approvedLinkSchema>
 
+export const socialPlatforms = ["linkedin", "instagram", "x", "github"] as const
+export type SocialPlatform = (typeof socialPlatforms)[number]
+
+const pendingSocialProfileSchema = z.object({
+  platform: z.enum(socialPlatforms),
+  label: nonEmptyString,
+  href: approvedUrl.optional(),
+  approval: pendingApprovalSchema,
+})
+
+const approvedSocialProfileSchema = z.object({
+  platform: z.enum(socialPlatforms),
+  label: nonEmptyString,
+  href: approvedUrl,
+  approval: z.literal("approved"),
+})
+
+export const socialProfileDraftSchema = z.discriminatedUnion("approval", [
+  pendingSocialProfileSchema,
+  approvedSocialProfileSchema,
+])
+
+export type SocialProfileDraft = z.infer<typeof socialProfileDraftSchema>
+
+const socialProfilesSchema = z
+  .array(socialProfileDraftSchema)
+  .min(1)
+  .superRefine((profiles, context) => {
+    const seen = new Set<SocialPlatform>()
+
+    profiles.forEach((profile, index) => {
+      if (seen.has(profile.platform)) {
+        context.addIssue({
+          code: "custom",
+          path: [index, "platform"],
+          message: `Duplicate social platform ${profile.platform}`,
+        })
+      }
+
+      seen.add(profile.platform)
+    })
+  })
+
 const pendingMetricSchema = z.object({
   value: optionalNonEmptyString,
   period: optionalNonEmptyString,
@@ -349,7 +392,7 @@ const aegisSchema = z.object({
 const founderSchema = z.object({
   id: z.literal("founder"),
   profile: founderProfileDraftSchema,
-  linkedIn: linkDraftSchema,
+  social: socialProfilesSchema,
 })
 
 const contactSchema = z.object({
@@ -451,7 +494,9 @@ export function getPublicationBlockers(input: LandingContentDraft): string[] {
   }
   addApprovalBlocker(blockers, "aegis.logo", content.aegis.logo)
   addApprovalBlocker(blockers, "founder.profile", content.founder.profile)
-  addApprovalBlocker(blockers, "founder.linkedIn", content.founder.linkedIn)
+  content.founder.social.forEach((profile, index) => {
+    addApprovalBlocker(blockers, `founder.social.${index}`, profile)
+  })
   addApprovalBlocker(blockers, "contact.copyApproval", {
     approval: content.contact.copyApproval,
   })

@@ -1,4 +1,5 @@
 import aegisLogo from "@/assets/aegis/aegis-logo.svg"
+import founderPortrait from "@/assets/pixelated_portrait.png"
 
 import type { LandingContentDraft } from "../contracts.js"
 
@@ -172,8 +173,37 @@ export const englishLandingContent = {
   },
   founder: {
     id: "founder",
-    profile: { role: "Founder of Voynan", approval: "missing" },
-    linkedIn: { label: "LinkedIn", approval: "missing" },
+    profile: {
+      name: "Kaio Vinícios",
+      role: "Founder and principal engineer",
+      note: "I started Voynan to build the products I wanted to use, and then to run them every day. Every system I hand to a client meets the same bar: it has to keep working when nobody is watching. That standard is what I bring to everyone who builds with us.",
+      portraitSrc: founderPortrait,
+      portraitAlt:
+        "Pixel-art portrait of Kaio Vinícios with his arms crossed, wearing a black T-shirt.",
+      source:
+        "src/assets/pixelated_portrait.png — image supplied and approved by Kaio Vinícios on 2026-08-30",
+      approval: "approved",
+    },
+    social: [
+      {
+        platform: "linkedin",
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/in/kaiovinicios/",
+        approval: "approved",
+      },
+      {
+        platform: "x",
+        label: "X",
+        href: "https://x.com/KaioVinicios__",
+        approval: "approved",
+      },
+      {
+        platform: "github",
+        label: "GitHub",
+        href: "https://github.com/KaioVinicios",
+        approval: "approved",
+      },
+    ],
   },
   contact: {
     id: "contact",

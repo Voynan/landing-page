@@ -62,7 +62,8 @@ const supportingChapterLabels = {
     sectionLabel: "Founder",
     profilePending: "Founder profile awaiting approval",
     portraitPending: "Portrait awaiting approval",
-    linkedInPending: "Destination awaiting approval",
+    socialLabel: "Founder profiles",
+    socialPending: "Destination awaiting approval",
   },
   contact: {
     sectionLabel: "Contact",

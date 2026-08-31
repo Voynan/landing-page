@@ -1,5 +1,6 @@
-import { useRef, type RefObject } from "react"
+import { useId, useRef, type RefObject } from "react"
 
+import { SocialIcon } from "@/components/landing/founder/SocialIcon"
 import { PearlescentStarfield } from "@/components/motion/PearlescentStarfield"
 import { useChapterMotion } from "@/components/motion/useChapterMotion"
 import type { LandingContentDraft } from "@/content"
@@ -9,7 +10,8 @@ type FounderNoteLabels = {
   sectionLabel: string
   profilePending: string
   portraitPending: string
-  linkedInPending: string
+  socialLabel: string
+  socialPending: string
 }
 
 type FounderNoteProps = {
@@ -37,7 +39,9 @@ function useFounderMotion(scope: RefObject<HTMLElement | null>) {
         { opacity: 1, y: 0, duration: 0.54, ease: "power3.out" },
       )
       .fromTo(
-        select(".founder-note__portrait, .founder-note__portrait-pending"),
+        select(
+          ".founder-note__portrait-frame, .founder-note__portrait-pending",
+        ),
         { opacity: 0, rotation: isMobile ? 0 : 1.5, scale: 0.97 },
         {
           opacity: 1,
@@ -53,8 +57,11 @@ function useFounderMotion(scope: RefObject<HTMLElement | null>) {
 
 export function FounderNote({ content, labels }: FounderNoteProps) {
   const sectionRef = useRef<HTMLElement>(null)
+  const pendingId = useId()
   const hasApprovedProfile = content.profile.approval === "approved"
-  const hasApprovedLinkedIn = content.linkedIn.approval === "approved"
+  const hasPendingSocial = content.social.some(
+    (profile) => profile.approval !== "approved",
+  )
   useFounderMotion(sectionRef)
 
   return (
@@ -76,7 +83,6 @@ export function FounderNote({ content, labels }: FounderNoteProps) {
                 <h2 id="founder-title">{content.profile.name}</h2>
                 <p className="founder-note__role">{content.profile.role}</p>
                 <p className="founder-note__message">{content.profile.note}</p>
-                <small>{content.profile.source}</small>
               </>
             ) : (
               <>
@@ -88,35 +94,56 @@ export function FounderNote({ content, labels }: FounderNoteProps) {
               </>
             )}
 
-            {hasApprovedLinkedIn ? (
-              <a
-                className="founder-note__link"
-                href={content.linkedIn.href}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {content.linkedIn.label}
-              </a>
-            ) : (
-              <span className="founder-note__link-pending">
-                <span role="link" aria-disabled="true">
-                  {content.linkedIn.label}
-                </span>
-                <small>{labels.linkedInPending}</small>
-              </span>
-            )}
+            <nav
+              className="founder-note__social"
+              aria-label={labels.socialLabel}
+            >
+              {content.social.map((profile) =>
+                profile.approval === "approved" ? (
+                  <a
+                    key={profile.platform}
+                    className="founder-note__link"
+                    aria-label={profile.label}
+                    href={profile.href}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <SocialIcon platform={profile.platform} />
+                  </a>
+                ) : (
+                  <span
+                    key={profile.platform}
+                    className="founder-note__link-pending"
+                    role="link"
+                    aria-disabled="true"
+                    aria-label={profile.label}
+                    aria-describedby={pendingId}
+                  >
+                    <SocialIcon platform={profile.platform} />
+                  </span>
+                ),
+              )}
+            </nav>
+
+            {hasPendingSocial ? (
+              <small className="founder-note__social-pending" id={pendingId}>
+                {labels.socialPending}
+              </small>
+            ) : null}
           </div>
 
           {hasApprovedProfile ? (
-            <picture className="founder-note__portrait">
-              <img
-                src={content.profile.portraitSrc}
-                alt={content.profile.portraitAlt}
-                width="720"
-                height="900"
-                loading="lazy"
-              />
-            </picture>
+            <figure className="founder-note__portrait-frame">
+              <picture className="founder-note__portrait">
+                <img
+                  src={content.profile.portraitSrc}
+                  alt={content.profile.portraitAlt}
+                  width="1024"
+                  height="1536"
+                  loading="lazy"
+                />
+              </picture>
+            </figure>
           ) : (
             <div
               className="founder-note__portrait-pending"
