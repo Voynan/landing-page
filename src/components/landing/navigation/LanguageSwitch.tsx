@@ -8,6 +8,7 @@ type LanguageSwitchProps = {
   currentLocale: Locale
   label: string
   localeLabels: Record<Locale, string>
+  localeHrefs?: Record<Locale, string>
   onLocaleSelect?: (locale: Locale) => void
   trackEvent?: AnalyticsTrack
 }
@@ -17,6 +18,7 @@ export function LanguageSwitch({
   currentLocale,
   label,
   localeLabels,
+  localeHrefs,
   onLocaleSelect,
   trackEvent = track,
 }: LanguageSwitchProps) {
@@ -48,7 +50,7 @@ export function LanguageSwitch({
         return (
           <a
             key={locale}
-            href={`/${locale}${fragment}`}
+            href={localeHrefs?.[locale] ?? `/${locale}${fragment}`}
             hrefLang={locale === "pt" ? "pt-BR" : "en"}
             lang={locale === "pt" ? "pt-BR" : "en"}
             aria-current={locale === currentLocale ? "page" : undefined}

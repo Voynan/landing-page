@@ -1,10 +1,18 @@
-import type { LandingContentDraft, Locale } from "@/content/contracts"
-import { buildLocaleUrl } from "@/utils/localeUrl"
+import type { Locale } from "@/content/contracts"
+
+type SeoMetadata = {
+  approval?: unknown
+  title?: string
+  description?: string
+  openGraphTitle?: string
+  openGraphDescription?: string
+}
 
 type LocaleSeoProps = {
   locale: Locale
-  metadata: LandingContentDraft["metadata"]
+  metadata: SeoMetadata
   origin: string
+  pathsByLocale?: Record<Locale, string>
 }
 
 const hrefLangByLocale = {
@@ -17,7 +25,12 @@ const openGraphLocaleByLocale = {
   en: "en_US",
 } as const
 
-export function LocaleSeo({ locale, metadata, origin }: LocaleSeoProps) {
+export function LocaleSeo({
+  locale,
+  metadata,
+  origin,
+  pathsByLocale = { pt: "/pt", en: "/en" },
+}: LocaleSeoProps) {
   const { title, description, openGraphTitle, openGraphDescription } = metadata
 
   if (!title || !description || !openGraphTitle || !openGraphDescription) {
@@ -26,7 +39,7 @@ export function LocaleSeo({ locale, metadata, origin }: LocaleSeoProps) {
     )
   }
 
-  const canonical = buildLocaleUrl(origin, locale)
+  const canonical = new URL(pathsByLocale[locale], origin).toString()
 
   return (
     <>
@@ -38,7 +51,7 @@ export function LocaleSeo({ locale, metadata, origin }: LocaleSeoProps) {
           key={alternateLocale}
           rel="alternate"
           hrefLang={hrefLangByLocale[alternateLocale]}
-          href={buildLocaleUrl(origin, alternateLocale)}
+          href={new URL(pathsByLocale[alternateLocale], origin).toString()}
         />
       ))}
       <meta property="og:type" content="website" />

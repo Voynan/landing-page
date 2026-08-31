@@ -47,10 +47,17 @@ const content = {
     address: "hello@voynan.com",
     approval: "approved" as const,
   },
-  linkedIn: { label: "LinkedIn", approval: "missing" as const },
+  social: [
+    {
+      platform: "linkedin" as const,
+      label: "LinkedIn",
+      approval: "missing" as const,
+    },
+  ],
   privacyPolicy: {
     label: "Política de privacidade",
-    approval: "missing" as const,
+    href: "/pt/privacidade",
+    approval: "approved" as const,
   },
   terms: { label: "Termos", approval: "missing" as const },
   copyApproval: "received" as const,
@@ -89,6 +96,14 @@ async function fillValidForm(user: ReturnType<typeof userEvent.setup>) {
 }
 
 afterEach(cleanup)
+
+it("links the contact notice to the approved privacy policy", () => {
+  renderContact(vi.fn())
+
+  expect(
+    screen.getByRole("link", { name: "Política de privacidade" }),
+  ).toHaveAttribute("href", "/pt/privacidade")
+})
 
 it("announces invalid fields and focuses the accessible error summary", async () => {
   const user = userEvent.setup()

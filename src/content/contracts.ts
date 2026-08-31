@@ -29,6 +29,10 @@ const pendingApprovalSchema = z.enum(["missing", "received", "reviewed"])
 const nonEmptyString = z.string().trim().min(1)
 const optionalNonEmptyString = nonEmptyString.optional()
 const approvedUrl = z.url({ protocol: /^https?$/ })
+const approvedLegalHref = z.union([
+  approvedUrl,
+  z.string().regex(/^\/(?!\/)/, "Expected an internal path or HTTP(S) URL"),
+])
 
 const pendingLinkSchema = z.object({
   label: nonEmptyString,
@@ -45,6 +49,23 @@ const approvedLinkSchema = z.object({
 export const linkDraftSchema = z.discriminatedUnion("approval", [
   pendingLinkSchema,
   approvedLinkSchema,
+])
+
+const pendingLegalLinkSchema = z.object({
+  label: nonEmptyString,
+  href: approvedLegalHref.optional(),
+  approval: pendingApprovalSchema,
+})
+
+const approvedLegalLinkSchema = z.object({
+  label: nonEmptyString,
+  href: approvedLegalHref,
+  approval: z.literal("approved"),
+})
+
+export const legalLinkDraftSchema = z.discriminatedUnion("approval", [
+  pendingLegalLinkSchema,
+  approvedLegalLinkSchema,
 ])
 
 export type ApprovedLink = z.infer<typeof approvedLinkSchema>
@@ -402,8 +423,8 @@ const contactSchema = z.object({
   ctaLabel: nonEmptyString,
   publicEmail: emailDraftSchema,
   social: socialProfilesSchema,
-  privacyPolicy: linkDraftSchema,
-  terms: linkDraftSchema,
+  privacyPolicy: legalLinkDraftSchema,
+  terms: legalLinkDraftSchema,
   copyApproval: approvalSchema,
 })
 

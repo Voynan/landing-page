@@ -48,11 +48,13 @@ function Destination({
   trackEvent: AnalyticsTrack
 }) {
   if (item.approval === "approved") {
+    const isExternal = /^https?:\/\//.test(item.href)
+
     return (
       <a
         href={item.href}
-        target="_blank"
-        rel="noreferrer"
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noreferrer" : undefined}
         onClick={() => event && trackEvent(event)}
       >
         {item.label}

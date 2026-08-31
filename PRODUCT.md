@@ -2,7 +2,7 @@
 
 <!-- impeccable:product-schema 1 -->
 
-> Status: product truth inferred from the project documents at the user's direction to proceed. It describes the approved working direction for the landing page, not approval of external claims, assets, links, metrics, testimonials, or legal content.
+> Status: product truth inferred from the project documents at the user's direction to proceed. It describes the approved working direction for the landing page, not approval of external claims, assets, links, metrics, or testimonials.
 
 ## Platform
 
@@ -51,7 +51,7 @@ The public experience ends in external product destinations, approved Aegis dest
 
 Documented direction:
 
-- Public routes are `/pt` and `/en`; the root defaults to Portuguese while preserving an explicit saved preference.
+- Public routes are `/pt`, `/en` and the localized privacy and terms routes; the root defaults to Portuguese while preserving an explicit saved preference.
 - The page includes navigation, hero, thesis, three equal SaaS chapters, credibility, custom software, Aegis, founder, contact, and footer in that narrative order.
 - Primary content, landmarks, headings, links, and calls to action exist in static HTML before hydration.
 - Motion, media playback, analytics, and contact submission are independent progressive enhancements with meaningful failure states.
@@ -63,7 +63,7 @@ Documented direction:
 
 Open decisions and missing product facts:
 
-- Final company, founder, legal, contact, product, and Aegis destinations.
+- Final product and future released-stage Aegis destinations; legal pages are now internal localized routes.
 - Approved metrics, testimonials, permissions, product media, claims, and translations.
 - Contact endpoint, message owner, retention policy, antispam provider, and public configuration.
 - Production domain/canonical origin, deployment owner, hosting policy, and rollback target.
@@ -87,7 +87,7 @@ Documented direction available in the repository:
 - `docs/v1-todo.md`: closed v1 scope, milestones, implementation order, and verification gates.
 - `docs/v1-content-inventory.md`: current readiness record for content, media, approvals, and missing external facts.
 
-No approved product media, founder portrait, metrics, testimonials, external destinations, contact endpoint, or legal URLs are currently present. Future work must not fabricate them.
+No approved product media, metrics, testimonials, or contact endpoint is currently present. The localized legal routes were approved after external legal review was confirmed on 2026-08-30.
 
 ## Product Principles
 

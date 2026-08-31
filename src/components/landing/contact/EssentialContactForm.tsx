@@ -59,6 +59,7 @@ type EssentialContactFormProps = {
     values?: ContactInput
   }
   labels: ContactFormLabels
+  privacyPolicy?: { href: string; label: string }
   publicEmail?: string
   requestAntispamToken?: () => Promise<string>
   submit?: (
@@ -101,6 +102,7 @@ export function EssentialContactForm({
   idPrefix = "contact",
   initialState,
   labels,
+  privacyPolicy,
   publicEmail,
   requestAntispamToken,
   submit = submitContact,
@@ -241,7 +243,12 @@ export function EssentialContactForm({
         </form.Subscribe>
 
         <div className="essential-contact-form__footer">
-          <p>{labels.privacyNotice}</p>
+          <p>
+            {labels.privacyNotice}{" "}
+            {privacyPolicy ? (
+              <a href={privacyPolicy.href}>{privacyPolicy.label}</a>
+            ) : null}
+          </p>
           <Button
             type="submit"
             aria-busy={phase === "submitting" ? "true" : undefined}

@@ -9,6 +9,7 @@ import { AppProviders } from "@/app/AppProviders"
 import { isDesignSystemEnabled } from "@/config/designSystem"
 import { publicConfig } from "@/config/publicConfig"
 import { LocaleLandingPage } from "@/pages/LocaleLandingPage"
+import { LegalDocumentPage } from "@/pages/LegalDocumentPage"
 import { NotFoundPage } from "@/pages/NotFoundPage"
 import { DesignSystemRoute } from "@/routes/designSystemRoute"
 import { ROOT_LOCALE_STORAGE_KEY, resolveRootLocale } from "@/utils/rootLocale"
@@ -48,6 +49,30 @@ const englishRoute = createRoute({
   component: () => <LocaleLandingPage locale="en" />,
 })
 
+const portuguesePrivacyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/pt/privacidade",
+  component: () => <LegalDocumentPage locale="pt" kind="privacy" />,
+})
+
+const englishPrivacyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/en/privacy",
+  component: () => <LegalDocumentPage locale="en" kind="privacy" />,
+})
+
+const portugueseTermsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/pt/termos",
+  component: () => <LegalDocumentPage locale="pt" kind="terms" />,
+})
+
+const englishTermsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/en/terms",
+  component: () => <LegalDocumentPage locale="en" kind="terms" />,
+})
+
 const designSystemRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/design-system",
@@ -63,5 +88,9 @@ export const routeTree = rootRoute.addChildren([
   indexRoute,
   portugueseRoute,
   englishRoute,
+  portuguesePrivacyRoute,
+  englishPrivacyRoute,
+  portugueseTermsRoute,
+  englishTermsRoute,
   ...(designSystemEnabled ? [designSystemRoute] : []),
 ])

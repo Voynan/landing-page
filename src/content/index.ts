@@ -18,4 +18,6 @@ export type {
   ProductId,
   PublishedLandingContent,
   SectionId,
+  SocialPlatform,
+  SocialProfileDraft,
 } from "./contracts.js"

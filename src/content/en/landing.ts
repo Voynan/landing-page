@@ -242,8 +242,12 @@ export const englishLandingContent = {
         approval: "approved",
       },
     ],
-    privacyPolicy: { label: "Privacy policy", approval: "missing" },
-    terms: { label: "Terms", approval: "missing" },
+    privacyPolicy: {
+      label: "Privacy policy",
+      href: "/en/privacy",
+      approval: "approved",
+    },
+    terms: { label: "Terms", href: "/en/terms", approval: "approved" },
     copyApproval: "approved",
   },
   footer: {

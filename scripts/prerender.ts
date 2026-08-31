@@ -2,7 +2,8 @@ import { mkdir, readFile, writeFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
 
-type PublicRoute = "/pt" | "/en"
+type PublicRoute =
+  "/pt" | "/en" | "/pt/privacidade" | "/en/privacy" | "/pt/termos" | "/en/terms"
 
 type RenderedPage = {
   appHtml: string
@@ -19,7 +20,14 @@ export type PrerenderOptions = {
   serverEntry?: string
 }
 
-const publicRoutes = ["/pt", "/en"] as const
+const publicRoutes: readonly PublicRoute[] = [
+  "/pt",
+  "/en",
+  "/pt/privacidade",
+  "/en/privacy",
+  "/pt/termos",
+  "/en/terms",
+]
 
 function injectRenderedPage(template: string, page: RenderedPage) {
   if (!/<main(?:\s|>)/i.test(page.appHtml)) {

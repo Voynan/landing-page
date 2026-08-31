@@ -38,6 +38,13 @@ export function ContactSection({
     content.publicEmail.approval === "approved"
       ? content.publicEmail.address
       : undefined
+  const privacyPolicy =
+    content.privacyPolicy.approval === "approved"
+      ? {
+          href: content.privacyPolicy.href,
+          label: content.privacyPolicy.label,
+        }
+      : undefined
 
   return (
     <section
@@ -56,6 +63,7 @@ export function ContactSection({
         clipboard={clipboard}
         ctaLabel={content.ctaLabel}
         labels={labels}
+        privacyPolicy={privacyPolicy}
         publicEmail={publicEmail}
         requestAntispamToken={requestAntispamToken}
         submit={submit}

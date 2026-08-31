@@ -248,9 +248,10 @@ export const portugueseLandingContent = {
     ],
     privacyPolicy: {
       label: "Política de privacidade",
-      approval: "missing",
+      href: "/pt/privacidade",
+      approval: "approved",
     },
-    terms: { label: "Termos", approval: "missing" },
+    terms: { label: "Termos", href: "/pt/termos", approval: "approved" },
     copyApproval: "approved",
   },
   footer: {

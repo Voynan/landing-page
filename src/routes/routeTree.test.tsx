@@ -6,17 +6,48 @@ import { resolveRootLocale } from "@/utils/rootLocale"
 
 describe("public locale routes", () => {
   it.each([
-    ["/pt", 'lang="pt-BR"', "https://voynan.com/pt", "en"],
-    ["/en", 'lang="en"', "https://voynan.com/en", "pt-BR"],
+    ["/pt", 'lang="pt-BR"', "https://voynan.com/pt", "/en"],
+    ["/en", 'lang="en"', "https://voynan.com/en", "/pt"],
+    [
+      "/pt/privacidade",
+      'lang="pt-BR"',
+      "https://voynan.com/pt/privacidade",
+      "/en/privacy",
+    ],
+    [
+      "/en/privacy",
+      'lang="en"',
+      "https://voynan.com/en/privacy",
+      "/pt/privacidade",
+    ],
+    ["/pt/termos", 'lang="pt-BR"', "https://voynan.com/pt/termos", "/en/terms"],
+    ["/en/terms", 'lang="en"', "https://voynan.com/en/terms", "/pt/termos"],
   ] as const)(
     "renders %s as crawlable HTML",
-    async (url, htmlAttrs, canonical, alternateLocale) => {
+    async (url, htmlAttrs, canonical, alternatePath) => {
       const result = await render(url, { origin: "https://voynan.com" })
 
       expect(result.appHtml).toContain("<main")
       expect(result.htmlAttrs).toBe(htmlAttrs)
       expect(result.headHtml).toContain(`rel="canonical" href="${canonical}"`)
-      expect(result.headHtml).toContain(`hrefLang="${alternateLocale}"`)
+      expect(result.headHtml).toContain(
+        `href="https://voynan.com${alternatePath}"`,
+      )
+    },
+  )
+
+  it.each([
+    ["/pt/privacidade", "Política de privacidade", "Seus direitos"],
+    ["/en/privacy", "Privacy policy", "Your rights"],
+    ["/pt/termos", "Termos de uso", "Produtos e serviços"],
+    ["/en/terms", "Terms of use", "Products and services"],
+  ] as const)(
+    "renders the legal document at %s",
+    async (url, title, section) => {
+      const result = await render(url, { origin: "https://voynan.com" })
+
+      expect(result.appHtml).toContain(title)
+      expect(result.appHtml).toContain(section)
     },
   )
 
