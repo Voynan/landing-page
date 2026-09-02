@@ -10,15 +10,15 @@ import { gsap, useGSAP } from "@/lib/gsap"
 
 type EnhancedMotionProfile = Exclude<MotionProfile, "reduced" | "static">
 
-type ChapterMotionContext = {
+type ChapterMotionContext<TElement extends Element = HTMLElement> = {
   profile: EnhancedMotionProfile
-  root: HTMLElement
+  root: TElement
   select: ReturnType<typeof gsap.utils.selector>
 }
 
 type ChapterMotionCleanup = () => void
-type ChapterMotionSetup = (
-  context: ChapterMotionContext,
+type ChapterMotionSetup<TElement extends Element = HTMLElement> = (
+  context: ChapterMotionContext<TElement>,
 ) => ChapterMotionCleanup | void
 
 type ChapterMotionOptions = {
@@ -26,9 +26,9 @@ type ChapterMotionOptions = {
   onProfileChange?: (profile: MotionProfile) => void
 }
 
-function useChapterMotion(
-  scope: RefObject<HTMLElement | null>,
-  setup: ChapterMotionSetup,
+function useChapterMotion<TElement extends Element = HTMLElement>(
+  scope: RefObject<TElement | null>,
+  setup: ChapterMotionSetup<TElement>,
   { enabled = true, onProfileChange }: ChapterMotionOptions = {},
 ) {
   useGSAP(

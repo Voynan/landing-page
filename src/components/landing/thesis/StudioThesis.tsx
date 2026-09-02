@@ -2,6 +2,7 @@ import { useRef, type RefObject } from "react"
 
 import { PearlescentStarfield } from "@/components/motion/PearlescentStarfield"
 import { useChapterMotion } from "@/components/motion/useChapterMotion"
+import { OrbitalField } from "@/components/landing/thesis/OrbitalField"
 import type { LandingContentDraft } from "@/content"
 import { gsap } from "@/lib/gsap"
 
@@ -59,6 +60,7 @@ export function StudioThesis({ content }: StudioThesisProps) {
         <div className="landing-thesis__rule" aria-hidden="true" />
         <h2 id="landing-thesis-title">{content.statement}</h2>
       </div>
+      <OrbitalField />
     </section>
   )
 }

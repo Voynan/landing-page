@@ -2163,7 +2163,7 @@
   .landing-thesis {
     position: relative;
     isolation: isolate;
-    min-height: 84svh;
+    min-height: 96svh;
     width: 100%;
     overflow: clip;
   }
@@ -2254,7 +2254,7 @@
 
   .landing-thesis__inner {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     display: grid;
     min-height: inherit;
     width: min(100%, var(--container-max));
@@ -2262,7 +2262,7 @@
     gap: var(--space-8);
     align-content: center;
     margin-inline: auto;
-    padding: var(--space-24) var(--page-pad);
+    padding: var(--space-24) var(--page-pad) clamp(12.5rem, 19vw, 15rem);
   }
 
   .landing-thesis__rule {
@@ -2278,6 +2278,134 @@
     max-width: 24ch;
     font-size: var(--text-statement);
     line-height: var(--leading-statement);
+  }
+
+  .solar-corona {
+    position: absolute;
+    z-index: 1;
+    bottom: -1px;
+    left: 50%;
+    width: 100vw;
+    height: clamp(10.5rem, 20vw, 14.25rem);
+    overflow: visible;
+    color: var(--color-copper-light);
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+
+  .solar-corona__limb,
+  .solar-corona__filament,
+  .solar-corona__pulse {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .solar-corona__limb {
+    opacity: 0.72;
+    stroke-width: 1.35;
+  }
+
+  .solar-corona__filament {
+    opacity: 0.2;
+    stroke-width: 1.15;
+    transform-box: fill-box;
+    transform-origin: center bottom;
+  }
+
+  .solar-corona__filament:nth-child(2),
+  .solar-corona__filament:nth-child(6) {
+    opacity: 0.28;
+  }
+
+  .solar-corona__filament:nth-child(3),
+  .solar-corona__filament:nth-child(5) {
+    opacity: 0.42;
+    stroke-width: 1.4;
+  }
+
+  .solar-corona__filament:nth-child(4) {
+    opacity: 0.66;
+    stroke-width: 1.7;
+  }
+
+  .solar-corona__pulse {
+    opacity: 0.22;
+    stroke: var(--color-copper-light);
+    stroke-dasharray: 18 342;
+    stroke-width: 2.15;
+  }
+
+  .orbital-field {
+    position: absolute;
+    z-index: 1;
+    bottom: -1px;
+    left: 50%;
+    width: 100vw;
+    height: clamp(12rem, 20vw, 15.75rem);
+    overflow: visible;
+    isolation: isolate;
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+
+  .orbital-field__halo,
+  .orbital-field__core,
+  .orbital-field__filament,
+  .orbital-field__flow {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .orbital-field__gravity {
+    opacity: 0.86;
+    mix-blend-mode: screen;
+  }
+
+  .orbital-field__thread {
+    transform-box: fill-box;
+    transform-origin: center;
+    will-change: transform, opacity;
+    mix-blend-mode: screen;
+  }
+
+  .orbital-field__thread:nth-child(1),
+  .orbital-field__thread:nth-child(7) {
+    opacity: 0.54;
+  }
+
+  .orbital-field__thread:nth-child(2),
+  .orbital-field__thread:nth-child(6) {
+    opacity: 0.72;
+  }
+
+  .orbital-field__halo {
+    opacity: 0.21;
+    stroke-width: 8;
+  }
+
+  .orbital-field__core {
+    opacity: 0.62;
+    stroke-width: 2.2;
+  }
+
+  .orbital-field__filament {
+    opacity: 0.94;
+    stroke-width: 0.72;
+  }
+
+  .orbital-field__flow {
+    opacity: 0.5;
+    stroke-dasharray: 8 34 2 76 18 112;
+    stroke-width: 2.35;
+    will-change: opacity, stroke-dashoffset;
+  }
+
+  .orbital-field__thread:nth-child(even) .orbital-field__flow {
+    stroke-dasharray: 2 48 14 92 6 138;
   }
 
   .saas-story-stage {
@@ -4199,6 +4327,7 @@
 
   .landing-thesis__inner {
     grid-template-columns: repeat(8, minmax(0, 1fr));
+    padding-bottom: 12.5rem;
   }
 
   .landing-thesis__rule {
@@ -4485,13 +4614,13 @@
   }
 
   .landing-thesis {
-    min-height: 74svh;
+    min-height: 84svh;
   }
 
   .landing-thesis__inner {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--space-6);
-    padding-block: var(--space-16);
+    padding-block: var(--space-16) 10.5rem;
   }
 
   .landing-thesis__rule {
@@ -4502,6 +4631,43 @@
 
   .landing-thesis h2 {
     grid-column: 1 / -1;
+  }
+
+  .solar-corona {
+    height: 9.5rem;
+  }
+
+  .solar-corona__filament:nth-child(1),
+  .solar-corona__filament:nth-child(2),
+  .solar-corona__filament:nth-child(6),
+  .solar-corona__filament:nth-child(7) {
+    display: none;
+  }
+
+  .solar-corona__pulse[data-corona-pulse="secondary"] {
+    display: none;
+  }
+
+  .orbital-field {
+    height: 10.5rem;
+  }
+
+  .orbital-field__thread:nth-child(1),
+  .orbital-field__thread:nth-child(7) {
+    display: none;
+  }
+
+  .orbital-field__halo {
+    opacity: 0.16;
+    stroke-width: 6;
+  }
+
+  .orbital-field__core {
+    stroke-width: 1.75;
+  }
+
+  .orbital-field__flow {
+    stroke-width: 1.8;
   }
 
   .product-observatory__overture {
@@ -4847,6 +5013,8 @@
   .landing-nav,
   .landing-nav *,
   .retractable-mark img,
+  .solar-corona *,
+  .orbital-field *,
   .product-observatory *,
   .mobile-product-explorer *,
   .mobile-product-explorer__tap-target::after,

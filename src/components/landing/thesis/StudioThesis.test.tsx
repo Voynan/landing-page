@@ -42,6 +42,42 @@ it("keeps the complete studio thesis readable in the static document", () => {
   expect(screen.getByText(content.statement)).toBeVisible()
 })
 
+it("renders an illuminated orbital weave without floating nodes or lens rings", () => {
+  const content = getLandingContent("en").thesis
+
+  render(<StudioThesis content={content} />)
+
+  const field = screen.getByTestId("orbital-field")
+  expect(field.tagName).toBe("svg")
+  expect(field).toHaveAttribute("aria-hidden", "true")
+  expect(field.querySelectorAll("[data-orbital-thread]")).toHaveLength(7)
+  expect(field.querySelectorAll("[data-orbital-halo]")).toHaveLength(7)
+  expect(field.querySelectorAll("[data-orbital-core]")).toHaveLength(7)
+  expect(field.querySelectorAll("[data-orbital-filament]")).toHaveLength(7)
+  expect(field.querySelectorAll("[data-orbital-flow]")).toHaveLength(7)
+  expect(field.querySelectorAll("[data-orbital-node]")).toHaveLength(0)
+  expect(field.querySelectorAll("[data-orbital-lens]")).toHaveLength(0)
+  expect(screen.queryByTestId("solar-corona")).not.toBeInTheDocument()
+})
+
+it("runs the orbital drift only while the thesis is in view", async () => {
+  installMatchMedia()
+  const content = getLandingContent("en").thesis
+
+  const { unmount } = render(<StudioThesis content={content} />)
+
+  await waitFor(() => {
+    expect(ScrollTrigger.getById("thesis-orbital-drift")).toBeDefined()
+  })
+
+  const trigger = ScrollTrigger.getById("thesis-orbital-drift")!
+  expect(trigger.vars.toggleActions).toBe("play pause resume pause")
+  expect(trigger.animation).toBeDefined()
+
+  unmount()
+  expect(ScrollTrigger.getById("thesis-orbital-drift")).toBeUndefined()
+})
+
 it("renders a dense radiant field and pauses its drift outside the thesis", async () => {
   installMatchMedia()
   const content = getLandingContent("en").thesis
