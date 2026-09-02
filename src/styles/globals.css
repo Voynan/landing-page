@@ -3241,6 +3241,10 @@
     background: var(--color-navy);
   }
 
+  .services-flow .landing-chapter__frame {
+    padding-block: clamp(3.5rem, 5vw, 4.5rem);
+  }
+
   .services-flow__header {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -3268,73 +3272,174 @@
 
   .services-flow__introduction > p {
     max-width: 46rem;
-    margin: var(--space-8) 0 0;
+    margin: var(--space-6) 0 0;
     color: var(--color-slate);
   }
 
   .services-flow__layers {
+    --services-grid-bleed: clamp(1.75rem, 4vw, 3.75rem);
+
     position: relative;
+    isolation: isolate;
     display: grid;
+    width: 100%;
+    max-width: none;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    margin-top: var(--space-24);
-    border-top: 1px solid var(--color-line-strong);
-    border-bottom: 1px solid var(--color-line-strong);
+    margin: var(--space-12) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .services-flow__layers::after {
+    position: absolute;
+    z-index: 0;
+    right: calc(-1 * var(--services-grid-bleed));
+    bottom: 0;
+    left: calc(-1 * var(--services-grid-bleed));
+    height: 1px;
+    background: var(--color-line);
+    content: "";
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black var(--services-grid-bleed),
+      black calc(100% - var(--services-grid-bleed)),
+      transparent
+    );
+    pointer-events: none;
   }
 
   .capability-layer {
     position: relative;
     min-width: 0;
-    min-height: 17rem;
-    padding: var(--space-12) var(--space-6) var(--space-8);
+    min-height: 12rem;
+    padding: 0;
+    text-align: center;
   }
 
-  .capability-layer + .capability-layer {
-    border-left: 1px solid var(--color-line);
-  }
-
-  .capability-layer:nth-child(2) {
-    padding-top: calc(var(--space-12) + var(--space-4));
-  }
-
-  .capability-layer:nth-child(3) {
-    padding-top: calc(var(--space-12) + var(--space-8));
-  }
-
-  .capability-layer:nth-child(4) {
-    padding-top: calc(var(--space-12) + var(--space-12));
+  .capability-layer::before,
+  .capability-layer:last-child::after {
+    position: absolute;
+    z-index: 0;
+    top: calc(-1 * var(--space-6));
+    bottom: calc(-1 * var(--space-6));
+    width: 1px;
+    background: var(--color-line);
+    content: "";
+    mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      black var(--space-6),
+      black calc(100% - var(--space-6)),
+      transparent
+    );
+    pointer-events: none;
   }
 
   .capability-layer::before {
+    left: 0;
+  }
+
+  .capability-layer:last-child::after {
+    right: 0;
+  }
+
+  .capability-layer__marker {
     position: absolute;
-    width: 0.5rem;
-    height: 0.5rem;
+    z-index: 0;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .capability-layer__node {
+    position: absolute;
+    z-index: 2;
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-left: -0.375rem;
     border: 1px solid var(--color-line-strong);
     border-radius: 50%;
     background: var(--color-navy);
-    content: "";
-    inset: -0.3rem auto auto var(--space-6);
+    inset: -0.375rem auto auto 50%;
+    transition: border-color 220ms var(--ease-enter);
+    will-change: transform;
   }
 
-  .capability-layer:last-child::before {
+  .capability-layer[data-active="true"] .capability-layer__node {
     border-color: var(--color-copper-light);
+  }
+
+  .capability-layer__signal {
+    position: absolute;
+    border-radius: inherit;
     background: var(--color-copper);
+    inset: 1px;
+    will-change: transform;
+  }
+
+  .capability-layer__connector {
+    position: absolute;
+    height: 1px;
+    background: var(--color-line-strong);
+    inset: 0 auto auto 50%;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .capability-layer__connector--leading {
+    width: calc(50% + var(--services-grid-bleed));
+    inset-inline-start: calc(-1 * var(--services-grid-bleed));
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black var(--services-grid-bleed)
+    );
+  }
+
+  .capability-layer__connector--trailing {
+    width: calc(50% + var(--services-grid-bleed));
+    mask-image: linear-gradient(
+      90deg,
+      black calc(100% - var(--services-grid-bleed)),
+      transparent
+    );
+  }
+
+  .capability-layer__connector-fill {
+    position: absolute;
+    background: var(--color-copper-light);
+    inset: 0;
+    will-change: transform;
+  }
+
+  .capability-layer__content {
+    position: relative;
+    z-index: 1;
+    padding: var(--space-6) var(--space-6) 1.25rem;
   }
 
   .capability-layer__index {
     color: var(--color-slate);
     font-family: var(--font-technical);
     font-size: var(--text-kicker);
+    transition: color 280ms var(--ease-enter);
+  }
+
+  .capability-layer[data-active="true"] .capability-layer__index {
+    color: var(--color-copper-light);
   }
 
   .capability-layer h3 {
-    max-width: 12ch;
-    margin-top: var(--space-4);
+    max-width: 14ch;
+    margin-top: var(--space-3);
+    margin-inline: auto;
     font-size: var(--text-h3);
     line-height: 1.18;
   }
 
   .capability-layer ul {
-    margin: var(--space-8) 0 0;
+    max-width: 22rem;
+    margin: var(--space-3) auto 0;
     padding: 0;
     color: var(--color-slate);
     font-size: 0.875rem;
@@ -3342,19 +3447,16 @@
   }
 
   .capability-layer li {
-    padding-block: var(--space-3);
-    border-top: 1px solid var(--color-line);
+    line-height: 1.65;
   }
 
   .services-flow__footer {
     display: flex;
-    justify-content: flex-end;
-    gap: var(--space-4);
+    justify-content: center;
     align-items: center;
-    margin-top: var(--space-8);
+    margin-top: var(--space-6);
   }
 
-  .services-flow__cta,
   .technical-links a,
   .technical-links [role="link"] {
     display: inline-flex;
@@ -3366,13 +3468,11 @@
     text-decoration: none;
   }
 
-  .services-flow__cta,
   .founder-note__link-pending,
   .technical-links [role="link"] {
     cursor: not-allowed;
   }
 
-  .services-flow__footer small,
   .founder-note__social-pending,
   .technical-links__pending small {
     color: var(--color-slate);
@@ -4221,18 +4321,85 @@
   }
 
   .services-flow__layers {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 42rem;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-inline: auto;
   }
 
-  .capability-layer:nth-child(3) {
-    padding-top: var(--space-12);
-    border-top: 1px solid var(--color-line);
-    border-left: 0;
+  .capability-layer {
+    min-height: 9.75rem;
+    padding: 0;
+    text-align: left;
   }
 
-  .capability-layer:nth-child(4) {
-    padding-top: calc(var(--space-12) + var(--space-4));
-    border-top: 1px solid var(--color-line);
+  .capability-layer::before {
+    top: 0;
+    right: calc(-1 * var(--services-grid-bleed));
+    bottom: auto;
+    left: calc(-1 * var(--services-grid-bleed));
+    width: auto;
+    height: 1px;
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      black var(--services-grid-bleed),
+      black calc(100% - var(--services-grid-bleed)),
+      transparent
+    );
+  }
+
+  .capability-layer:last-child::after {
+    display: none;
+  }
+
+  .capability-layer__node {
+    margin-left: -0.375rem;
+    inset: var(--space-4) auto auto var(--space-6);
+  }
+
+  .capability-layer__connector {
+    width: 1px;
+    height: calc(100% + 1px);
+    inset: calc(var(--space-4) + 0.375rem) auto auto var(--space-6);
+  }
+
+  .capability-layer__connector--leading {
+    width: 1px;
+    height: calc(var(--services-grid-bleed) + var(--space-4) + 0.375rem);
+    inset: calc(-1 * var(--services-grid-bleed)) auto auto var(--space-6);
+    mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      black var(--services-grid-bleed)
+    );
+  }
+
+  .capability-layer__connector--trailing {
+    width: 1px;
+    height: calc(100% - var(--space-4) - 0.375rem + var(--services-grid-bleed));
+    inset: calc(var(--space-4) + 0.375rem) auto auto var(--space-6);
+    mask-image: linear-gradient(
+      to bottom,
+      black calc(100% - var(--services-grid-bleed)),
+      transparent
+    );
+  }
+
+  .capability-layer__content {
+    width: auto;
+    margin: 0;
+    padding: var(--space-4) var(--space-6) var(--space-4) var(--space-16);
+    background: transparent;
+  }
+
+  .capability-layer__index {
+    display: block;
+  }
+
+  .capability-layer h3,
+  .capability-layer ul {
+    margin-inline: 0;
   }
 
   .aegis-chapter__layout {
@@ -4262,6 +4429,10 @@
 }
 
 @media (width <= 35rem) {
+  .services-flow .landing-chapter__frame {
+    padding-block: var(--space-12);
+  }
+
   .landing-nav__bar {
     gap: var(--space-3);
   }
@@ -4491,43 +4662,62 @@
   .services-flow__header {
     display: flex;
     flex-direction: column;
+    gap: var(--space-4);
   }
 
   .services-flow__introduction {
-    order: 1;
+    max-width: 100%;
   }
 
   .services-flow__intent {
-    order: 2;
     padding-top: 0;
   }
 
+  .services-flow h2 {
+    max-width: 15ch;
+  }
+
+  .services-flow__introduction > p {
+    max-width: 34ch;
+    margin-top: var(--space-4);
+  }
+
   .services-flow__layers {
-    grid-template-columns: 1fr;
-    margin-top: var(--space-16);
+    margin-top: var(--space-6);
   }
 
-  .capability-layer,
-  .capability-layer:nth-child(2),
-  .capability-layer:nth-child(3),
-  .capability-layer:nth-child(4) {
-    min-height: auto;
-    padding: var(--space-8) 0;
-    border-top: 1px solid var(--color-line);
-    border-left: 0;
+  .capability-layer {
+    min-height: 9.75rem;
   }
 
-  .capability-layer:first-child {
-    border-top: 0;
+  .capability-layer__node {
+    inset-inline-start: var(--space-4);
   }
 
-  .capability-layer::before {
-    inset-inline-start: 0;
+  .capability-layer__connector {
+    inset-inline-start: var(--space-4);
+  }
+
+  .capability-layer__content {
+    padding: var(--space-4);
+    padding-inline-start: var(--space-12);
+  }
+
+  .capability-layer h3 {
+    max-width: 18ch;
+  }
+
+  .capability-layer ul {
+    max-width: 31ch;
+    margin-top: var(--space-3);
   }
 
   .services-flow__footer {
-    align-items: flex-start;
-    flex-direction: column;
+    margin-top: var(--space-6);
+  }
+
+  .services-flow__cta {
+    width: 100%;
   }
 
   .aegis-chapter__layout {

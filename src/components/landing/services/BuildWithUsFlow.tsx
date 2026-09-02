@@ -3,6 +3,7 @@ import { useRef, type RefObject } from "react"
 import { CapabilityLayer } from "@/components/landing/services/CapabilityLayer"
 import { PearlescentStarfield } from "@/components/motion/PearlescentStarfield"
 import { useChapterMotion } from "@/components/motion/useChapterMotion"
+import { Button } from "@/components/ui/button"
 import type { LandingContentDraft } from "@/content"
 import { gsap } from "@/lib/gsap"
 
@@ -18,48 +19,150 @@ type BuildWithUsFlowProps = {
 
 function useServicesMotion(scope: RefObject<HTMLElement | null>) {
   useChapterMotion(scope, ({ profile, root, select }) => {
-    const isMobile = profile === "mobile"
+    const layers = select(".capability-layer")
+    const nodes = select(".capability-layer__node")
+    const signals = select(".capability-layer__signal")
+    const connectorFills = select(".capability-layer__connector-fill")
+    const isHorizontal = profile === "desktop"
+
+    if (layers.length === 0 || nodes.length === 0 || signals.length === 0)
+      return
+
+    gsap.set(layers, { attr: { "data-active": "false" } })
+    gsap.set(signals, {
+      scale: 0,
+      transformOrigin: "center",
+    })
+    gsap.set(connectorFills, {
+      scaleX: isHorizontal ? 0 : 1,
+      scaleY: isHorizontal ? 1 : 0,
+      transformOrigin: isHorizontal ? "left center" : "center top",
+    })
+
     const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: root,
-        start: isMobile ? "top 86%" : "top 72%",
-        end: isMobile ? "center 60%" : "bottom 44%",
-        scrub: isMobile ? false : profile === "desktop" ? 0.38 : 0.18,
-        toggleActions: isMobile ? "play none none reverse" : undefined,
-      },
+      id: "services-flow-loop",
+      paused: true,
+      repeat: -1,
+      repeatDelay: 0.45,
+    })
+
+    nodes.forEach((node, index) => {
+      const stageLabel = `stage-${index}`
+      const signal = signals[index]
+
+      timeline
+        .addLabel(stageLabel)
+        .set(layers[index], { attr: { "data-active": "true" } }, stageLabel)
+
+      if (index === 0) {
+        timeline.to(
+          connectorFills[0],
+          {
+            scaleX: 1,
+            scaleY: 1,
+            duration: 0.28,
+            ease: "power2.out",
+          },
+          stageLabel,
+        )
+      }
+
+      timeline
+        .to(
+          signal,
+          {
+            scale: 1,
+            duration: 0.26,
+            ease: "power3.out",
+          },
+          stageLabel,
+        )
+        .to(
+          node,
+          {
+            scale: 1.18,
+            duration: 0.18,
+            ease: "power3.out",
+          },
+          stageLabel,
+        )
+        .to(node, {
+          scale: 1,
+          duration: 0.22,
+          ease: "power2.out",
+        })
+
+      const outgoingFill = connectorFills[index + 1]
+      if (outgoingFill) {
+        timeline.to(
+          outgoingFill,
+          {
+            scaleX: 1,
+            scaleY: 1,
+            duration: index === nodes.length - 1 ? 0.42 : 0.68,
+            ease: "none",
+          },
+          "+=0.2",
+        )
+      } else {
+        timeline.to({}, { duration: 0.54 })
+      }
     })
 
     timeline
-      .fromTo(
-        select(".services-flow__intent, .services-flow__introduction"),
-        { opacity: 0, y: isMobile ? 18 : 28 },
+      .addLabel("journey-complete")
+      .to({}, { duration: 0.78 })
+      .addLabel("journey-reset")
+      .set(layers, { attr: { "data-active": "false" } }, "journey-reset")
+      .to(
+        signals,
         {
-          opacity: 1,
-          y: 0,
-          duration: 0.46,
-          ease: "power3.out",
-          stagger: 0.08,
+          scale: 0,
+          duration: 0.32,
+          ease: "power2.inOut",
         },
+        "journey-reset",
       )
-      .fromTo(
-        select(".capability-layer"),
-        { opacity: 0, x: isMobile ? 0 : -20, y: isMobile ? 16 : 0 },
+      .to(
+        connectorFills,
         {
-          opacity: 1,
-          x: 0,
-          y: 0,
-          duration: 0.54,
-          ease: "power2.out",
-          stagger: profile === "desktop" ? 0.11 : 0.07,
+          scaleX: isHorizontal ? 0 : 1,
+          scaleY: isHorizontal ? 1 : 0,
+          duration: 0.32,
+          ease: "power2.inOut",
         },
-        "-=0.18",
+        "journey-reset",
       )
-      .fromTo(
-        select(".services-flow__footer"),
-        { opacity: 0, y: 14 },
-        { opacity: 1, y: 0, duration: 0.32, ease: "power2.out" },
-        "-=0.16",
-      )
+
+    let isVisible = false
+    const syncPlayback = () => {
+      if (isVisible && !document.hidden) {
+        timeline.play()
+      } else {
+        timeline.pause()
+      }
+    }
+
+    const observer =
+      typeof IntersectionObserver === "undefined"
+        ? undefined
+        : new IntersectionObserver(
+            ([entry]) => {
+              isVisible = entry?.isIntersecting ?? false
+              syncPlayback()
+            },
+            { rootMargin: "8% 0px" },
+          )
+
+    observer?.observe(root)
+    document.addEventListener("visibilitychange", syncPlayback)
+    syncPlayback()
+
+    return () => {
+      observer?.disconnect()
+      document.removeEventListener("visibilitychange", syncPlayback)
+      timeline.kill()
+    }
   })
 }
 
@@ -85,29 +188,27 @@ export function BuildWithUsFlow({ content, labels }: BuildWithUsFlowProps) {
           </div>
         </header>
 
-        <div className="services-flow__layers" aria-label={labels.sectionLabel}>
+        <ol className="services-flow__layers" aria-label={labels.sectionLabel}>
           {content.layers.map((layer, index) => (
             <CapabilityLayer
               key={layer.title}
               capabilities={layer.capabilities}
               index={index}
+              isLast={index === content.layers.length - 1}
               title={layer.title}
             />
           ))}
-        </div>
+        </ol>
 
         <footer className="services-flow__footer">
-          <span
-            className="services-flow__cta"
-            role="link"
-            aria-disabled="true"
-            aria-describedby="services-destination-status"
-          >
-            {content.cta.label}
-          </span>
-          <small id="services-destination-status">
-            {labels.destinationPending}
-          </small>
+          <Button asChild size="lg">
+            <a
+              className="services-flow__cta"
+              href={`#${content.cta.sectionId}`}
+            >
+              {content.cta.label}
+            </a>
+          </Button>
         </footer>
       </div>
     </section>

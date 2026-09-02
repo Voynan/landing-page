@@ -16,7 +16,10 @@ type ChapterMotionContext = {
   select: ReturnType<typeof gsap.utils.selector>
 }
 
-type ChapterMotionSetup = (context: ChapterMotionContext) => void
+type ChapterMotionCleanup = () => void
+type ChapterMotionSetup = (
+  context: ChapterMotionContext,
+) => ChapterMotionCleanup | void
 
 type ChapterMotionOptions = {
   enabled?: boolean
@@ -52,7 +55,7 @@ function useChapterMotion(
 
           if (profile === "reduced" || profile === "static") return
 
-          setup({
+          return setup({
             profile,
             root,
             select: gsap.utils.selector(root),
@@ -76,6 +79,7 @@ function useChapterMotion(
 export { useChapterMotion }
 export type {
   ChapterMotionContext,
+  ChapterMotionCleanup,
   ChapterMotionOptions,
   ChapterMotionSetup,
   EnhancedMotionProfile,
