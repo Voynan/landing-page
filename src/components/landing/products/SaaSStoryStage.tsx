@@ -13,6 +13,7 @@ import { useChapterMotion } from "@/components/motion/useChapterMotion"
 import type { LandingContentDraft, ProductId } from "@/content"
 import { useProductVisibility } from "@/hooks/useProductVisibility"
 import { track, type AnalyticsTrack } from "@/lib/analytics"
+import { ScrollTrigger } from "@/lib/gsap"
 
 type SaaSStoryStageLabels = {
   sectionLabel: string
@@ -80,6 +81,13 @@ export function SaaSStoryStage({
       (motionProfile === "reduced" &&
         mobileViewport.resolved &&
         mobileViewport.matches))
+  // The observatory and the compact explorer differ by thousands of pixels, and
+  // the swap only happens after the motion profile resolves. Every chapter below
+  // this section would keep the scroll positions measured before the swap.
+  useEffect(() => {
+    ScrollTrigger.refresh()
+  }, [enhanced, mobilePresentation])
+
   const selectProduct = useCallback(
     (productId: ProductId) => {
       activateProduct(productId)

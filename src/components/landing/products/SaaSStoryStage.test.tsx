@@ -83,6 +83,7 @@ afterEach(() => {
   Reflect.deleteProperty(HTMLElement.prototype, "scrollIntoView")
   window.history.replaceState(null, "", "/")
   vi.unstubAllGlobals()
+  vi.restoreAllMocks()
 })
 
 describe("SaaSStoryStage", () => {
@@ -332,5 +333,25 @@ describe("SaaSStoryStage", () => {
       "true",
     )
     expect(screen.getAllByRole("article")).toHaveLength(1)
+  })
+  it("recalculates scroll positions once the compact explorer replaces the full observatory", async () => {
+    installMotionProfile("mobile")
+    const refresh = vi.spyOn(ScrollTrigger, "refresh")
+
+    render(
+      <SaaSStoryStage
+        content={baseContent}
+        labels={labels}
+        motionMode="auto"
+      />,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByTestId("mobile-product-explorer")).toBeVisible()
+    })
+
+    await waitFor(() => {
+      expect(refresh).toHaveBeenCalled()
+    })
   })
 })
