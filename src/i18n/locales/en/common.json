@@ -1,8 +1,13 @@
 {
   "nav": {
+    "sections": "Sections",
+    "start": "Start",
+    "thesis": "Thesis",
     "products": "Products",
-    "openSource": "Open source",
     "buildWithUs": "Build with us",
+    "openSource": "Open source",
+    "founder": "Founder",
+    "contact": "Contact",
     "language": "Language"
   },
   "products": {
@@ -75,8 +80,6 @@
   "accessibility": {
     "skipToContent": "Skip to content",
     "primaryNavigation": "Primary navigation",
-    "openMenu": "Open menu",
-    "closeMenu": "Close menu",
     "menuOpened": "Menu opened",
     "menuClosed": "Menu closed"
   },

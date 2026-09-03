@@ -95,11 +95,11 @@ it("renders production controls inside the controls specimen", () => {
   expect(within(controls).getByRole("link", { name: "EN" })).toBeVisible()
   expect(
     within(controls).getByRole("group", {
-      name: "Compact navigation at 320 pixels",
+      name: "Section index at 320 pixels",
     }),
   ).toBeVisible()
   expect(
-    within(controls).getByRole("navigation", { name: "Compact navigation" }),
+    within(controls).getByRole("list", { name: "Section index" }),
   ).toBeVisible()
 })
 

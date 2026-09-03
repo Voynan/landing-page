@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { CTAGroup } from "@/components/landing/hero/CTAGroup"
 import { LanguageSwitch } from "@/components/landing/navigation/LanguageSwitch"
-import { CompactNavigationMenu } from "@/components/landing/navigation/ProgressiveNav"
+import { SectionIndexMenu } from "@/components/landing/navigation/ProgressiveNav"
 import { Label } from "@/components/ui/label"
 import { LiveRegion } from "@/components/ui/LiveRegion"
 import {
@@ -107,27 +107,32 @@ export function ControlsSpecimen() {
         </div>
 
         <div className="ds-control-group ds-control-group--wide">
-          <h3>Compact navigation</h3>
+          <h3>Section index</h3>
           <div
-            className="ds-compact-navigation-preview"
+            className="ds-section-index-preview"
             role="group"
-            aria-label="Compact navigation at 320 pixels"
+            aria-label="Section index at 320 pixels"
           >
-            <CompactNavigationMenu
+            <SectionIndexMenu
               activeSectionId="products"
-              ariaLabel="Compact navigation"
-              id="design-system-compact-navigation"
+              ariaLabel="Section index"
+              id="design-system-section-index"
               links={[
+                { label: "Start", sectionId: "hero" },
+                { label: "Thesis", sectionId: "thesis" },
                 { label: "Products", sectionId: "products" },
+                { label: "Build with us", sectionId: "services" },
                 { label: "Open source", sectionId: "aegis" },
-                { label: "Build with us", sectionId: "contact" },
+                { label: "Founder", sectionId: "founder" },
+                { label: "Contact", sectionId: "contact" },
               ]}
               open
             />
           </div>
           <p>
-            The production menu is held at 320px so wrapping, touch targets,
-            active location, and visible keyboard focus can be inspected.
+            The production quick menu is held at 320px so wrapping, touch
+            targets, active location, and visible keyboard focus can be
+            inspected.
           </p>
         </div>
       </div>

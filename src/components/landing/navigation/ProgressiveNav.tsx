@@ -3,9 +3,12 @@ import { type RefObject, useEffect, useRef, useState } from "react"
 
 import { LanguageSwitch } from "@/components/landing/navigation/LanguageSwitch"
 import { RetractableVoynanMark } from "@/components/landing/navigation/RetractableVoynanMark"
+import { motionQueries } from "@/components/motion/motionQueries"
 import { Button } from "@/components/ui/button"
 import { sectionIds, type Locale, type SectionId } from "@/content/contracts"
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap"
+
+const SECTION_INDEX_ID = "section-index-menu"
 
 type NavigationLink = {
   label: string
@@ -14,12 +17,11 @@ type NavigationLink = {
 
 type ProgressiveNavContent = {
   ariaLabel: string
-  closeMenuLabel: string
   homeLabel: string
   languageLabel: string
   links: readonly NavigationLink[]
   localeLabels: Record<Locale, string>
-  openMenuLabel: string
+  menuLabel: string
 }
 
 type ProgressiveNavProps = {
@@ -27,14 +29,15 @@ type ProgressiveNavProps = {
   currentLocale: Locale
 }
 
-type CompactNavigationMenuProps = {
+type SectionIndexMenuProps = {
   activeSectionId: SectionId
-  ariaLabel: string
+  ariaLabel?: string
   firstLinkRef?: RefObject<HTMLAnchorElement | null>
   id: string
   links: readonly NavigationLink[]
   onNavigate?: () => void
   open: boolean
+  panelRef?: RefObject<HTMLDivElement | null>
 }
 
 function getHashSectionId(hash: string): SectionId | undefined {
@@ -42,7 +45,13 @@ function getHashSectionId(hash: string): SectionId | undefined {
   return sectionIds.includes(sectionId) ? sectionId : undefined
 }
 
-export function CompactNavigationMenu({
+function prefersReducedMotion() {
+  if (typeof window === "undefined") return false
+  if (typeof window.matchMedia !== "function") return false
+  return window.matchMedia(motionQueries.reduceMotion).matches
+}
+
+export function SectionIndexMenu({
   activeSectionId,
   ariaLabel,
   firstLinkRef,
@@ -50,13 +59,19 @@ export function CompactNavigationMenu({
   links,
   onNavigate,
   open,
-}: CompactNavigationMenuProps) {
+  panelRef,
+}: SectionIndexMenuProps) {
   return (
-    <div id={id} className="landing-nav__compact" hidden={!open}>
-      <nav aria-label={ariaLabel}>
-        <ul>
+    <div ref={panelRef} id={id} className="landing-nav__index" hidden={!open}>
+      <span
+        className="landing-nav__index-sweep"
+        data-index-sweep
+        aria-hidden="true"
+      />
+      <div className="landing-nav__index-frame">
+        <ul aria-label={ariaLabel}>
           {links.map((link, index) => (
-            <li key={link.sectionId}>
+            <li key={link.sectionId} data-index-row>
               <a
                 ref={index === 0 ? firstLinkRef : undefined}
                 href={`#${link.sectionId}`}
@@ -65,12 +80,17 @@ export function CompactNavigationMenu({
                 }
                 onClick={onNavigate}
               >
-                {link.label}
+                <span
+                  className="landing-nav__index-marker"
+                  aria-hidden="true"
+                />
+                <span className="landing-nav__index-label">{link.label}</span>
+                <span className="landing-nav__index-trace" aria-hidden="true" />
               </a>
             </li>
           ))}
         </ul>
-      </nav>
+      </div>
     </div>
   )
 }
@@ -84,9 +104,10 @@ export function ProgressiveNav({
   const [footerReached, setFooterReached] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const navigationRef = useRef<HTMLElement>(null)
+  const indexPanelRef = useRef<HTMLDivElement>(null)
   const scrollProgressRef = useRef<HTMLSpanElement>(null)
   const menuTriggerRef = useRef<HTMLButtonElement>(null)
-  const firstCompactLinkRef = useRef<HTMLAnchorElement>(null)
+  const firstIndexLinkRef = useRef<HTMLAnchorElement>(null)
 
   useGSAP(
     () => {
@@ -128,6 +149,45 @@ export function ProgressiveNav({
     { scope: navigationRef },
   )
 
+  useGSAP(
+    () => {
+      const panel = indexPanelRef.current
+      if (!panel || !isMenuOpen || prefersReducedMotion()) return
+
+      const select = gsap.utils.selector(panel)
+
+      gsap
+        .timeline()
+        .fromTo(
+          select("[data-index-sweep]"),
+          { scaleX: 0 },
+          {
+            scaleX: 1,
+            duration: 0.76,
+            ease: "expo.out",
+            transformOrigin: "left center",
+          },
+        )
+        .fromTo(
+          select("[data-index-row]"),
+          { opacity: 0, y: 14 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "expo.out",
+            stagger: 0.045,
+          },
+          0.06,
+        )
+    },
+    {
+      dependencies: [isMenuOpen],
+      revertOnUpdate: true,
+      scope: indexPanelRef,
+    },
+  )
+
   useEffect(() => {
     if (!("IntersectionObserver" in window)) return
 
@@ -166,7 +226,7 @@ export function ProgressiveNav({
 
   useEffect(() => {
     if (isMenuOpen) {
-      firstCompactLinkRef.current?.focus()
+      firstIndexLinkRef.current?.focus()
     }
   }, [isMenuOpen])
 
@@ -179,22 +239,21 @@ export function ProgressiveNav({
       menuTriggerRef.current?.focus()
     }
 
+    function closeOnOutsidePointer(event: PointerEvent) {
+      const navigation = navigationRef.current
+      if (!navigation) return
+      if (navigation.contains(event.target as Node)) return
+      setIsMenuOpen(false)
+    }
+
     window.addEventListener("keydown", closeOnEscape)
-    return () => window.removeEventListener("keydown", closeOnEscape)
+    document.addEventListener("pointerdown", closeOnOutsidePointer)
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape)
+      document.removeEventListener("pointerdown", closeOnOutsidePointer)
+    }
   }, [isMenuOpen])
 
-  const navigationLinks = content.links.map((link) => (
-    <li key={link.sectionId}>
-      <a
-        href={`#${link.sectionId}`}
-        aria-current={
-          activeSectionId === link.sectionId ? "location" : undefined
-        }
-      >
-        {link.label}
-      </a>
-    </li>
-  ))
   const isBrandCollapsed = hasScrolled && footerReached
 
   return (
@@ -203,6 +262,15 @@ export function ProgressiveNav({
       className="landing-nav"
       data-scrolled={hasScrolled}
       data-footer-reached={footerReached}
+      data-menu-open={isMenuOpen}
+      onBlur={(event) => {
+        if (!isMenuOpen) return
+        // Touch keyboards and iOS Safari drop focus without moving it, which
+        // must not retract the index from under the finger mid-tap.
+        if (!event.relatedTarget) return
+        if (event.currentTarget.contains(event.relatedTarget)) return
+        setIsMenuOpen(false)
+      }}
     >
       <div className="landing-nav__scroll-track" aria-hidden="true">
         <span
@@ -211,57 +279,58 @@ export function ProgressiveNav({
         />
       </div>
 
-      <div className="landing-nav__bar">
-        <RetractableVoynanMark
-          collapsed={isBrandCollapsed}
-          label={content.homeLabel}
-        />
-
-        <nav className="landing-nav__desktop" aria-label={content.ariaLabel}>
-          <ul>{navigationLinks}</ul>
-        </nav>
-
-        <div className="landing-nav__desktop-language">
-          <LanguageSwitch
-            activeSectionId={activeSectionId}
-            currentLocale={currentLocale}
-            label={content.languageLabel}
-            localeLabels={content.localeLabels}
+      <nav className="landing-nav__primary" aria-label={content.ariaLabel}>
+        <div className="landing-nav__bar">
+          <RetractableVoynanMark
+            collapsed={isBrandCollapsed}
+            label={content.homeLabel}
           />
+
+          <div className="landing-nav__language">
+            <LanguageSwitch
+              activeSectionId={activeSectionId}
+              currentLocale={currentLocale}
+              label={content.languageLabel}
+              localeLabels={content.localeLabels}
+            />
+          </div>
+
+          <Button
+            ref={menuTriggerRef}
+            className="landing-nav__index-trigger"
+            type="button"
+            variant="outline"
+            aria-controls={SECTION_INDEX_ID}
+            aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen((open) => !open)}
+          >
+            <span className="landing-nav__index-trigger-label">
+              {content.menuLabel}
+            </span>
+            {isMenuOpen ? (
+              <X aria-hidden="true" />
+            ) : (
+              <Menu aria-hidden="true" />
+            )}
+          </Button>
         </div>
 
-        <Button
-          ref={menuTriggerRef}
-          className="landing-nav__menu-trigger hidden max-[980px]:inline-flex"
-          type="button"
-          variant="ghost"
-          size="icon"
-          aria-controls="compact-navigation"
-          aria-expanded={isMenuOpen}
-          aria-label={
-            isMenuOpen ? content.closeMenuLabel : content.openMenuLabel
-          }
-          onClick={() => setIsMenuOpen((open) => !open)}
-        >
-          {isMenuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-        </Button>
-      </div>
-
-      <CompactNavigationMenu
-        activeSectionId={activeSectionId}
-        ariaLabel={content.ariaLabel}
-        firstLinkRef={firstCompactLinkRef}
-        id="compact-navigation"
-        links={content.links}
-        onNavigate={() => setIsMenuOpen(false)}
-        open={isMenuOpen}
-      />
+        <SectionIndexMenu
+          activeSectionId={activeSectionId}
+          firstLinkRef={firstIndexLinkRef}
+          id={SECTION_INDEX_ID}
+          links={content.links}
+          onNavigate={() => setIsMenuOpen(false)}
+          open={isMenuOpen}
+          panelRef={indexPanelRef}
+        />
+      </nav>
     </header>
   )
 }
 
 export type {
-  CompactNavigationMenuProps,
   ProgressiveNavContent,
   ProgressiveNavProps,
+  SectionIndexMenuProps,
 }

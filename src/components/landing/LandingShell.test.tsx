@@ -14,15 +14,18 @@ import { ScrollTrigger } from "@/lib/gsap"
 
 const navigationContent = {
   ariaLabel: "Primary navigation",
-  openMenuLabel: "Open navigation",
-  closeMenuLabel: "Close navigation",
   homeLabel: "Voynan — back to start",
   languageLabel: "Language",
   localeLabels: { en: "English", pt: "Portuguese" },
+  menuLabel: "Sections",
   links: [
+    { label: "Start", sectionId: "hero" },
+    { label: "Thesis", sectionId: "thesis" },
     { label: "Products", sectionId: "products" },
+    { label: "Build with us", sectionId: "services" },
     { label: "Open source", sectionId: "aegis" },
-    { label: "Build with us", sectionId: "contact" },
+    { label: "Founder", sectionId: "founder" },
+    { label: "Contact", sectionId: "contact" },
   ],
 } as const
 

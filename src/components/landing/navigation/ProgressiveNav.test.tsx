@@ -2,7 +2,14 @@
 
 import "@testing-library/jest-dom/vitest"
 
-import { act, cleanup, render, screen, waitFor } from "@testing-library/react"
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { afterEach, expect, it, vi } from "vitest"
 
@@ -11,15 +18,18 @@ import { ScrollTrigger } from "@/lib/gsap"
 
 const navigationContent = {
   ariaLabel: "Primary navigation",
-  openMenuLabel: "Open navigation",
-  closeMenuLabel: "Close navigation",
   homeLabel: "Voynan — back to start",
   languageLabel: "Language",
   localeLabels: { en: "English", pt: "Portuguese" },
+  menuLabel: "Sections",
   links: [
+    { label: "Start", sectionId: "hero" },
+    { label: "Thesis", sectionId: "thesis" },
     { label: "Products", sectionId: "products" },
+    { label: "Build with us", sectionId: "services" },
     { label: "Open source", sectionId: "aegis" },
-    { label: "Build with us", sectionId: "contact" },
+    { label: "Founder", sectionId: "founder" },
+    { label: "Contact", sectionId: "contact" },
   ],
 } as const
 
@@ -64,48 +74,154 @@ it("fills the navigation progress line as the document approaches its end", asyn
   expect(ScrollTrigger.getById("navigation-scroll-progress")).toBeUndefined()
 })
 
-it("opens the compact navigation with an exposed expanded state and focus", async () => {
+it("keeps the chapter index behind a single trigger instead of standing links", () => {
+  render(<ProgressiveNav content={navigationContent} currentLocale="en" />)
+
+  const trigger = screen.getByRole("button", { name: "Sections" })
+  expect(trigger).toHaveAttribute("aria-expanded", "false")
+  expect(trigger).toHaveAttribute("aria-controls", "section-index-menu")
+  expect(
+    screen.getByRole("navigation", { name: "Primary navigation" }),
+  ).toBeVisible()
+
+  for (const link of navigationContent.links) {
+    expect(screen.queryByRole("link", { name: link.label })).toBeNull()
+  }
+})
+
+it("opens every chapter destination from the single quick menu", async () => {
   const user = userEvent.setup()
 
   render(<ProgressiveNav content={navigationContent} currentLocale="en" />)
 
-  const trigger = screen.getByRole("button", { name: "Open navigation" })
-  expect(trigger).toHaveAttribute("aria-expanded", "false")
+  await user.click(screen.getByRole("button", { name: "Sections" }))
 
-  await user.click(trigger)
+  expect(screen.getByRole("button", { name: "Sections" })).toHaveAttribute(
+    "aria-expanded",
+    "true",
+  )
 
-  expect(
-    screen.getByRole("button", { name: "Close navigation" }),
-  ).toHaveAttribute("aria-expanded", "true")
-  expect(screen.getAllByRole("link", { name: "Products" })[1]).toHaveFocus()
+  for (const link of navigationContent.links) {
+    expect(screen.getByRole("link", { name: link.label })).toHaveAttribute(
+      "href",
+      `#${link.sectionId}`,
+    )
+  }
+
+  expect(screen.getByRole("link", { name: "Start" })).toHaveFocus()
 
   await user.keyboard("{Escape}")
 
-  expect(screen.getByRole("button", { name: "Open navigation" })).toHaveFocus()
-  expect(
-    screen.getByRole("button", { name: "Open navigation" }),
-  ).toHaveAttribute("aria-expanded", "false")
+  expect(screen.getByRole("button", { name: "Sections" })).toHaveFocus()
+  expect(screen.getByRole("button", { name: "Sections" })).toHaveAttribute(
+    "aria-expanded",
+    "false",
+  )
+  expect(screen.queryByRole("link", { name: "Contact" })).toBeNull()
 })
 
-it("exposes navigation as ordinary chapter links without JavaScript routing", () => {
+it("marks the observed chapter inside the quick menu", async () => {
+  const user = userEvent.setup()
+  window.location.hash = "#aegis"
+
   render(<ProgressiveNav content={navigationContent} currentLocale="en" />)
 
-  expect(screen.getByRole("link", { name: "Products" })).toHaveAttribute(
-    "href",
-    "#products",
+  await user.click(screen.getByRole("button", { name: "Sections" }))
+
+  expect(screen.getByRole("link", { name: "Open source" })).toHaveAttribute(
+    "aria-current",
+    "location",
   )
-  expect(screen.getByRole("link", { name: "Build with us" })).toHaveAttribute(
-    "href",
-    "#contact",
+  expect(screen.getByRole("link", { name: "Products" })).not.toHaveAttribute(
+    "aria-current",
   )
 })
 
-it("keeps one persistent language control when the compact menu opens", async () => {
+it("closes the quick menu when a pointer lands outside the navigation", async () => {
+  const user = userEvent.setup()
+
+  render(
+    <>
+      <ProgressiveNav content={navigationContent} currentLocale="en" />
+      <main>
+        <button type="button">Outside control</button>
+      </main>
+    </>,
+  )
+
+  await user.click(screen.getByRole("button", { name: "Sections" }))
+  expect(screen.getByRole("link", { name: "Thesis" })).toBeInTheDocument()
+
+  await user.click(screen.getByRole("button", { name: "Outside control" }))
+
+  expect(screen.queryByRole("link", { name: "Thesis" })).toBeNull()
+  expect(screen.getByRole("button", { name: "Sections" })).toHaveAttribute(
+    "aria-expanded",
+    "false",
+  )
+})
+
+it("closes the quick menu after a chapter destination is chosen", async () => {
   const user = userEvent.setup()
 
   render(<ProgressiveNav content={navigationContent} currentLocale="en" />)
 
-  await user.click(screen.getByRole("button", { name: "Open navigation" }))
+  await user.click(screen.getByRole("button", { name: "Sections" }))
+  await user.click(screen.getByRole("link", { name: "Founder" }))
+
+  expect(screen.getByRole("button", { name: "Sections" })).toHaveAttribute(
+    "aria-expanded",
+    "false",
+  )
+})
+
+it("keeps the quick menu open when a touch clears focus instead of moving it", async () => {
+  const user = userEvent.setup()
+
+  render(<ProgressiveNav content={navigationContent} currentLocale="en" />)
+
+  await user.click(screen.getByRole("button", { name: "Sections" }))
+
+  const firstLink = screen.getByRole("link", { name: "Start" })
+  expect(firstLink).toHaveFocus()
+
+  // Tapping a link on iOS Safari drops focus without moving it to another element.
+  fireEvent.focusOut(firstLink, { relatedTarget: null })
+
+  expect(screen.getByRole("link", { name: "Founder" })).toBeInTheDocument()
+  expect(screen.getByRole("button", { name: "Sections" })).toHaveAttribute(
+    "aria-expanded",
+    "true",
+  )
+})
+
+it("closes the quick menu when focus moves to content outside the navigation", async () => {
+  const user = userEvent.setup()
+
+  render(
+    <>
+      <ProgressiveNav content={navigationContent} currentLocale="en" />
+      <main>
+        <button type="button">Outside control</button>
+      </main>
+    </>,
+  )
+
+  await user.click(screen.getByRole("button", { name: "Sections" }))
+
+  fireEvent.focusOut(screen.getByRole("link", { name: "Start" }), {
+    relatedTarget: screen.getByRole("button", { name: "Outside control" }),
+  })
+
+  expect(screen.queryByRole("link", { name: "Start" })).toBeNull()
+})
+
+it("keeps one persistent language control when the quick menu opens", async () => {
+  const user = userEvent.setup()
+
+  render(<ProgressiveNav content={navigationContent} currentLocale="en" />)
+
+  await user.click(screen.getByRole("button", { name: "Sections" }))
 
   expect(screen.getAllByRole("group", { name: "Language" })).toHaveLength(1)
 })

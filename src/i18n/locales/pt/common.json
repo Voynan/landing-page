@@ -1,8 +1,13 @@
 {
   "nav": {
+    "sections": "Seções",
+    "start": "Início",
+    "thesis": "Tese",
     "products": "Produtos",
-    "openSource": "Open source",
     "buildWithUs": "Construa conosco",
+    "openSource": "Open source",
+    "founder": "Fundador",
+    "contact": "Contato",
     "language": "Idioma"
   },
   "products": {
@@ -75,8 +80,6 @@
   "accessibility": {
     "skipToContent": "Ir para o conteúdo",
     "primaryNavigation": "Navegação principal",
-    "openMenu": "Abrir menu",
-    "closeMenu": "Fechar menu",
     "menuOpened": "Menu aberto",
     "menuClosed": "Menu fechado"
   },

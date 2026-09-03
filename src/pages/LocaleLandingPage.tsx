@@ -116,15 +116,18 @@ function LocalizedLandingPage({ locale }: LocaleLandingPageProps) {
       }}
       navigationContent={{
         ariaLabel: t("accessibility.primaryNavigation"),
-        openMenuLabel: t("accessibility.openMenu"),
-        closeMenuLabel: t("accessibility.closeMenu"),
         homeLabel: "Voynan",
         languageLabel: t("nav.language"),
         localeLabels: { pt: "PT", en: "EN" },
+        menuLabel: t("nav.sections"),
         links: [
+          { label: t("nav.start"), sectionId: "hero" },
+          { label: t("nav.thesis"), sectionId: "thesis" },
           { label: t("nav.products"), sectionId: "products" },
+          { label: t("nav.buildWithUs"), sectionId: "services" },
           { label: t("nav.openSource"), sectionId: "aegis" },
-          { label: t("nav.buildWithUs"), sectionId: "contact" },
+          { label: t("nav.founder"), sectionId: "founder" },
+          { label: t("nav.contact"), sectionId: "contact" },
         ],
       }}
     />
