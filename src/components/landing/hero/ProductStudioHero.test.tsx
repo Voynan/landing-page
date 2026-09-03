@@ -13,6 +13,25 @@ import type { AllowedEvent } from "@/lib/analytics"
 afterEach(cleanup)
 
 describe("ProductStudioHero", () => {
+  it("renders a static illuminated eclipse with a single copper arc", () => {
+    render(<ProductStudioHero content={getLandingContent("en").hero} />)
+
+    const eclipse = screen.getByTestId("hero-eclipse")
+    const ringGlow = eclipse.querySelector("[data-eclipse-glow='ring']")
+    const orangeArc = eclipse.querySelector("[data-eclipse-accent='orange']")
+
+    expect(eclipse).toHaveAttribute("aria-hidden", "true")
+    expect(ringGlow).toHaveAttribute("filter")
+    expect(orangeArc).toHaveAttribute(
+      "d",
+      "M 12.41 63.68 A 40 40 0 0 0 87.59 63.68",
+    )
+    expect(eclipse.querySelectorAll("[data-eclipse-accent]")).toHaveLength(1)
+    expect(eclipse.querySelector("[data-eclipse-fill]")).toBeNull()
+    expect(eclipse.querySelector("[data-eclipse-wipe]")).toBeNull()
+    expect(eclipse).not.toHaveAttribute("data-eclipse-variant")
+  })
+
   it.each(["pt", "en"] as const)(
     "renders useful %s hero content without animation",
     (locale) => {

@@ -2103,10 +2103,29 @@
     transform: translateY(-50%);
   }
 
-  .landing-hero__eclipse img {
+  .landing-hero__eclipse svg {
     width: 100%;
     height: 100%;
+    overflow: visible;
     opacity: 0.92;
+  }
+
+  .hero-eclipse__base,
+  .hero-eclipse__ring-glow,
+  .hero-eclipse__accent {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 10;
+  }
+
+  .hero-eclipse__base,
+  .hero-eclipse__ring-glow {
+    stroke: var(--color-ivory);
+  }
+
+  .hero-eclipse__ring-glow {
+    opacity: 0.54;
   }
 
   .landing-hero__content {

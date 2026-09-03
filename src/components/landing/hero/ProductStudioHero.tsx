@@ -1,6 +1,5 @@
-import { useRef, type RefObject } from "react"
+import { useId, useRef, type RefObject } from "react"
 
-import voynanEclipse from "@/assets/brand/voynan.svg"
 import { CTAGroup } from "@/components/landing/hero/CTAGroup"
 import { PearlescentStarfield } from "@/components/motion/PearlescentStarfield"
 import { useChapterMotion } from "@/components/motion/useChapterMotion"
@@ -13,6 +12,87 @@ type HeroContent = LandingContentDraft["hero"]
 type ProductStudioHeroProps = {
   content: HeroContent
   trackEvent?: AnalyticsTrack
+}
+
+const eclipseAccentArc = "M 12.41 63.68 A 40 40 0 0 0 87.59 63.68"
+
+function HeroEclipse() {
+  const id = useId().replaceAll(":", "")
+  const accentGradientId = `hero-eclipse-accent-${id}`
+  const ringGlowFilterId = `hero-eclipse-ring-glow-${id}`
+
+  return (
+    <svg
+      aria-hidden="true"
+      className="hero-eclipse"
+      data-testid="hero-eclipse"
+      focusable="false"
+      viewBox="0 0 100 100"
+    >
+      <defs>
+        <linearGradient
+          id={accentGradientId}
+          gradientUnits="userSpaceOnUse"
+          x1="12.41"
+          x2="87.59"
+          y1="50"
+          y2="50"
+        >
+          <stop offset="0" stopColor="var(--color-ivory)" stopOpacity="0" />
+          <stop
+            offset="0.18"
+            stopColor="var(--color-copper-light)"
+            stopOpacity="0.55"
+          />
+          <stop offset="0.38" stopColor="var(--color-copper)" stopOpacity="1" />
+          <stop offset="0.62" stopColor="var(--color-copper)" stopOpacity="1" />
+          <stop
+            offset="0.82"
+            stopColor="var(--color-copper-light)"
+            stopOpacity="0.55"
+          />
+          <stop offset="1" stopColor="var(--color-ivory)" stopOpacity="0" />
+        </linearGradient>
+
+        <filter
+          id={ringGlowFilterId}
+          colorInterpolationFilters="sRGB"
+          height="160%"
+          width="160%"
+          x="-30%"
+          y="-30%"
+        >
+          <feGaussianBlur
+            in="SourceGraphic"
+            result="ringGlow"
+            stdDeviation="2.6"
+          />
+          <feOffset dx="1.2" dy="1" in="ringGlow" result="offsetGlow" />
+          <feMerge>
+            <feMergeNode in="offsetGlow" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <circle
+        className="hero-eclipse__ring-glow"
+        cx="50"
+        cy="50"
+        data-eclipse-glow="ring"
+        filter={`url(#${ringGlowFilterId})`}
+        r="40"
+      />
+      <circle className="hero-eclipse__base" cx="50" cy="50" r="40" />
+
+      <path
+        className="hero-eclipse__accent"
+        d={eclipseAccentArc}
+        data-eclipse-accent="orange"
+        stroke={`url(#${accentGradientId})`}
+      />
+    </svg>
+  )
 }
 
 function useHeroMotion(scope: RefObject<HTMLElement | null>) {
@@ -67,7 +147,7 @@ export function ProductStudioHero({
       <PearlescentStarfield motionId="hero-starfield-drift" variant={1} />
 
       <div className="landing-hero__eclipse" aria-hidden="true">
-        <img src={voynanEclipse} alt="" width="100" height="100" />
+        <HeroEclipse />
       </div>
 
       <div className="landing-hero__content">
