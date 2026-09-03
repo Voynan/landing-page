@@ -1,11 +1,19 @@
 #!/usr/bin/env node
 /**
- * Codex PreToolUse gate for project visual edits.
+ * PreToolUse gate for visual edits, enforcing `.claude/rules/ui-changes.md`.
  *
- * A visual apply_patch is denied until the Impeccable context setup has run in
- * the current session. The gate is deliberately fail-open when Codex input or
- * transcript state is unavailable, and repeated denials downgrade to a warning
- * so a format change cannot trap the agent in a loop.
+ * A visual edit is denied until the Impeccable context setup has run in the
+ * current session. The gate covers the file tools and the shell, because a
+ * heredoc or an in-place `sed` changes a component exactly as much as `Edit`
+ * does.
+ *
+ * Contract: never break a turn. Malformed input, an unreadable transcript, or
+ * any internal error allows the tool through (exit 0). The gate fails open.
+ *
+ * Escape hatches:
+ *   - UI_DESIGN_GATE_DISABLED=1 turns the gate off for the shell or session.
+ *   - After MAX_DENIALS blocks on the same targets in one session, the gate
+ *     downgrades to a warning so a detection miss cannot become a loop.
  */
 
 import fs from "node:fs"
@@ -36,14 +44,28 @@ const UI_DIRECTORIES = new Set([
   "views",
 ])
 const SKIPPED_DIRECTORIES =
-  /(^|\/)(node_modules|dist|build|out|coverage|public|\.git|\.next|\.vercel|\.agents|\.codex|\.impeccable)(\/|$)/
-const SKIPPED_FILES = /(\.(?:test|spec)\.|\.d\.ts$)/i
-const SUPPORTED_TOOLS = new Set(["apply_patch", "Edit", "Write", "MultiEdit"])
+  /(^|\/)(node_modules|dist|build|out|coverage|public|playwright-report|test-results|\.git|\.next|\.vercel|\.claude|\.impeccable)(\/|$)/
+const SKIPPED_FILES = /(\.(?:test|spec|stories)\.|\.d\.ts$)/i
+const SUPPORTED_TOOLS = new Set([
+  "Bash",
+  "Edit",
+  "MultiEdit",
+  "NotebookEdit",
+  "Write",
+])
 const MAX_DENIALS = 2
 const MAX_TRANSCRIPT_BYTES = 32 * 1024 * 1024
 
 // Kept fragmented so reading this hook cannot satisfy its own transcript check.
 const IMPECCABLE_SETUP_MARKER = `${"RESOLVED"}_${"CONTEXT"}:`
+
+// Shell constructs that write a file. Reads are deliberately left alone.
+const REDIRECT_TARGET = /(?:^|[^0-9&<>])>>?\s*(?!&)(["']?)([^\s"';|&<>()]+)\1/g
+const TEE_TARGET = /\btee\b(?:\s+-\S+)*\s+(["']?)([^\s"';|&<>()]+)\1/g
+const IN_PLACE_EDITOR = /(?:^|\s)(?:sed|perl)\s/
+const IN_PLACE_FLAG = /\s-i(?:\s|["']|\.|=|$)/
+const COPYING_COMMAND = /(?:^|\s)(?:cp|mv|install|rsync)\s/
+const SHELL_SEPARATORS = /\n|;|\|\||&&|\||&/
 
 async function readStdin() {
   if (process.stdin.isTTY) return ""
@@ -88,10 +110,14 @@ function truthy(value) {
   )
 }
 
-function normalizeProjectPath(rawPath, cwd) {
-  const trimmed = String(rawPath || "")
+function unquote(value) {
+  return String(value || "")
     .trim()
     .replace(/^(["'])(.*)\1$/, "$2")
+}
+
+function normalizeProjectPath(rawPath, cwd) {
+  const trimmed = unquote(rawPath)
 
   if (!trimmed) return ""
 
@@ -111,15 +137,32 @@ function normalizeProjectPath(rawPath, cwd) {
   return relativePath.split(path.sep).join("/")
 }
 
-function patchTargets(command) {
+function argumentsOf(segment) {
+  return segment
+    .trim()
+    .split(/\s+/)
+    .map(unquote)
+    .filter((token) => token && !token.startsWith("-"))
+}
+
+function shellTargets(command) {
   if (typeof command !== "string" || !command) return []
 
   const targets = []
-  const header = /^\*\*\* (?:Add|Update|Delete) File:\s*(.+)$/gm
-  const move = /^\*\*\* Move to:\s*(.+)$/gm
 
-  for (const match of command.matchAll(header)) targets.push(match[1])
-  for (const match of command.matchAll(move)) targets.push(match[1])
+  for (const match of command.matchAll(REDIRECT_TARGET)) targets.push(match[2])
+  for (const match of command.matchAll(TEE_TARGET)) targets.push(match[2])
+
+  for (const segment of command.split(SHELL_SEPARATORS)) {
+    if (IN_PLACE_EDITOR.test(segment) && IN_PLACE_FLAG.test(segment)) {
+      targets.push(...argumentsOf(segment))
+    }
+
+    if (COPYING_COMMAND.test(segment)) {
+      const operands = argumentsOf(segment)
+      if (operands.length > 1) targets.push(operands[operands.length - 1])
+    }
+  }
 
   return targets
 }
@@ -129,10 +172,11 @@ function eventTargets(event, cwd) {
   if (!input || typeof input !== "object") return []
 
   const candidates = [
-    ...patchTargets(input.command),
+    ...shellTargets(input.command),
     input.file_path,
     input.path,
     input.target_file,
+    input.notebook_path,
   ]
 
   return Array.from(
@@ -225,7 +269,7 @@ function bumpDenials(sessionId, targetKey) {
   try {
     fs.writeFileSync(statePath, JSON.stringify(state))
   } catch {
-    // Best effort: failure to persist state must not break a Codex turn.
+    // Best effort: failure to persist state must not break a turn.
   }
 
   return nextCount
@@ -237,17 +281,19 @@ function denialMessage(visualTargets) {
     .join("\n")
 
   return [
-    "Blocked by the project UI design gate.",
+    "Blocked by .claude/rules/ui-changes.md.",
     "",
-    "This patch changes visual interface files:",
+    "This change touches visual interface files:",
     renderedTargets,
     "",
     "Before retrying:",
-    "  1. Invoke the project-local `impeccable` skill.",
-    "  2. Complete its context setup and load the playbook for this visual task.",
-    "  3. Retry the edit inside the Impeccable workflow.",
+    "  1. Invoke the `impeccable` skill.",
+    "  2. Run its Setup step once, targeting the file or surface being changed,",
+    "     then load the playbook the skill selects for this task.",
+    "  3. Retry the edit inside that workflow.",
     "",
-    "Re-running the same patch without setup will be denied again.",
+    "This is not a permission prompt: repeating the same call without the setup",
+    "will be denied again.",
   ].join("\n")
 }
 
@@ -280,7 +326,7 @@ async function main() {
 
   if (denialCount > MAX_DENIALS) {
     allow(
-      `The UI design gate blocked ${visualTargets.join(", ")} ${MAX_DENIALS} times and is now allowing the edit to avoid a loop. Impeccable setup was not detected; load it before continuing or report that the gate needs repair.`,
+      `The UI design gate blocked ${visualTargets.join(", ")} ${MAX_DENIALS} times and is now allowing the edit to avoid a loop. The Impeccable setup was not detected; run it before continuing, or report that the gate needs repair.`,
     )
   }
 

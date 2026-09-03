@@ -396,3 +396,6 @@ docs/backend-requests/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Claude Code local overrides
+.claude/settings.local.json

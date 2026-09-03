@@ -15,12 +15,12 @@ Every bug fix starts with a regression test that reproduces the defect at the lo
 
 ## Tool boundaries
 
-| Tool | Responsibility |
-|---|---|
-| **Vitest** | Unit-test TypeScript logic such as content contracts, schemas, locale and routing helpers, analytics contracts, state, and fallback utilities. |
-| **Vitest + Testing Library** | Test React components through rendered, user-observable behavior: semantic content, controls, keyboard interaction, form states, accessible announcements, and static or reduced-motion fallbacks. |
-| **MSW** | Exercise contact-service HTTP behavior at the network boundary, including success, server errors, timeouts, and malformed responses. Prefer MSW handlers over mocking axios or TanStack Query internals. |
-| **Playwright** | Test complete browser journeys across `/pt` and `/en`, responsive layouts, navigation, hydration, reduced motion, media failures, contact failures, and analytics privacy boundaries. |
+| Tool                         | Responsibility                                                                                                                                                                                           |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Vitest**                   | Unit-test TypeScript logic such as content contracts, schemas, locale and routing helpers, analytics contracts, state, and fallback utilities.                                                           |
+| **Vitest + Testing Library** | Test React components through rendered, user-observable behavior: semantic content, controls, keyboard interaction, form states, accessible announcements, and static or reduced-motion fallbacks.       |
+| **MSW**                      | Exercise contact-service HTTP behavior at the network boundary, including success, server errors, timeouts, and malformed responses. Prefer MSW handlers over mocking axios or TanStack Query internals. |
+| **Playwright**               | Test complete browser journeys across `/pt` and `/en`, responsive layouts, navigation, hydration, reduced motion, media failures, contact failures, and analytics privacy boundaries.                    |
 
 Use the lowest layer that proves the behavior. Do not move pure logic into Playwright, and do not duplicate every component edge case in end-to-end tests. Cross-layer coverage is appropriate only for critical journeys or integration boundaries.
 
@@ -29,11 +29,11 @@ Use the lowest layer that proves the behavior. Do not move pure logic into Playw
 - Name each test after the behavior and outcome it verifies. The `describe`/`it` or `test` title replaces the Python-style docstring requirement; comments should explain only non-obvious rationale.
 
   ```tsx
-  describe('ContactForm', () => {
-    it('retains the submitted values and exposes the email fallback when the request fails', async () => {
+  describe("ContactForm", () => {
+    it("retains the submitted values and exposes the email fallback when the request fails", async () => {
       // Arrange, act, and assert through the rendered UI.
-    });
-  });
+    })
+  })
   ```
 
 - Assert public behavior, not component state, hook internals, implementation-specific class names, or call order unless that order is itself a contract.
