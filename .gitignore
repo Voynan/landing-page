@@ -399,3 +399,10 @@ docs/backend-requests/
 
 # Claude Code local overrides
 .claude/settings.local.json
+
+### Agent tooling working directories ###
+# Impeccable design artifacts and Superpowers visual-companion state are
+# local working output, not project sources. The Superpowers directory also
+# holds the companion server's auth token.
+.impeccable/
+.superpowers/
