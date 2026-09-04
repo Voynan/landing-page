@@ -42,7 +42,6 @@ function ControllerHarness() {
         "hero",
         "thesis",
         "products",
-        "credibility",
         "services",
         "aegis",
         "founder",
@@ -81,7 +80,6 @@ it("creates document-order desktop triggers and removes them on unmount", async 
     "eclipse-hero",
     "eclipse-thesis",
     "eclipse-products",
-    "eclipse-credibility",
     "eclipse-services",
     "eclipse-aegis",
     "eclipse-founder",
@@ -151,7 +149,7 @@ it("tracks reduced-motion chapters discretely without scroll triggers", async ()
     "data-motion",
     "static",
   )
-  expect(observe).toHaveBeenCalledTimes(8)
+  expect(observe).toHaveBeenCalledTimes(7)
   expect(ScrollTrigger.getAll()).toHaveLength(0)
 
   const contact = document.querySelector<HTMLElement>("#contact")

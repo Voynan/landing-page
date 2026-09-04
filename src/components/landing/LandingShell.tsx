@@ -3,10 +3,6 @@ import {
   type AegisOpenSourceLabels,
 } from "@/components/landing/aegis/AegisOpenSourceChapter"
 import {
-  CredibilityField,
-  type CredibilityFieldLabels,
-} from "@/components/landing/credibility/CredibilityField"
-import {
   ContactSection,
   type ContactSectionLabels,
 } from "@/components/landing/contact/ContactSection"
@@ -37,7 +33,6 @@ import { SkipLink } from "@/components/ui/SkipLink"
 import type { LandingContentDraft } from "@/content"
 
 type SupportingChapterLabels = {
-  credibility: CredibilityFieldLabels
   services: BuildWithUsFlowLabels
   aegis: AegisOpenSourceLabels
   founder: FounderNoteLabels
@@ -76,10 +71,6 @@ export function LandingShell({
           content={content.products}
           labels={productStageLabels}
           motionMode="auto"
-        />
-        <CredibilityField
-          content={content.credibility}
-          labels={supportingChapterLabels.credibility}
         />
         <BuildWithUsFlow
           content={content.services}

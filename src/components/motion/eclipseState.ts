@@ -2,7 +2,6 @@ const eclipseStates = [
   "ring",
   "line",
   "orbit",
-  "evidence",
   "flow",
   "code",
   "signature",

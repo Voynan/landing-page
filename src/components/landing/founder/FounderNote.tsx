@@ -71,7 +71,7 @@ export function FounderNote({ content, labels }: FounderNoteProps) {
       className="founder-note landing-chapter"
       aria-labelledby="founder-title"
     >
-      <PearlescentStarfield motionId="founder-starfield-drift" variant={6} />
+      <PearlescentStarfield motionId="founder-starfield-drift" variant={5} />
 
       <div className="landing-chapter__frame">
         <div className="founder-note__layout">

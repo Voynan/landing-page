@@ -46,13 +46,6 @@ const productStageLabels = {
 } as const
 
 const supportingChapterLabels = {
-  credibility: {
-    sectionLabel: "Credibility",
-    pendingTitle: "Evidence review in progress",
-    pendingSupport: "Verified evidence will appear after approval.",
-    metricsLabel: "Verified metrics",
-    testimonialsLabel: "Testimonials",
-  },
   services: {
     sectionLabel: "Services",
     destinationPending: "Contact destination arrives in the next phase",
@@ -175,7 +168,6 @@ it("provides one page heading, a skip link, and stable chapter identifiers", () 
     "hero",
     "thesis",
     "products",
-    "credibility",
     "services",
     "aegis",
     "founder",
@@ -185,7 +177,7 @@ it("provides one page heading, a skip link, and stable chapter identifiers", () 
   const main = document.querySelector("main#main-content") as HTMLElement
   const footer = screen.getByRole("contentinfo", { name: "Voynan footer" })
 
-  expect(within(main).getAllByTestId("pearlescent-starfield")).toHaveLength(8)
+  expect(within(main).getAllByTestId("pearlescent-starfield")).toHaveLength(7)
   expect(within(footer).queryByTestId("pearlescent-starfield")).toBeNull()
 
   const hero = document.querySelector("section#hero") as HTMLElement
@@ -199,7 +191,6 @@ it("provides one page heading, a skip link, and stable chapter identifiers", () 
       section.getAttribute("data-motion-profile"),
     ),
   ).toEqual([
-    "reduced",
     "reduced",
     "reduced",
     "reduced",

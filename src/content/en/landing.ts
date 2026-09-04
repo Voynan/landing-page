@@ -142,19 +142,6 @@ export const englishLandingContent = {
       },
     ],
   },
-  credibility: {
-    id: "credibility",
-    metrics: [
-      { approval: "missing" },
-      { approval: "missing" },
-      { approval: "missing" },
-    ],
-    testimonials: [
-      { approval: "missing" },
-      { approval: "missing" },
-      { approval: "missing" },
-    ],
-  },
   services: {
     id: "services",
     kicker: "Build with us",

@@ -53,7 +53,7 @@ The public experience ends in external product destinations, approved Aegis dest
 Documented direction:
 
 - Public routes are `/pt`, `/en` and the localized privacy and terms routes; the root defaults to Portuguese while preserving an explicit saved preference.
-- The page includes navigation, hero, thesis, four SaaS chapters, credibility, custom software, Aegis, founder, contact, and footer in that narrative order. The first three chapters represent production products; Constrully is explicitly marked as in development.
+- The page includes navigation, hero, thesis, four SaaS chapters, custom software, Aegis, founder, contact, and footer in that narrative order. The first three chapters represent production products; Constrully is explicitly marked as in development.
 - Primary content, landmarks, headings, links, and calls to action exist in static HTML before hydration.
 - Motion, media playback, analytics, and contact submission are independent progressive enhancements with meaningful failure states.
 - The contact form collects name, e-mail, and message, validates for usability, never retries submissions automatically, preserves values on failure, and offers manual e-mail copying.

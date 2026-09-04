@@ -12,7 +12,6 @@ export const sectionIds = [
   "hero",
   "thesis",
   "products",
-  "credibility",
   "services",
   "aegis",
   "founder",
@@ -119,64 +118,6 @@ const socialProfilesSchema = z
       seen.add(profile.platform)
     })
   })
-
-const pendingMetricSchema = z.object({
-  value: optionalNonEmptyString,
-  period: optionalNonEmptyString,
-  definition: optionalNonEmptyString,
-  source: optionalNonEmptyString,
-  approval: pendingApprovalSchema,
-})
-
-const verifiedMetricSchema = z.object({
-  value: nonEmptyString,
-  period: nonEmptyString,
-  definition: nonEmptyString,
-  source: nonEmptyString,
-  approval: z.literal("approved"),
-})
-
-export const metricDraftSchema = z.discriminatedUnion("approval", [
-  pendingMetricSchema,
-  verifiedMetricSchema,
-])
-
-export type VerifiedMetric = z.infer<typeof verifiedMetricSchema>
-
-const testimonialPermissionsSchema = z.object({
-  text: z.literal(true),
-  name: z.literal(true),
-  role: z.literal(true),
-  company: z.literal(true),
-  translation: z.literal(true),
-  photo: z.boolean().optional(),
-  logo: z.boolean().optional(),
-})
-
-const pendingTestimonialSchema = z.object({
-  quote: optionalNonEmptyString,
-  name: optionalNonEmptyString,
-  role: optionalNonEmptyString,
-  company: optionalNonEmptyString,
-  source: optionalNonEmptyString,
-  permissions: testimonialPermissionsSchema.partial().optional(),
-  approval: pendingApprovalSchema,
-})
-
-const approvedTestimonialSchema = z.object({
-  quote: nonEmptyString,
-  name: nonEmptyString,
-  role: nonEmptyString,
-  company: nonEmptyString,
-  source: nonEmptyString,
-  permissions: testimonialPermissionsSchema,
-  approval: z.literal("approved"),
-})
-
-export const testimonialDraftSchema = z.discriminatedUnion("approval", [
-  pendingTestimonialSchema,
-  approvedTestimonialSchema,
-])
 
 const claimCategorySchema = z.enum(["legal", "financial", "tax"])
 
@@ -384,12 +325,6 @@ const productsSchema = z.object({
     }),
 })
 
-const credibilitySchema = z.object({
-  id: z.literal("credibility"),
-  metrics: z.array(metricDraftSchema).min(3).max(4),
-  testimonials: z.array(testimonialDraftSchema).min(3).max(5),
-})
-
 const servicesSchema = z.object({
   id: z.literal("services"),
   kicker: nonEmptyString,
@@ -452,7 +387,6 @@ export const landingContentDraftSchema = z.object({
   hero: heroSchema,
   thesis: thesisSchema,
   products: productsSchema,
-  credibility: credibilitySchema,
   services: servicesSchema,
   aegis: aegisSchema,
   founder: founderSchema,
@@ -497,17 +431,6 @@ export function getPublicationBlockers(input: LandingContentDraft): string[] {
       addApprovalBlocker(blockers, `${path}.destination`, product.destination)
       addApprovalBlocker(blockers, `${path}.media`, product.media)
     }
-  })
-
-  content.credibility.metrics.forEach((metric, index) => {
-    addApprovalBlocker(blockers, `credibility.metrics.${index}`, metric)
-  })
-  content.credibility.testimonials.forEach((testimonial, index) => {
-    addApprovalBlocker(
-      blockers,
-      `credibility.testimonials.${index}`,
-      testimonial,
-    )
   })
 
   addApprovalBlocker(blockers, "services", content.services)

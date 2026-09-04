@@ -143,19 +143,6 @@ export const portugueseLandingContent = {
       },
     ],
   },
-  credibility: {
-    id: "credibility",
-    metrics: [
-      { approval: "missing" },
-      { approval: "missing" },
-      { approval: "missing" },
-    ],
-    testimonials: [
-      { approval: "missing" },
-      { approval: "missing" },
-      { approval: "missing" },
-    ],
-  },
   services: {
     id: "services",
     kicker: "Construa conosco",

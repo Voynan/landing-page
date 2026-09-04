@@ -25,13 +25,6 @@
     "previousProduct": "Produto anterior",
     "nextProduct": "Próximo produto"
   },
-  "credibility": {
-    "sectionLabel": "Credibilidade",
-    "pendingTitle": "Evidências em validação",
-    "pendingSupport": "Métricas e depoimentos verificados aparecerão após aprovação.",
-    "metricsLabel": "Métricas verificadas",
-    "testimonialsLabel": "Depoimentos"
-  },
   "services": {
     "sectionLabel": "Serviços",
     "destinationPending": "O contato será habilitado na próxima etapa."

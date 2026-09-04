@@ -52,7 +52,7 @@ export function ContactSection({
       className="contact-section"
       aria-label={labels.sectionLabel}
     >
-      <PearlescentStarfield motionId="contact-starfield-drift" variant={7} />
+      <PearlescentStarfield motionId="contact-starfield-drift" variant={6} />
 
       <div className="contact-section__intro">
         <h2>{content.title}</h2>

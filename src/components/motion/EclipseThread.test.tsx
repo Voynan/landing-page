@@ -29,7 +29,6 @@ it.each<EclipseState>([
   "ring",
   "line",
   "orbit",
-  "evidence",
   "flow",
   "code",
   "signature",
@@ -41,7 +40,7 @@ it.each<EclipseState>([
   const layers = thread.querySelectorAll<SVGGElement>("[data-eclipse-layer]")
 
   expect(thread).toHaveAttribute("data-motion", "enhanced")
-  expect(layers).toHaveLength(8)
+  expect(layers).toHaveLength(7)
   expect(
     Array.from(layers).every((layer) => !layer.hasAttribute("style")),
   ).toBe(true)

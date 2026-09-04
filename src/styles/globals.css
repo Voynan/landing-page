@@ -3323,164 +3323,8 @@
     padding: clamp(5rem, 10vw, 9rem) var(--page-pad);
   }
 
-  .credibility-field {
-    min-height: 78svh;
-    background: var(--color-navy-deep);
-  }
-
-  .credibility-field .landing-chapter__frame {
-    display: grid;
-    min-height: inherit;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: var(--space-8);
-    align-content: center;
-  }
-
-  .credibility-field__title {
-    grid-column: 1 / span 3;
-    font-size: var(--text-h3);
-    line-height: var(--leading-h3);
-  }
-
-  .credibility-field__pending,
-  .credibility-field__evidence {
-    min-width: 0;
-    grid-column: 4 / -1;
-  }
-
-  .credibility-field__pending {
-    display: grid;
-    grid-template-columns: repeat(9, minmax(0, 1fr));
-    gap: var(--space-8);
-    padding-top: var(--space-6);
-    border-top: 1px solid var(--color-line-strong);
-  }
-
-  .credibility-field__pending-copy {
-    grid-column: 1 / span 5;
-  }
-
-  .credibility-field__pending-copy h3 {
-    max-width: 15ch;
-    font-size: var(--text-statement);
-    line-height: var(--leading-statement);
-  }
-
-  .credibility-field__pending-copy p {
-    max-width: 34rem;
-    margin: var(--space-6) 0 0;
-    color: var(--color-slate);
-  }
-
-  .credibility-field__ledger {
-    grid-column: 6 / -1;
-    margin: 0;
-  }
-
-  .credibility-field__ledger > div {
-    display: grid;
-    min-height: 5rem;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: var(--space-4);
-    align-items: center;
-    border-bottom: 1px solid var(--color-line);
-  }
-
-  .credibility-field__ledger > div:first-child {
-    border-top: 1px solid var(--color-line);
-  }
-
-  .credibility-field__ledger dt {
-    color: var(--color-slate);
-    font-size: 0.875rem;
-  }
-
-  .credibility-field__ledger dd {
-    margin: 0;
-    color: var(--color-ivory);
-    font-family: var(--font-technical);
-    font-size: var(--text-kicker);
-  }
-
-  .credibility-field__metrics {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    border-top: 1px solid var(--color-line-strong);
-  }
-
-  .verified-metric {
-    min-width: 0;
-    padding: var(--space-8) var(--space-6) var(--space-8) 0;
-    border-bottom: 1px solid var(--color-line);
-  }
-
-  .verified-metric + .verified-metric {
-    padding-left: var(--space-6);
-    border-left: 1px solid var(--color-line);
-  }
-
-  .verified-metric__value {
-    display: block;
-    color: var(--color-ivory);
-    font-size: var(--text-statistic);
-    font-weight: var(--font-weight-light);
-    letter-spacing: -0.03em;
-    line-height: var(--leading-statistic);
-  }
-
-  .verified-metric__definition {
-    margin: var(--space-4) 0 0;
-  }
-
-  .verified-metric__provenance {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin: var(--space-3) 0 0;
-    color: var(--color-slate);
-    font-size: 0.75rem;
-  }
-
-  .credibility-field__testimonials {
-    display: grid;
-    grid-template-columns: repeat(9, minmax(0, 1fr));
-    margin-top: var(--space-16);
-  }
-
-  .testimonial {
-    grid-column: span 5;
-    margin: 0;
-    padding: var(--space-8) var(--space-8) var(--space-8) 0;
-    border-top: 1px solid var(--color-line-strong);
-  }
-
-  .testimonial:nth-child(even) {
-    grid-column: 5 / span 5;
-  }
-
-  .testimonial blockquote {
-    margin: 0;
-    color: var(--color-ivory);
-    font-size: var(--text-h3);
-    font-weight: var(--font-weight-light);
-    line-height: 1.45;
-  }
-
-  .testimonial figcaption {
-    display: grid;
-    gap: var(--space-1);
-    margin-top: var(--space-6);
-    color: var(--color-slate);
-    font-size: 0.75rem;
-  }
-
-  .testimonial cite {
-    color: var(--color-ivory);
-    font-style: normal;
-  }
-
   .services-flow {
-    background: var(--color-navy);
+    background: var(--color-navy-deep);
   }
 
   .services-flow .landing-chapter__frame {
@@ -3723,7 +3567,7 @@
   }
 
   .aegis-chapter {
-    background: var(--color-navy-deep);
+    background: var(--color-navy);
   }
 
   .aegis-chapter__layout {
@@ -3820,7 +3664,7 @@
   .aegis-chapter__pending {
     margin: 0;
     border: 1px solid var(--color-line-strong);
-    background: var(--color-navy);
+    background: var(--color-navy-deep);
   }
 
   .aegis-chapter__calibration {
@@ -3927,7 +3771,7 @@
 
   .real-code-sample {
     border: 1px solid var(--color-line-strong);
-    background: var(--color-navy);
+    background: var(--color-navy-deep);
   }
 
   .real-code-sample__toolbar {
@@ -3971,7 +3815,7 @@
   }
 
   .founder-note {
-    background: var(--color-navy);
+    background: var(--color-navy-deep);
   }
 
   .founder-note .landing-chapter__frame {
@@ -4084,7 +3928,7 @@
     margin: 0;
     padding: var(--space-2);
     border: 1px solid var(--color-line-strong);
-    background: var(--color-navy-deep);
+    background: var(--color-navy);
   }
 
   .founder-note__portrait-frame::before {
@@ -4120,7 +3964,7 @@
     display: block;
     overflow: hidden;
     border: 1px solid var(--color-line);
-    background: var(--color-navy-deep);
+    background: var(--color-navy);
   }
 
   .founder-note__portrait img {
@@ -4133,7 +3977,7 @@
     position: relative;
     overflow: hidden;
     border: 1px solid var(--color-line-strong);
-    background: var(--color-navy-deep);
+    background: var(--color-navy);
   }
 
   .founder-note__portrait-pending::before {
@@ -4166,7 +4010,7 @@
     margin-inline: auto;
     padding: clamp(5rem, 10vw, 9rem) var(--page-pad);
     border-top: 1px solid var(--color-line-strong);
-    background: var(--color-navy-deep);
+    background: var(--color-navy);
   }
 
   .contact-section__intro {
@@ -4222,7 +4066,7 @@
     width: 100%;
     border: 1px solid var(--color-line-strong);
     border-radius: var(--radius-sm);
-    background: var(--color-navy);
+    background: var(--color-navy-deep);
     color: var(--color-ivory);
     font: inherit;
     outline: 2px solid transparent;
@@ -4874,48 +4718,6 @@
 
   .landing-chapter__frame {
     padding-block: var(--space-16);
-  }
-
-  .credibility-field {
-    min-height: auto;
-  }
-
-  .credibility-field .landing-chapter__frame {
-    display: block;
-  }
-
-  .credibility-field__title {
-    margin-bottom: var(--space-12);
-  }
-
-  .credibility-field__pending {
-    display: block;
-  }
-
-  .credibility-field__pending-copy h3 {
-    font-size: var(--text-h3);
-    line-height: var(--leading-h3);
-  }
-
-  .credibility-field__ledger {
-    margin-top: var(--space-12);
-  }
-
-  .credibility-field__metrics,
-  .credibility-field__testimonials {
-    grid-template-columns: 1fr;
-  }
-
-  .verified-metric,
-  .verified-metric + .verified-metric {
-    padding: var(--space-6) 0;
-    border-left: 0;
-  }
-
-  .testimonial,
-  .testimonial:nth-child(even) {
-    grid-column: 1;
-    padding-right: 0;
   }
 
   .services-flow__header {

@@ -25,13 +25,6 @@
     "previousProduct": "Previous product",
     "nextProduct": "Next product"
   },
-  "credibility": {
-    "sectionLabel": "Credibility",
-    "pendingTitle": "Evidence under review",
-    "pendingSupport": "Verified metrics and testimonials will appear after approval.",
-    "metricsLabel": "Verified metrics",
-    "testimonialsLabel": "Testimonials"
-  },
   "services": {
     "sectionLabel": "Services",
     "destinationPending": "Contact will be enabled in the next phase."

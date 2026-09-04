@@ -24,21 +24,15 @@ describe("landing content contracts", () => {
     expect(() =>
       assertPublishableContent({
         ...content,
-        credibility: {
-          ...content.credibility,
-          metrics: [
-            {
-              value: "12",
-              period: "2026",
-              definition: "Contas ativas no período",
-              source: "Relatório interno revisado",
-              approval: "reviewed",
-            },
-            ...content.credibility.metrics.slice(1),
-          ],
+        aegis: {
+          ...content.aegis,
+          github: {
+            label: content.aegis.github.label,
+            approval: "reviewed",
+          },
         },
       }),
-    ).toThrow(/credibility\.metrics\.0.*approved/i)
+    ).toThrow(/aegis\.github.*approved/i)
   })
 
   it("distinguishes the three released products from Constrully", () => {

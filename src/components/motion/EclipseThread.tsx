@@ -87,22 +87,6 @@ export function EclipseThread({
         />
       </g>
 
-      <g {...layerProps("evidence", state)}>
-        <path
-          className="eclipse-thread__ivory"
-          d="M18 80H142M48 80L66 46M96 80L116 116"
-        />
-        <circle className="eclipse-thread__accent-fill" cx="48" cy="80" r="4" />
-        <circle className="eclipse-thread__accent-fill" cx="66" cy="46" r="4" />
-        <circle className="eclipse-thread__accent-fill" cx="96" cy="80" r="4" />
-        <circle
-          className="eclipse-thread__accent-fill"
-          cx="116"
-          cy="116"
-          r="4"
-        />
-      </g>
-
       <g {...layerProps("flow", state)}>
         <path
           className="eclipse-thread__ivory"

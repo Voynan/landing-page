@@ -16,7 +16,6 @@ const sectionStates = [
   ["hero", "ring"],
   ["thesis", "line"],
   ["products", "orbit"],
-  ["credibility", "evidence"],
   ["services", "flow"],
   ["aegis", "code"],
   ["founder", "signature"],

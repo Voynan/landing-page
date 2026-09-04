@@ -40,13 +40,6 @@ function LocalizedLandingPage({ locale }: LocaleLandingPageProps) {
       }}
       skipLinkLabel={t("accessibility.skipToContent")}
       supportingChapterLabels={{
-        credibility: {
-          sectionLabel: t("credibility.sectionLabel"),
-          pendingTitle: t("credibility.pendingTitle"),
-          pendingSupport: t("credibility.pendingSupport"),
-          metricsLabel: t("credibility.metricsLabel"),
-          testimonialsLabel: t("credibility.testimonialsLabel"),
-        },
         services: {
           sectionLabel: t("services.sectionLabel"),
           destinationPending: t("services.destinationPending"),

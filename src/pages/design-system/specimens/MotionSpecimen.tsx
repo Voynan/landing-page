@@ -18,7 +18,6 @@ const eclipseStateLabels: Record<EclipseState, string> = {
   ring: "Ring",
   line: "Line",
   orbit: "Orbit",
-  evidence: "Evidence",
   flow: "Flow",
   code: "Code",
   signature: "Signature",

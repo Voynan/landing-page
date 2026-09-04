@@ -120,7 +120,7 @@ it("exercises every eclipse state without scroll pin and compares reduced motion
   const states = within(motion).getByRole("list", {
     name: "Eclipse thread states",
   })
-  expect(within(states).getAllByTestId("eclipse-thread")).toHaveLength(8)
+  expect(within(states).getAllByTestId("eclipse-thread")).toHaveLength(7)
 
   const controls = within(motion).getByRole("group", {
     name: "Eclipse state controls",

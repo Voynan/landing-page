@@ -177,7 +177,7 @@ export function BuildWithUsFlow({ content, labels }: BuildWithUsFlowProps) {
       className="services-flow landing-chapter"
       aria-labelledby="services-title"
     >
-      <PearlescentStarfield motionId="services-starfield-drift" variant={4} />
+      <PearlescentStarfield motionId="services-starfield-drift" variant={3} />
 
       <div className="landing-chapter__frame">
         <header className="services-flow__header">

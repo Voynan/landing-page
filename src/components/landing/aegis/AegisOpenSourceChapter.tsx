@@ -100,7 +100,7 @@ export function AegisOpenSourceChapter({
       className="aegis-chapter landing-chapter"
       aria-labelledby="aegis-title"
     >
-      <PearlescentStarfield motionId="aegis-starfield-drift" variant={5} />
+      <PearlescentStarfield motionId="aegis-starfield-drift" variant={4} />
 
       <div className="landing-chapter__frame">
         <div className="aegis-chapter__layout">
