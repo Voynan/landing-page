@@ -263,7 +263,6 @@ export function AtmosphericFooter({
           <section aria-labelledby={`${pendingId}-language-heading`}>
             <h2 id={`${pendingId}-language-heading`}>{labels.language}</h2>
             <LanguageSwitch
-              currentLocale={content.locale}
               label={labels.language}
               localeLabels={{ en: "EN", pt: "PT" }}
               trackEvent={trackEvent}

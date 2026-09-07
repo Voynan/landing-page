@@ -26,7 +26,6 @@ type ProgressiveNavContent = {
 
 type ProgressiveNavProps = {
   content: ProgressiveNavContent
-  currentLocale: Locale
 }
 
 type SectionIndexMenuProps = {
@@ -95,10 +94,7 @@ export function SectionIndexMenu({
   )
 }
 
-export function ProgressiveNav({
-  content,
-  currentLocale,
-}: ProgressiveNavProps) {
+export function ProgressiveNav({ content }: ProgressiveNavProps) {
   const [activeSectionId, setActiveSectionId] = useState<SectionId>("hero")
   const [hasScrolled, setHasScrolled] = useState(false)
   const [footerReached, setFooterReached] = useState(false)
@@ -289,7 +285,6 @@ export function ProgressiveNav({
           <div className="landing-nav__language">
             <LanguageSwitch
               activeSectionId={activeSectionId}
-              currentLocale={currentLocale}
               label={content.languageLabel}
               localeLabels={content.localeLabels}
             />

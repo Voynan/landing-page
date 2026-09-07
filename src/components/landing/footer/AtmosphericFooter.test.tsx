@@ -5,6 +5,7 @@ import "@testing-library/jest-dom/vitest"
 import { cleanup, render, screen, within } from "@testing-library/react"
 import { afterEach, expect, it } from "vitest"
 
+import { AppProviders } from "@/app/AppProviders"
 import { AtmosphericFooter } from "@/components/landing/footer/AtmosphericFooter"
 import { getLandingContent } from "@/content"
 
@@ -27,7 +28,9 @@ afterEach(cleanup)
 
 it("renders every footer group without inventing pending destinations", () => {
   render(
-    <AtmosphericFooter content={getLandingContent("en")} labels={labels} />,
+    <AppProviders initialLocale="en">
+      <AtmosphericFooter content={getLandingContent("en")} labels={labels} />
+    </AppProviders>,
   )
 
   const footer = screen.getByRole("contentinfo", {
@@ -99,63 +102,65 @@ it("uses approved legal, contact, and creator facts completely", () => {
   const base = getLandingContent("en")
 
   render(
-    <AtmosphericFooter
-      labels={labels}
-      content={{
-        ...base,
-        contact: {
-          ...base.contact,
-          publicEmail: {
-            label: "Email",
-            address: "hello@voynan.com",
-            approval: "approved",
-          },
-          social: [
-            {
-              platform: "linkedin",
-              label: "LinkedIn",
-              href: "https://www.linkedin.com/company/voynan",
+    <AppProviders initialLocale="en">
+      <AtmosphericFooter
+        labels={labels}
+        content={{
+          ...base,
+          contact: {
+            ...base.contact,
+            publicEmail: {
+              label: "Email",
+              address: "hello@voynan.com",
               approval: "approved",
             },
-          ],
-          privacyPolicy: {
-            label: "Privacy policy",
-            href: "https://voynan.com/privacy",
-            approval: "approved",
-          },
-          terms: {
-            label: "Terms",
-            href: "https://voynan.com/terms",
-            approval: "approved",
-          },
-        },
-        founder: {
-          id: "founder",
-          profile: {
-            name: "Approved founder",
-            role: "Founder of Voynan",
-            note: "Approved founder note.",
-            portraitSrc: "/founder.webp",
-            portraitAlt: "Approved founder portrait",
-            source: "Founder approval",
-            approval: "approved",
-          },
-          social: [
-            {
-              platform: "linkedin",
-              label: "LinkedIn",
-              href: "https://www.linkedin.com/in/approved-founder",
+            social: [
+              {
+                platform: "linkedin",
+                label: "LinkedIn",
+                href: "https://www.linkedin.com/company/voynan",
+                approval: "approved",
+              },
+            ],
+            privacyPolicy: {
+              label: "Privacy policy",
+              href: "https://voynan.com/privacy",
               approval: "approved",
             },
-          ],
-        },
-        footer: {
-          creatorNotice:
-            "All featured products and services are created and maintained by Voynan.",
-          approval: "approved",
-        },
-      }}
-    />,
+            terms: {
+              label: "Terms",
+              href: "https://voynan.com/terms",
+              approval: "approved",
+            },
+          },
+          founder: {
+            id: "founder",
+            profile: {
+              name: "Approved founder",
+              role: "Founder of Voynan",
+              note: "Approved founder note.",
+              portraitSrc: "/founder.webp",
+              portraitAlt: "Approved founder portrait",
+              source: "Founder approval",
+              approval: "approved",
+            },
+            social: [
+              {
+                platform: "linkedin",
+                label: "LinkedIn",
+                href: "https://www.linkedin.com/in/approved-founder",
+                approval: "approved",
+              },
+            ],
+          },
+          footer: {
+            creatorNotice:
+              "All featured products and services are created and maintained by Voynan.",
+            approval: "approved",
+          },
+        }}
+      />
+    </AppProviders>,
   )
 
   expect(screen.getByRole("link", { name: "Email" })).toHaveAttribute(

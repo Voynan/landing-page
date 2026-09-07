@@ -13,6 +13,7 @@ import {
 import userEvent from "@testing-library/user-event"
 import { afterEach, expect, it, vi } from "vitest"
 
+import { AppProviders } from "@/app/AppProviders"
 import { ProgressiveNav } from "@/components/landing/navigation/ProgressiveNav"
 import { ScrollTrigger } from "@/lib/gsap"
 
@@ -42,7 +43,9 @@ afterEach(() => {
 
 it("fills the navigation progress line as the document approaches its end", async () => {
   const { unmount } = render(
-    <ProgressiveNav content={navigationContent} currentLocale="en" />,
+    <AppProviders initialLocale="en">
+      <ProgressiveNav content={navigationContent} />
+    </AppProviders>,
   )
 
   const track = document.querySelector<HTMLElement>(
@@ -75,7 +78,11 @@ it("fills the navigation progress line as the document approaches its end", asyn
 })
 
 it("keeps the chapter index behind a single trigger instead of standing links", () => {
-  render(<ProgressiveNav content={navigationContent} currentLocale="en" />)
+  render(
+    <AppProviders initialLocale="en">
+      <ProgressiveNav content={navigationContent} />
+    </AppProviders>,
+  )
 
   const trigger = screen.getByRole("button", { name: "Sections" })
   expect(trigger).toHaveAttribute("aria-expanded", "false")
@@ -92,7 +99,11 @@ it("keeps the chapter index behind a single trigger instead of standing links", 
 it("opens every chapter destination from the single quick menu", async () => {
   const user = userEvent.setup()
 
-  render(<ProgressiveNav content={navigationContent} currentLocale="en" />)
+  render(
+    <AppProviders initialLocale="en">
+      <ProgressiveNav content={navigationContent} />
+    </AppProviders>,
+  )
 
   await user.click(screen.getByRole("button", { name: "Sections" }))
 
@@ -124,7 +135,11 @@ it("marks the observed chapter inside the quick menu", async () => {
   const user = userEvent.setup()
   window.location.hash = "#aegis"
 
-  render(<ProgressiveNav content={navigationContent} currentLocale="en" />)
+  render(
+    <AppProviders initialLocale="en">
+      <ProgressiveNav content={navigationContent} />
+    </AppProviders>,
+  )
 
   await user.click(screen.getByRole("button", { name: "Sections" }))
 
@@ -142,7 +157,9 @@ it("closes the quick menu when a pointer lands outside the navigation", async ()
 
   render(
     <>
-      <ProgressiveNav content={navigationContent} currentLocale="en" />
+      <AppProviders initialLocale="en">
+        <ProgressiveNav content={navigationContent} />
+      </AppProviders>
       <main>
         <button type="button">Outside control</button>
       </main>
@@ -164,7 +181,11 @@ it("closes the quick menu when a pointer lands outside the navigation", async ()
 it("closes the quick menu after a chapter destination is chosen", async () => {
   const user = userEvent.setup()
 
-  render(<ProgressiveNav content={navigationContent} currentLocale="en" />)
+  render(
+    <AppProviders initialLocale="en">
+      <ProgressiveNav content={navigationContent} />
+    </AppProviders>,
+  )
 
   await user.click(screen.getByRole("button", { name: "Sections" }))
   await user.click(screen.getByRole("link", { name: "Founder" }))
@@ -178,7 +199,11 @@ it("closes the quick menu after a chapter destination is chosen", async () => {
 it("keeps the quick menu open when a touch clears focus instead of moving it", async () => {
   const user = userEvent.setup()
 
-  render(<ProgressiveNav content={navigationContent} currentLocale="en" />)
+  render(
+    <AppProviders initialLocale="en">
+      <ProgressiveNav content={navigationContent} />
+    </AppProviders>,
+  )
 
   await user.click(screen.getByRole("button", { name: "Sections" }))
 
@@ -200,7 +225,9 @@ it("closes the quick menu when focus moves to content outside the navigation", a
 
   render(
     <>
-      <ProgressiveNav content={navigationContent} currentLocale="en" />
+      <AppProviders initialLocale="en">
+        <ProgressiveNav content={navigationContent} />
+      </AppProviders>
       <main>
         <button type="button">Outside control</button>
       </main>
@@ -219,7 +246,11 @@ it("closes the quick menu when focus moves to content outside the navigation", a
 it("keeps one persistent language control when the quick menu opens", async () => {
   const user = userEvent.setup()
 
-  render(<ProgressiveNav content={navigationContent} currentLocale="en" />)
+  render(
+    <AppProviders initialLocale="en">
+      <ProgressiveNav content={navigationContent} />
+    </AppProviders>,
+  )
 
   await user.click(screen.getByRole("button", { name: "Sections" }))
 
@@ -229,11 +260,15 @@ it("keeps one persistent language control when the quick menu opens", async () =
 it("preserves the current hash when section observation is unavailable", () => {
   window.location.hash = "#thesis"
 
-  render(<ProgressiveNav content={navigationContent} currentLocale="en" />)
+  render(
+    <AppProviders initialLocale="en">
+      <ProgressiveNav content={navigationContent} />
+    </AppProviders>,
+  )
 
   expect(screen.getByRole("link", { name: "Portuguese" })).toHaveAttribute(
     "href",
-    "/pt#thesis",
+    "/?lang=pt#thesis",
   )
 
   act(() => {
@@ -243,14 +278,16 @@ it("preserves the current hash when section observation is unavailable", () => {
 
   expect(screen.getByRole("link", { name: "Portuguese" })).toHaveAttribute(
     "href",
-    "/pt#contact",
+    "/?lang=pt#contact",
   )
 })
 
 it("keeps the wordmark at the top and through content, then retracts at the footer", async () => {
   const { unmount } = render(
     <>
-      <ProgressiveNav content={navigationContent} currentLocale="en" />
+      <AppProviders initialLocale="en">
+        <ProgressiveNav content={navigationContent} />
+      </AppProviders>
       <main />
       <footer className="atmospheric-footer" />
     </>,

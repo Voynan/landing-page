@@ -1,65 +1,52 @@
+import type { MouseEvent } from "react"
+
+import { useLocale } from "@/app/LocaleProvider"
 import type { Locale, SectionId } from "@/content"
 import { track, type AnalyticsTrack } from "@/lib/analytics"
-import { ROOT_LOCALE_STORAGE_KEY } from "@/utils/rootLocale"
-import type { MouseEvent } from "react"
+import { htmlLang, localeHref } from "@/utils/locale"
 
 type LanguageSwitchProps = {
   activeSectionId?: SectionId
-  currentLocale: Locale
   label: string
   localeLabels: Record<Locale, string>
-  localeHrefs?: Record<Locale, string>
-  onLocaleSelect?: (locale: Locale) => void
+  path?: string
   trackEvent?: AnalyticsTrack
 }
 
 export function LanguageSwitch({
   activeSectionId,
-  currentLocale,
   label,
   localeLabels,
-  localeHrefs,
-  onLocaleSelect,
+  path = "/",
   trackEvent = track,
 }: LanguageSwitchProps) {
-  function selectLocale(event: MouseEvent<HTMLAnchorElement>, locale: Locale) {
-    if (locale !== currentLocale) {
-      trackEvent({ name: "language_change", from: currentLocale, to: locale })
-    }
+  const { locale: currentLocale, setLocale } = useLocale()
 
-    if (onLocaleSelect) {
-      event.preventDefault()
-      onLocaleSelect(locale)
+  function selectLocale(event: MouseEvent<HTMLAnchorElement>, locale: Locale) {
+    event.preventDefault()
+
+    if (locale === currentLocale) {
       return
     }
 
-    try {
-      if (typeof window?.localStorage?.setItem === "function") {
-        window.localStorage.setItem(ROOT_LOCALE_STORAGE_KEY, locale)
-      }
-    } catch {
-      // Native navigation remains available when preference storage is blocked.
-    }
+    trackEvent({ name: "language_change", from: currentLocale, to: locale })
+    setLocale(locale)
   }
 
   return (
     <div className="language-switch" role="group" aria-label={label}>
-      {(["pt", "en"] as const).map((locale) => {
-        const fragment = activeSectionId ? `#${activeSectionId}` : ""
-
-        return (
-          <a
-            key={locale}
-            href={localeHrefs?.[locale] ?? `/${locale}${fragment}`}
-            hrefLang={locale === "pt" ? "pt-BR" : "en"}
-            lang={locale === "pt" ? "pt-BR" : "en"}
-            aria-current={locale === currentLocale ? "page" : undefined}
-            onClick={(event) => selectLocale(event, locale)}
-          >
-            {localeLabels[locale]}
-          </a>
-        )
-      })}
+      {(["pt", "en"] as const).map((locale) => (
+        <a
+          key={locale}
+          href={localeHref(path, locale, activeSectionId)}
+          hrefLang={htmlLang(locale)}
+          lang={htmlLang(locale)}
+          aria-current={locale === currentLocale ? "page" : undefined}
+          onClick={(event) => selectLocale(event, locale)}
+        >
+          {localeLabels[locale]}
+        </a>
+      ))}
     </div>
   )
 }

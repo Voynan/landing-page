@@ -60,10 +60,7 @@ export function LandingShell({
   return (
     <div className="landing-page" data-locale={content.locale}>
       <SkipLink targetId="main-content">{skipLinkLabel}</SkipLink>
-      <ProgressiveNav
-        content={navigationContent}
-        currentLocale={content.locale}
-      />
+      <ProgressiveNav content={navigationContent} />
       <main id="main-content" className="landing-main">
         <ProductStudioHero content={content.hero} />
         <StudioThesis content={content.thesis} />

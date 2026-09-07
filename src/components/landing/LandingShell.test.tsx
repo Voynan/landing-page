@@ -3,12 +3,11 @@
 import "@testing-library/jest-dom/vitest"
 
 import { cleanup, render, screen, within } from "@testing-library/react"
-import { QueryClientProvider } from "@tanstack/react-query"
 import { afterEach, expect, it, vi } from "vitest"
 
+import { AppProviders } from "@/app/AppProviders"
 import { LandingShell } from "@/components/landing/LandingShell"
 import { getLandingContent } from "@/content"
-import { createQueryClient } from "@/lib/queryClient"
 import { motionQueries } from "@/components/motion/motionQueries"
 import { ScrollTrigger } from "@/lib/gsap"
 
@@ -136,7 +135,7 @@ it("provides one page heading, a skip link, and stable chapter identifiers", () 
   )
 
   render(
-    <QueryClientProvider client={createQueryClient()}>
+    <AppProviders initialLocale="en">
       <LandingShell
         content={getLandingContent("en")}
         navigationContent={navigationContent}
@@ -144,7 +143,7 @@ it("provides one page heading, a skip link, and stable chapter identifiers", () 
         skipLinkLabel="Skip to content"
         supportingChapterLabels={supportingChapterLabels}
       />
-    </QueryClientProvider>,
+    </AppProviders>,
   )
 
   expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1)

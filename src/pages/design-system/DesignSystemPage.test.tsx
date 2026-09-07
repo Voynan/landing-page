@@ -12,13 +12,24 @@ import {
 import userEvent from "@testing-library/user-event"
 import { afterEach, expect, it } from "vitest"
 
+import { AppProviders } from "@/app/AppProviders"
 import { DesignSystemHead } from "@/pages/design-system/DesignSystemHead"
 import { DesignSystemPage } from "@/pages/design-system/DesignSystemPage"
+
+// The design-system route renders inside the application providers; the page
+// reads locale context through its controls specimen.
+function renderDesignSystem() {
+  return render(
+    <AppProviders initialLocale="en">
+      <DesignSystemPage />
+    </AppProviders>,
+  )
+}
 
 afterEach(cleanup)
 
 it("renders every foundational specimen as a named region", () => {
-  render(<DesignSystemPage />)
+  renderDesignSystem()
 
   for (const name of [
     "Foundations",
@@ -36,7 +47,7 @@ it("renders every foundational specimen as a named region", () => {
 })
 
 it("exposes one page heading and local specimen navigation", () => {
-  render(<DesignSystemPage />)
+  renderDesignSystem()
 
   expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1)
   expect(
@@ -45,7 +56,7 @@ it("exposes one page heading and local specimen navigation", () => {
 })
 
 it("keeps the current specimen exposed in the sticky index", () => {
-  render(<DesignSystemPage />)
+  renderDesignSystem()
 
   const foundations = screen.getByRole("link", { name: "Foundations" })
   const media = screen.getByRole("link", { name: "Media" })
@@ -57,7 +68,7 @@ it("keeps the current specimen exposed in the sticky index", () => {
 })
 
 it("renders measured contrast pairings and a calibration ruler", () => {
-  render(<DesignSystemPage />)
+  renderDesignSystem()
 
   const foundations = screen.getByRole("region", { name: "Foundations" })
 
@@ -69,7 +80,7 @@ it("renders measured contrast pairings and a calibration ruler", () => {
 })
 
 it("renders both official Voynan brand marks", () => {
-  render(<DesignSystemPage />)
+  renderDesignSystem()
 
   const foundations = screen.getByRole("region", { name: "Foundations" })
 
@@ -82,7 +93,7 @@ it("renders both official Voynan brand marks", () => {
 })
 
 it("renders production controls inside the controls specimen", () => {
-  render(<DesignSystemPage />)
+  renderDesignSystem()
 
   const controls = screen.getByRole("region", { name: "Controls" })
 
@@ -104,7 +115,7 @@ it("renders production controls inside the controls specimen", () => {
 })
 
 it("documents duration and easing contracts in the motion specimen", () => {
-  render(<DesignSystemPage />)
+  renderDesignSystem()
 
   const motion = screen.getByRole("region", { name: "Motion" })
 
@@ -114,7 +125,7 @@ it("documents duration and easing contracts in the motion specimen", () => {
 
 it("exercises every eclipse state without scroll pin and compares reduced motion", async () => {
   const user = userEvent.setup()
-  render(<DesignSystemPage />)
+  renderDesignSystem()
 
   const motion = screen.getByRole("region", { name: "Motion" })
   const states = within(motion).getByRole("list", {
@@ -150,7 +161,7 @@ it("exercises every eclipse state without scroll pin and compares reduced motion
 })
 
 it("renders the production media component across its resilient states", () => {
-  render(<DesignSystemPage />)
+  renderDesignSystem()
 
   const media = screen.getByRole("region", { name: "Media" })
 
@@ -163,7 +174,7 @@ it("renders the production media component across its resilient states", () => {
 })
 
 it("renders every production contact state in the forms specimen", () => {
-  render(<DesignSystemPage />)
+  renderDesignSystem()
 
   const forms = screen.getByRole("region", { name: "Forms" })
 

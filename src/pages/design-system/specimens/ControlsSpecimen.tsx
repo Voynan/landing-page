@@ -48,7 +48,6 @@ export function ControlsSpecimen() {
             ]}
           />
           <LanguageSwitch
-            currentLocale="en"
             label="Language"
             localeLabels={{ pt: "PT", en: "EN" }}
           />

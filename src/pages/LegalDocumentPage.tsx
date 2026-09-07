@@ -36,10 +36,9 @@ export function LegalDocumentPage({ locale, kind }: LegalDocumentPageProps) {
               Voynan
             </a>
             <LanguageSwitch
-              currentLocale={locale}
               label={document.languageLabel}
-              localeHrefs={legalPaths[kind]}
               localeLabels={{ pt: "PT", en: "EN" }}
+              path={legalPaths[kind].en}
             />
           </div>
         </header>
