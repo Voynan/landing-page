@@ -9,12 +9,12 @@ const resources = {
   en: { common: englishCommon },
 } as const
 
-export function createI18n(locale: Locale): i18n {
+export function createI18n(initialLocale: Locale): i18n {
   const instance = i18next.createInstance()
 
   void instance.init({
-    lng: locale,
-    fallbackLng: "pt",
+    lng: initialLocale,
+    fallbackLng: "en",
     defaultNS: "common",
     resources,
     interpolation: { escapeValue: false },

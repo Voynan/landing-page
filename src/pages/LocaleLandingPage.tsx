@@ -10,7 +10,7 @@ type LocaleLandingPageProps = {
 
 export function LocaleLandingPage({ locale }: LocaleLandingPageProps) {
   return (
-    <AppProviders locale={locale}>
+    <AppProviders initialLocale={locale}>
       <LocalizedLandingPage locale={locale} />
     </AppProviders>
   )

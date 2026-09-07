@@ -22,7 +22,7 @@ export function LegalDocumentPage({ locale, kind }: LegalDocumentPageProps) {
     locale === "pt" ? "Pular para o conteúdo" : "Skip to content"
 
   return (
-    <AppProviders locale={locale}>
+    <AppProviders initialLocale={locale}>
       <div className="legal-page">
         <SkipLink targetId="legal-content">{skipLabel}</SkipLink>
 
