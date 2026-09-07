@@ -106,5 +106,10 @@
   },
   "metadata": {
     "languageLabel": "Português"
+  },
+  "notFound": {
+    "title": "Página não encontrada",
+    "description": "Este endereço não existe, ou deixou de existir.",
+    "backLabel": "Voltar para a Voynan"
   }
 }
