@@ -1,5 +1,28 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "outputDirectory": "dist/client",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "headers": [
+    {
+      "source": "/_lang/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "query", "key": "lang", "value": "pt" }],
+      "destination": "/_lang/pt/index.html"
+    },
+    {
+      "source": "/privacy",
+      "has": [{ "type": "query", "key": "lang", "value": "pt" }],
+      "destination": "/_lang/pt/privacy/index.html"
+    },
+    {
+      "source": "/terms",
+      "has": [{ "type": "query", "key": "lang", "value": "pt" }],
+      "destination": "/_lang/pt/terms/index.html"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

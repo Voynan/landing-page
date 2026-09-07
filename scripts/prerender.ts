@@ -1,9 +1,14 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises"
-import { resolve } from "node:path"
+import { dirname, resolve } from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
 
 type PublicRoute =
-  "/pt" | "/en" | "/pt/privacidade" | "/en/privacy" | "/pt/termos" | "/en/terms"
+  | "/"
+  | "/privacy"
+  | "/terms"
+  | "/?lang=pt"
+  | "/privacy?lang=pt"
+  | "/terms?lang=pt"
 
 type RenderedPage = {
   appHtml: string
@@ -20,14 +25,36 @@ export type PrerenderOptions = {
   serverEntry?: string
 }
 
-const publicRoutes: readonly PublicRoute[] = [
-  "/pt",
-  "/en",
-  "/pt/privacidade",
-  "/en/privacy",
-  "/pt/termos",
-  "/en/terms",
+type PublicPage = {
+  url: PublicRoute
+  outputDirectory: string
+}
+
+const publicPages: readonly PublicPage[] = [
+  { url: "/", outputDirectory: "." },
+  { url: "/privacy", outputDirectory: "privacy" },
+  { url: "/terms", outputDirectory: "terms" },
+  { url: "/?lang=pt", outputDirectory: "_lang/pt" },
+  { url: "/privacy?lang=pt", outputDirectory: "_lang/pt/privacy" },
+  { url: "/terms?lang=pt", outputDirectory: "_lang/pt/terms" },
 ]
+
+// The English root output overwrites the very template this script reads, so a
+// pristine copy is stashed beside the client directory to keep reruns stable.
+async function readTemplate(clientDir: string) {
+  const stashPath = resolve(dirname(clientDir), "prerender-template.html")
+
+  try {
+    return await readFile(stashPath, "utf8")
+  } catch {
+    const template = await readFile(resolve(clientDir, "index.html"), "utf8")
+
+    await mkdir(dirname(stashPath), { recursive: true })
+    await writeFile(stashPath, template, "utf8")
+
+    return template
+  }
+}
 
 function injectRenderedPage(template: string, page: RenderedPage) {
   if (!/<main(?:\s|>)/i.test(page.appHtml)) {
@@ -68,7 +95,7 @@ export async function prerender(options: PrerenderOptions = {}) {
   const serverEntry = resolve(
     options.serverEntry ?? "dist/server/entry-server.js",
   )
-  const template = await readFile(resolve(clientDir, "index.html"), "utf8")
+  const template = await readTemplate(clientDir)
   const serverModule = (await import(
     pathToFileURL(serverEntry).href
   )) as ServerRenderModule
@@ -79,10 +106,10 @@ export async function prerender(options: PrerenderOptions = {}) {
     )
   }
 
-  for (const route of publicRoutes) {
-    const page = await serverModule.render(route)
-    const html = injectRenderedPage(template, page)
-    const outputDirectory = resolve(clientDir, route.slice(1))
+  for (const page of publicPages) {
+    const rendered = await serverModule.render(page.url)
+    const html = injectRenderedPage(template, rendered)
+    const outputDirectory = resolve(clientDir, page.outputDirectory)
 
     await mkdir(outputDirectory, { recursive: true })
     await writeFile(resolve(outputDirectory, "index.html"), html, "utf8")
