@@ -18,12 +18,11 @@ Documented direction:
 
 - People and organizations evaluating CryptoVault to protect files and verify their integrity.
 - Investors and shareholders in Brazil, the United States, and Canada evaluating BullLedger to organize investment information.
-- Lawyers, law firms, professionals, and companies evaluating SafeNumber to centralize scam-attempt reports, verify contacts, and organize submitted evidence.
 - Brazilian builders and construction companies following the development of Constrully for construction cost, tax, and reporting management.
 - Founders and companies seeking to create, modernize, integrate, automate, operate, or evolve digital products without a minimum project size.
 - Developers evaluating Aegis as a straightforward authenticated file-encryption library.
 
-No single persona supersedes these audiences. The landing page presents three SaaS products in production—CryptoVault, BullLedger, and SafeNumber—followed by Constrully with an explicit development-stage status. Product discovery and qualified custom-software conversations remain the two dominant business outcomes.
+No single persona supersedes these audiences. The landing page presents two SaaS products in production—CryptoVault and BullLedger—followed by Constrully with an explicit development-stage status. Product discovery and qualified custom-software conversations remain the two dominant business outcomes.
 
 ## Product Purpose
 
@@ -31,7 +30,7 @@ Documented direction: Voynan's first public landing page presents the company as
 
 Success is measured in this order:
 
-1. Visitors reach CryptoVault, BullLedger, and SafeNumber as the three SaaS products in production and can also discover development-stage Constrully without mistaking it for a released product.
+1. Visitors reach CryptoVault and BullLedger as the two SaaS products in production and can also discover development-stage Constrully without mistaking it for a released product.
 2. Qualified prospects start a conversation about custom software.
 3. Visitors understand Voynan as a product studio capable of handling focused and complex work.
 4. Developers can discover the development-stage Aegis through its approved GitHub destination.
@@ -93,7 +92,7 @@ No approved product media, metrics, testimonials, or contact endpoint is current
 ## Product Principles
 
 1. Prove capability with real operated products and traceable evidence.
-2. Give all four product chapters the same compositional quality while preserving the lifecycle distinction: CryptoVault, BullLedger, and SafeNumber are in production; Constrully is in development.
+2. Give all three product chapters the same compositional quality while preserving the lifecycle distinction: CryptoVault and BullLedger are in production; Constrully is in development.
 3. Keep every core narrative and conversion usable without motion, video, analytics, or successful contact submission.
 4. Treat Portuguese and English as complete editorial experiences, not fragments or runtime machine translation.
 5. Block publication when factual, legal, privacy, or permission evidence is incomplete.

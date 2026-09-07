@@ -17,7 +17,11 @@ import { MobileProductExplorer } from "@/components/landing/products/MobileProdu
 import { getLandingContent, type ProductId } from "@/content"
 
 const labels = {
-  conceptualEvidence: "Representação conceitual",
+  comingSoon: "Em breve",
+  mediaCaption: {
+    cryptovault: "Página inicial do produto",
+    bullledger: "Dashboard inicial de exemplo",
+  },
   destinationPending: "Destino aguardando aprovação",
   productionStatus: "Em produção",
   developmentStatus: "Em desenvolvimento",
@@ -34,7 +38,7 @@ const products = getLandingContent("pt").products.items
 
 afterEach(cleanup)
 
-it("starts as a complete 2 by 2 product overview without an expanded panel", () => {
+it("starts as a complete stacked product overview without an expanded panel", () => {
   render(
     <MobileProductExplorer
       activeProductId={null}
@@ -52,7 +56,7 @@ it("starts as a complete 2 by 2 product overview without an expanded panel", () 
   })
 
   expect(grid).toHaveAttribute("data-layout", "overview")
-  expect(within(grid).getAllByRole("button")).toHaveLength(4)
+  expect(within(grid).getAllByRole("button")).toHaveLength(3)
   expect(screen.getByText(labels.mobileInteractionHint)).toBeVisible()
   expect(within(grid).getByText(products[2].title)).toBeVisible()
   expect(screen.queryByRole("article")).not.toBeInTheDocument()
@@ -83,32 +87,32 @@ it("compacts to one row and exposes only the selected product", async () => {
   }
 
   render(<Fixture />)
-  const safeNumberButton = screen.getByRole("button", {
-    name: /SafeNumber, Em produção/,
+  const bullLedgerButton = screen.getByRole("button", {
+    name: /BullLedger, Em produção/,
   })
 
-  await user.click(safeNumberButton)
+  await user.click(bullLedgerButton)
 
-  expect(safeNumberButton).toHaveAttribute(
+  expect(bullLedgerButton).toHaveAttribute(
     "aria-controls",
-    "mobile-product-safenumber",
+    "mobile-product-bullledger",
   )
   expect(
     screen.getByRole("group", { name: labels.mobileGridLabel }),
   ).toHaveAttribute("data-layout", "compact")
-  expect(safeNumberButton).toHaveAttribute("aria-expanded", "true")
+  expect(bullLedgerButton).toHaveAttribute("aria-expanded", "true")
   expect(
     screen.queryByText(labels.mobileInteractionHint),
   ).not.toBeInTheDocument()
   expect(screen.getByRole("article")).toHaveAttribute(
     "id",
-    "mobile-product-safenumber",
+    "mobile-product-bullledger",
   )
-  expect(screen.getByRole("article")).toHaveAccessibleName(products[2].title)
+  expect(screen.getByRole("article")).toHaveAccessibleName(products[1].title)
   expect(screen.queryByText(products[0].support)).not.toBeInTheDocument()
-  expect(onProductSelect).toHaveBeenCalledWith("safenumber")
+  expect(onProductSelect).toHaveBeenCalledWith("bullledger")
 
-  await user.click(safeNumberButton)
+  await user.click(bullLedgerButton)
   await waitFor(() => {
     expect(screen.queryByRole("article")).not.toBeInTheDocument()
   })
@@ -120,7 +124,7 @@ it("moves between adjacent products without wrapping", async () => {
 
   function Fixture() {
     const [activeProductId, setActiveProductId] = useState<ProductId | null>(
-      "safenumber",
+      "bullledger",
     )
 
     return (
@@ -138,13 +142,13 @@ it("moves between adjacent products without wrapping", async () => {
   render(<Fixture />)
 
   await user.click(screen.getByRole("button", { name: labels.nextProduct }))
-  expect(screen.getByRole("article")).toHaveAccessibleName(products[3].title)
+  expect(screen.getByRole("article")).toHaveAccessibleName(products[2].title)
   expect(
     screen.getByRole("button", { name: labels.nextProduct }),
   ).toBeDisabled()
 
   await user.click(screen.getByRole("button", { name: labels.previousProduct }))
-  expect(screen.getByRole("article")).toHaveAccessibleName(products[2].title)
+  expect(screen.getByRole("article")).toHaveAccessibleName(products[1].title)
 
   await user.click(screen.getByRole("button", { name: labels.collapseProduct }))
   expect(screen.queryByRole("article")).not.toBeInTheDocument()

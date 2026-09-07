@@ -8,12 +8,7 @@ import { afterEach, expect, it, vi } from "vitest"
 import { useProductObservatory } from "@/components/landing/products/useProductObservatory"
 import type { ProductId } from "@/content"
 
-const productIds = [
-  "cryptovault",
-  "bullledger",
-  "safenumber",
-  "constrully",
-] as const
+const productIds = ["cryptovault", "bullledger", "constrully"] as const
 
 afterEach(() => {
   cleanup()
@@ -62,7 +57,7 @@ it("changes only when a candidate clearly dominates the current segment", () => 
       isIntersecting: ratio > 0,
     }) as IntersectionObserverEntry
 
-  expect(observe).toHaveBeenCalledTimes(4)
+  expect(observe).toHaveBeenCalledTimes(3)
 
   act(() => {
     notify(

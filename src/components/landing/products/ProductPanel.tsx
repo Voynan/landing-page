@@ -1,11 +1,12 @@
 import { ProductEvidence } from "@/components/landing/products/ProductEvidence"
-import type { LandingContentDraft } from "@/content"
+import type { LandingContentDraft, ProductId } from "@/content"
 import type { AnalyticsTrack } from "@/lib/analytics"
 
 type ProductContent = LandingContentDraft["products"]["items"][number]
 
 type ProductPanelLabels = {
-  conceptualEvidence: string
+  comingSoon: string
+  mediaCaption: Partial<Record<ProductId, string>>
   destinationPending: string
   productionStatus: string
   developmentStatus: string
@@ -90,7 +91,8 @@ export function ProductPanel({
       <div className="product-panel__evidence">
         <ProductEvidence
           product={product}
-          conceptualLabel={labels.conceptualEvidence}
+          caption={labels.mediaCaption[product.id]}
+          comingSoonLabel={labels.comingSoon}
           eager={active}
         />
       </div>

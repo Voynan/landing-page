@@ -13,7 +13,11 @@
   "products": {
     "sectionLabel": "Produtos SaaS",
     "progressLabel": "Capítulos dos produtos",
-    "conceptualEvidence": "Representação conceitual",
+    "comingSoon": "Em breve",
+    "mediaCaption": {
+      "cryptovault": "Página inicial do produto",
+      "bullledger": "Dashboard inicial de exemplo"
+    },
     "destinationPending": "Destino aguardando aprovação",
     "productionStatus": "Em produção",
     "developmentStatus": "Em desenvolvimento",

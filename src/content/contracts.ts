@@ -1,11 +1,6 @@
 import { z } from "zod"
 
-export const productIds = [
-  "cryptovault",
-  "bullledger",
-  "safenumber",
-  "constrully",
-] as const
+export const productIds = ["cryptovault", "bullledger", "constrully"] as const
 export const productStages = ["production", "development"] as const
 export const locales = ["pt", "en"] as const
 export const sectionIds = [
@@ -142,27 +137,53 @@ const claimDraftSchema = z.discriminatedUnion("approval", [
   approvedClaimSchema,
 ])
 
-const pendingMediaSchema = z.object({
-  desktopSrc: optionalNonEmptyString,
-  mobileSrc: optionalNonEmptyString,
-  posterSrc: optionalNonEmptyString,
-  width: z.number().int().positive().optional(),
-  height: z.number().int().positive().optional(),
-  alt: optionalNonEmptyString,
-  source: optionalNonEmptyString,
-  approval: pendingApprovalSchema,
-})
+// The mobile crop is art-directed, so it may be framed taller than the desktop
+// asset. Its own dimensions are optional, but only as a pair.
+const optionalPixelLength = z.number().int().positive().optional()
 
-const approvedMediaSchema = z.object({
-  desktopSrc: nonEmptyString,
-  mobileSrc: nonEmptyString,
-  posterSrc: nonEmptyString,
-  width: z.number().int().positive(),
-  height: z.number().int().positive(),
-  alt: nonEmptyString,
-  source: nonEmptyString,
-  approval: z.literal("approved"),
-})
+const mobileCropMessage =
+  "mobileWidth and mobileHeight must be declared together"
+
+const hasPairedMobileCrop = (media: {
+  mobileWidth?: number
+  mobileHeight?: number
+}) => (media.mobileWidth === undefined) === (media.mobileHeight === undefined)
+
+const pendingMediaSchema = z
+  .object({
+    desktopSrc: optionalNonEmptyString,
+    mobileSrc: optionalNonEmptyString,
+    posterSrc: optionalNonEmptyString,
+    width: optionalPixelLength,
+    height: optionalPixelLength,
+    mobileWidth: optionalPixelLength,
+    mobileHeight: optionalPixelLength,
+    alt: optionalNonEmptyString,
+    source: optionalNonEmptyString,
+    approval: pendingApprovalSchema,
+  })
+  .refine(hasPairedMobileCrop, {
+    message: mobileCropMessage,
+    path: ["mobileHeight"],
+  })
+
+const approvedMediaSchema = z
+  .object({
+    desktopSrc: nonEmptyString,
+    mobileSrc: nonEmptyString,
+    posterSrc: nonEmptyString,
+    width: z.number().int().positive(),
+    height: z.number().int().positive(),
+    mobileWidth: optionalPixelLength,
+    mobileHeight: optionalPixelLength,
+    alt: nonEmptyString,
+    source: nonEmptyString,
+    approval: z.literal("approved"),
+  })
+  .refine(hasPairedMobileCrop, {
+    message: mobileCropMessage,
+    path: ["mobileHeight"],
+  })
 
 const mediaDraftSchema = z.discriminatedUnion("approval", [
   pendingMediaSchema,
@@ -296,6 +317,7 @@ const productSchema = z.object({
   title: nonEmptyString,
   support: nonEmptyString,
   capabilities: z.array(nonEmptyString).length(3),
+  icon: brandLogoDraftSchema.optional(),
   destination: linkDraftSchema,
   claimReview: claimDraftSchema,
   media: mediaDraftSchema,
@@ -309,7 +331,7 @@ const productsSchema = z.object({
   summary: nonEmptyString,
   closing: nonEmptyString,
   items: z
-    .tuple([productSchema, productSchema, productSchema, productSchema])
+    .tuple([productSchema, productSchema, productSchema])
     .superRefine((items, context) => {
       const expectedIds: ProductId[] = [...productIds]
 

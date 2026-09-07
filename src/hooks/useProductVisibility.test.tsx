@@ -40,6 +40,6 @@ it("waits to report until a product is actually visible", () => {
   const view = render(<VisibilityFixture productId={null} record={record} />)
 
   expect(events).toEqual([])
-  view.rerender(<VisibilityFixture productId="safenumber" record={record} />)
-  expect(events).toEqual([{ name: "product_view", productId: "safenumber" }])
+  view.rerender(<VisibilityFixture productId="bullledger" record={record} />)
+  expect(events).toEqual([{ name: "product_view", productId: "bullledger" }])
 })

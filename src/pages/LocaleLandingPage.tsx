@@ -1,6 +1,6 @@
 import { AppProviders } from "@/app/AppProviders"
 import { LandingShell } from "@/components/landing/LandingShell"
-import { getLandingContent } from "@/content"
+import { getLandingContent, type ProductId } from "@/content"
 import type { PublicLocale } from "@/utils/rootLocale"
 import { useTranslation } from "react-i18next"
 
@@ -26,7 +26,10 @@ function LocalizedLandingPage({ locale }: LocaleLandingPageProps) {
       productStageLabels={{
         sectionLabel: t("products.sectionLabel"),
         progressLabel: t("products.progressLabel"),
-        conceptualEvidence: t("products.conceptualEvidence"),
+        comingSoon: t("products.comingSoon"),
+        mediaCaption: t("products.mediaCaption", {
+          returnObjects: true,
+        }) as Partial<Record<ProductId, string>>,
         destinationPending: t("products.destinationPending"),
         productionStatus: t("products.productionStatus"),
         developmentStatus: t("products.developmentStatus"),

@@ -32,7 +32,11 @@ const navigationContent = {
 const productStageLabels = {
   sectionLabel: "Products",
   progressLabel: "Product chapters",
-  conceptualEvidence: "Conceptual representation",
+  comingSoon: "Coming soon",
+  mediaCaption: {
+    cryptovault: "Product home page",
+    bullledger: "Sample starting dashboard",
+  },
   destinationPending: "Destination awaiting approval",
   productionStatus: "In production",
   developmentStatus: "In development",
@@ -204,5 +208,5 @@ it("provides one page heading, a skip link, and stable chapter identifiers", () 
   expect(productSection).toBeInTheDocument()
   expect(
     within(productSection as HTMLElement).getAllByRole("article"),
-  ).toHaveLength(4)
+  ).toHaveLength(3)
 })

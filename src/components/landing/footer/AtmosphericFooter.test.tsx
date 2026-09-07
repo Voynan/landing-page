@@ -38,7 +38,6 @@ it("renders every footer group without inventing pending destinations", () => {
   expect(within(footer).getByText(labels.tagline)).toBeVisible()
   expect(within(footer).getByText("CryptoVault")).toBeVisible()
   expect(within(footer).getByText("BullLedger")).toBeVisible()
-  expect(within(footer).getByText("SafeNumber")).toBeVisible()
   expect(
     within(footer).getByRole("link", {
       name: "Constrully — In development",

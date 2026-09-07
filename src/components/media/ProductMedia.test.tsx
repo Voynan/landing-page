@@ -2,7 +2,13 @@
 
 import "@testing-library/jest-dom/vitest"
 
-import { cleanup, fireEvent, render, screen } from "@testing-library/react"
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from "@testing-library/react"
 import { afterEach, describe, expect, it, vi } from "vitest"
 
 import { ProductMedia } from "@/components/media/ProductMedia"
@@ -139,5 +145,52 @@ describe("ProductMedia", () => {
       "data-media-state",
       "ready",
     )
+  })
+  it("reserves the poster proportion for the layout box", () => {
+    render(<ProductMedia {...fixture} />)
+
+    const media = screen.getByTestId("product-media")
+
+    expect(media.style.getPropertyValue("--product-media-ratio")).toBe(
+      "1600 / 900",
+    )
+    expect(media.style.getPropertyValue("--product-media-ratio-mobile")).toBe(
+      "",
+    )
+  })
+
+  it("reserves a separate proportion when the mobile crop is shaped differently", () => {
+    render(
+      <ProductMedia
+        {...fixture}
+        mobileAspect={{ width: 1040, height: 1300 }}
+      />,
+    )
+
+    const media = screen.getByTestId("product-media")
+
+    expect(media.style.getPropertyValue("--product-media-ratio")).toBe(
+      "1600 / 900",
+    )
+    expect(media.style.getPropertyValue("--product-media-ratio-mobile")).toBe(
+      "1040 / 1300",
+    )
+  })
+
+  it("labels the media with a visible caption when one is supplied", () => {
+    render(<ProductMedia {...fixture} caption="Product home page" />)
+
+    // The caption is the figure's own label, so it stays inside the figure.
+    const figure = screen.getByRole("figure")
+
+    expect(within(figure).getByTestId("product-media")).toBeVisible()
+    expect(within(figure).getByText("Product home page")).toBeVisible()
+  })
+
+  it("stays a bare media box when no caption is supplied", () => {
+    render(<ProductMedia {...fixture} />)
+
+    expect(screen.queryByRole("figure")).not.toBeInTheDocument()
+    expect(screen.getByTestId("product-media")).toBeVisible()
   })
 })

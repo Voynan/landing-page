@@ -11,7 +11,7 @@ import { getLandingContent } from "@/content"
 
 afterEach(cleanup)
 
-it("exposes four direct product destinations and the current step", async () => {
+it("exposes one direct destination per product and the current step", async () => {
   const onSelect = vi.fn()
   const user = userEvent.setup()
 
@@ -30,16 +30,15 @@ it("exposes four direct product destinations and the current step", async () => 
     name: "Navegação dos produtos",
   })
   const links = within(nav).getAllByRole("link")
-  expect(links).toHaveLength(4)
+  expect(links).toHaveLength(3)
   expect(links.map((link) => link.getAttribute("href"))).toEqual([
     "#product-cryptovault-segment",
     "#product-bullledger-segment",
-    "#product-safenumber-segment",
     "#product-constrully-segment",
   ])
   expect(links[1]).toHaveAttribute("aria-current", "step")
-  expect(links[3]).toHaveTextContent("Em desenvolvimento")
+  expect(links[2]).toHaveTextContent("Em desenvolvimento")
 
   await user.click(links[2])
-  expect(onSelect).toHaveBeenCalledWith("safenumber")
+  expect(onSelect).toHaveBeenCalledWith("constrully")
 })

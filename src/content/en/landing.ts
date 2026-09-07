@@ -1,4 +1,11 @@
 import aegisLogo from "@/assets/aegis/aegis-logo.svg"
+import bullledgerEvidenceDesktop from "@/assets/bull-ledger/bullledger-evidence-desktop.avif"
+import bullledgerEvidenceMobile from "@/assets/bull-ledger/bullledger-evidence-mobile.avif"
+import bullledgerEvidencePoster from "@/assets/bull-ledger/bullledger-evidence-poster.jpg"
+import cryptovaultEvidenceDesktop from "@/assets/crypto-vault/cryptovault-evidence-desktop.avif"
+import cryptovaultEvidenceMobile from "@/assets/crypto-vault/cryptovault-evidence-mobile.avif"
+import cryptovaultEvidencePoster from "@/assets/crypto-vault/cryptovault-evidence-poster.jpg"
+import construllyIcon from "@/assets/constrully/constrully-icon.svg"
 import founderPortrait from "@/assets/pixelated_portrait.png"
 
 import type { LandingContentDraft } from "../contracts.js"
@@ -21,7 +28,7 @@ export const englishLandingContent = {
     support:
       "Our own SaaS products and software engineering that turn ideas into systems built for the real world.",
     contextLine:
-      "3 SaaS products in production · 1 product in development · 1 open-source project in development",
+      "2 SaaS products in production · 1 product in development · 1 open-source project in development",
     productCta: { label: "Explore our products", sectionId: "products" },
     contactCta: { label: "Build with us", sectionId: "contact" },
     approval: "received",
@@ -36,7 +43,7 @@ export const englishLandingContent = {
     id: "products",
     kicker: "Our products",
     title: "Products we build, operate, and continue to evolve.",
-    summary: "3 SaaS products in production · 1 product in development",
+    summary: "2 SaaS products in production · 1 product in development",
     closing:
       "The experience of operating these products is the same experience we bring to every client project.",
     items: [
@@ -55,14 +62,27 @@ export const englishLandingContent = {
         ],
         destination: {
           label: "Explore CryptoVault",
-          approval: "missing",
+          href: "https://cryptovault.rosetta-solutions.com/",
+          approval: "approved",
         },
         claimReview: {
           text: "File integrity and verifiable records",
           category: "legal",
           approval: "missing",
         },
-        media: { approval: "missing" },
+        media: {
+          desktopSrc: cryptovaultEvidenceDesktop,
+          mobileSrc: cryptovaultEvidenceMobile,
+          posterSrc: cryptovaultEvidencePoster,
+          width: 1280,
+          height: 960,
+          mobileWidth: 1040,
+          mobileHeight: 1300,
+          alt: "CryptoVault's home page: the product header above the headline “Your Files. Your Keys. Your Control.” and buttons to upload a first file or open the API documentation.",
+          source:
+            "src/assets/crypto-vault/cryptovault-evidence-desktop.avif, -mobile.avif and -poster.jpg — captured from https://cryptovault.rosetta-solutions.com/ on 2026-09-07; Voynan-owned product, capture approved by Kaio Vinícios",
+          approval: "approved",
+        },
         copyApproval: "received",
       },
       {
@@ -80,46 +100,34 @@ export const englishLandingContent = {
         ],
         destination: {
           label: "Explore BullLedger",
-          approval: "missing",
+          href: "https://bull-ledger.voynan.com",
+          approval: "approved",
         },
         claimReview: {
           text: "Organization and analysis of financial and tax data",
           category: "financial",
           approval: "missing",
         },
-        media: { approval: "missing" },
-        copyApproval: "received",
-      },
-      {
-        id: "safenumber",
-        name: "SafeNumber",
-        stage: "production",
-        kicker: "03 / SaaS",
-        title: "Verify contacts. Organize fraud evidence.",
-        support:
-          "Centralize reports about phone numbers and email addresses used to impersonate company professionals, with a verification portal built for their clients.",
-        capabilities: [
-          "Cross-referenced reports on scam attempts",
-          "Contact verification and reporting portal",
-          "Submission of Pix keys, screenshots, and a dedicated email address for potential legal action",
-        ],
-        destination: {
-          label: "Explore SafeNumber",
-          approval: "missing",
+        media: {
+          desktopSrc: bullledgerEvidenceDesktop,
+          mobileSrc: bullledgerEvidenceMobile,
+          posterSrc: bullledgerEvidencePoster,
+          width: 1280,
+          height: 960,
+          mobileWidth: 1040,
+          mobileHeight: 1419,
+          alt: "BullLedger's Overview page: the product sidebar beside a portfolio summary with total value, nominal return and free cash, above a month-by-month line chart of demonstration data.",
+          source:
+            "src/assets/bull-ledger/bullledger-evidence-desktop.avif, -mobile.avif and -poster.jpg — captured from http://localhost:5173/app, a development build of https://bull-ledger.voynan.com, on 2026-09-07 with seeded demonstration data; the signed-in account address and the development-build label were hidden before capture, nothing was added or altered; Voynan-owned product, capture approved by Kaio Vinícios",
+          approval: "approved",
         },
-        claimReview: {
-          text: "Organization of reports and evidence of professional identity fraud attempts",
-          category: "legal",
-          approval: "missing",
-        },
-        media: { approval: "missing" },
         copyApproval: "received",
       },
       {
         id: "constrully",
         name: "Constrully",
         stage: "development",
-        kicker: "04 / SaaS",
+        kicker: "03 / SaaS",
         title: "Every construction cost, under control.",
         support:
           "Manage expenses, track taxes and generate reports with an up-to-date view of every construction project.",
@@ -128,9 +136,19 @@ export const englishLandingContent = {
           "Tracking of construction-related taxes",
           "Operational and tax reports",
         ],
+        icon: {
+          src: construllyIcon,
+          alt: "Constrully icon: four stacked architectural chevrons in a silver-to-slate gradient.",
+          width: 1254,
+          height: 1254,
+          source:
+            "src/assets/constrully/constrully-icon.svg — Voynan-owned asset",
+          approval: "approved",
+        },
         destination: {
           label: "Explore Constrully",
-          approval: "missing",
+          href: "https://constrully.voynan.com",
+          approval: "approved",
         },
         claimReview: {
           text: "Organization of construction costs, taxes and reports",

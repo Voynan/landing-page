@@ -35,7 +35,7 @@ describe("landing content contracts", () => {
     ).toThrow(/aegis\.github.*approved/i)
   })
 
-  it("distinguishes the three released products from Constrully", () => {
+  it("distinguishes the two released products from Constrully", () => {
     const products = getLandingContent("pt").products.items
 
     expect(
@@ -43,10 +43,9 @@ describe("landing content contracts", () => {
     ).toEqual([
       { id: "cryptovault", name: "CryptoVault", stage: "production" },
       { id: "bullledger", name: "BullLedger", stage: "production" },
-      { id: "safenumber", name: "SafeNumber", stage: "production" },
       { id: "constrully", name: "Constrully", stage: "development" },
     ])
-    expect(products).toHaveLength(4)
+    expect(products).toHaveLength(3)
     expect(
       new Set(products.map((product) => product.capabilities.length)),
     ).toEqual(new Set([3]))
@@ -56,13 +55,13 @@ describe("landing content contracts", () => {
     [
       "pt",
       "Produtos próprios",
-      "3 SaaS em produção · 1 produto em desenvolvimento",
+      "2 SaaS em produção · 1 produto em desenvolvimento",
       "A experiência de operar esses produtos é a mesma que levamos para cada projeto de cliente.",
     ],
     [
       "en",
       "Our products",
-      "3 SaaS products in production · 1 product in development",
+      "2 SaaS products in production · 1 product in development",
       "The experience of operating these products is the same experience we bring to every client project.",
     ],
   ] as const)(
@@ -77,18 +76,32 @@ describe("landing content contracts", () => {
     },
   )
 
-  it("localizes the conceptual evidence label", () => {
-    expect(createI18n("pt").t("products.conceptualEvidence")).toBe(
-      "Representação conceitual",
+  it("localizes the coming-soon label", () => {
+    expect(createI18n("pt").t("products.comingSoon")).toBe("Em breve")
+    expect(createI18n("en").t("products.comingSoon")).toBe("Coming soon")
+  })
+
+  it("provides every product media caption through i18n, not the content draft", () => {
+    expect(createI18n("pt").t("products.mediaCaption.cryptovault")).toBe(
+      "Página inicial do produto",
     )
-    expect(createI18n("en").t("products.conceptualEvidence")).toBe(
-      "Conceptual representation",
+    expect(createI18n("en").t("products.mediaCaption.cryptovault")).toBe(
+      "Product home page",
+    )
+    expect(createI18n("pt").t("products.mediaCaption.bullledger")).toBe(
+      "Dashboard inicial de exemplo",
+    )
+    expect(createI18n("en").t("products.mediaCaption.bullledger")).toBe(
+      "Sample starting dashboard",
+    )
+    expect(JSON.stringify(getLandingContent("pt"))).not.toContain(
+      "Página inicial do produto",
     )
   })
 
   it("reports all production-product blockers instead of stopping at the first", () => {
     expect(() => assertPublishableContent(getLandingContent("en"))).toThrow(
-      /products\.items\.0\.destination[\s\S]*products\.items\.1\.destination[\s\S]*products\.items\.2\.destination/i,
+      /products\.items\.0\.claimReview[\s\S]*products\.items\.1\.claimReview/i,
     )
   })
 
@@ -114,13 +127,13 @@ describe("landing content contracts", () => {
     const blockers = getPublicationBlockers(getLandingContent("pt"))
 
     expect(blockers).not.toContain(
-      "products.items.3.destination must be approved (currently missing)",
+      "products.items.2.destination must be approved (currently missing)",
     )
     expect(blockers).not.toContain(
-      "products.items.3.media must be approved (currently missing)",
+      "products.items.2.media must be approved (currently missing)",
     )
     expect(blockers).toContain(
-      "products.items.3.claimReview must be approved (currently missing)",
+      "products.items.2.claimReview must be approved (currently missing)",
     )
   })
 
@@ -143,4 +156,75 @@ describe("landing content contracts", () => {
       getLandingContent("pt").hero.title,
     )
   })
+  describe("approved product media crops", () => {
+    const withFirstProductMedia = (media: unknown) => {
+      const content = getLandingContent("en")
+      const [first, second, third] = content.products.items
+
+      return {
+        ...content,
+        products: {
+          ...content.products,
+          items: [{ ...first, media }, second, third],
+        },
+      }
+    }
+
+    const approvedMedia = {
+      desktopSrc: "/media/cryptovault-desktop.avif",
+      mobileSrc: "/media/cryptovault-mobile.avif",
+      posterSrc: "/media/cryptovault-poster.webp",
+      width: 1280,
+      height: 800,
+      alt: "CryptoVault vault view listing verified files",
+      source: "Voynan product team",
+      approval: "approved",
+    }
+
+    it("accepts a mobile crop that declares its own proportion", () => {
+      expect(() =>
+        landingContentDraftSchema.parse(
+          withFirstProductMedia({
+            ...approvedMedia,
+            mobileWidth: 1040,
+            mobileHeight: 1300,
+          }),
+        ),
+      ).not.toThrow()
+    })
+
+    it("accepts approved media without a mobile crop proportion", () => {
+      expect(() =>
+        landingContentDraftSchema.parse(withFirstProductMedia(approvedMedia)),
+      ).not.toThrow()
+    })
+
+    it("rejects a mobile crop width that is missing its height", () => {
+      expect(() =>
+        landingContentDraftSchema.parse(
+          withFirstProductMedia({ ...approvedMedia, mobileWidth: 1040 }),
+        ),
+      ).toThrow(/mobileWidth and mobileHeight/i)
+    })
+  })
+  it.each(["pt", "en"] as const)(
+    "publishes the official %s product destinations",
+    (locale) => {
+      const [cryptovault, bullledger, constrully] =
+        getLandingContent(locale).products.items
+
+      expect(cryptovault.destination).toMatchObject({
+        href: "https://cryptovault.rosetta-solutions.com/",
+        approval: "approved",
+      })
+      expect(bullledger.destination).toMatchObject({
+        href: "https://bull-ledger.voynan.com",
+        approval: "approved",
+      })
+      expect(constrully.destination).toMatchObject({
+        href: "https://constrully.voynan.com",
+        approval: "approved",
+      })
+    },
+  )
 })

@@ -5,7 +5,8 @@ type ProductContent = LandingContentDraft["products"]["items"][number]
 
 type ProductEvidenceProps = {
   product: ProductContent
-  conceptualLabel: string
+  caption?: string
+  comingSoonLabel: string
   eager?: boolean
 }
 
@@ -27,20 +28,28 @@ function getMediaType(source: string) {
 
 export function ProductEvidence({
   product,
-  conceptualLabel,
+  caption,
+  comingSoonLabel,
   eager = false,
 }: ProductEvidenceProps) {
   if (product.media.approval === "approved") {
+    const { mobileWidth, mobileHeight } = product.media
+    const mobileAspect =
+      mobileWidth && mobileHeight
+        ? { width: mobileWidth, height: mobileHeight }
+        : undefined
+
     return (
       <ProductMedia
         eager={eager}
+        mobileAspect={mobileAspect}
         sources={[
           {
             src: product.media.mobileSrc,
             type: getMediaType(product.media.mobileSrc),
             media: "(max-width: 35rem)",
-            width: product.media.width,
-            height: product.media.height,
+            width: mobileWidth ?? product.media.width,
+            height: mobileHeight ?? product.media.height,
           },
           {
             src: product.media.desktopSrc,
@@ -55,30 +64,32 @@ export function ProductEvidence({
           height: product.media.height,
         }}
         alt={product.media.alt}
+        caption={caption}
       />
     )
   }
 
-  const accessibleName = `${conceptualLabel}: ${product.name}`
+  const icon = product.icon?.approval === "approved" ? product.icon : undefined
 
   return (
     <figure
-      className="product-evidence product-evidence--conceptual"
+      className="product-evidence product-evidence--coming-soon"
       data-product={product.id}
-      aria-label={accessibleName}
     >
-      <figcaption>
-        <span>{conceptualLabel}</span>
+      {icon ? (
+        <img
+          className="product-evidence__mark"
+          src={icon.src}
+          width={icon.width}
+          height={icon.height}
+          alt={icon.alt}
+          loading="lazy"
+        />
+      ) : null}
+      <figcaption className="product-evidence__identity">
         <strong>{product.name}</strong>
+        <span>{comingSoonLabel}</span>
       </figcaption>
-      <ol className="product-evidence__flow">
-        {product.capabilities.map((capability, index) => (
-          <li className="product-evidence__node" key={capability}>
-            <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-            <strong>{capability}</strong>
-          </li>
-        ))}
-      </ol>
     </figure>
   )
 }

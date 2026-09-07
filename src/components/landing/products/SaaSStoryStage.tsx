@@ -18,7 +18,8 @@ import { ScrollTrigger } from "@/lib/gsap"
 type SaaSStoryStageLabels = {
   sectionLabel: string
   progressLabel: string
-  conceptualEvidence: string
+  comingSoon: string
+  mediaCaption: Partial<Record<ProductId, string>>
   destinationPending: string
   productionStatus: string
   developmentStatus: string

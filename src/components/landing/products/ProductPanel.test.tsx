@@ -15,7 +15,11 @@ import { ProductPanel } from "@/components/landing/products/ProductPanel"
 import { getLandingContent } from "@/content"
 
 const labels = {
-  conceptualEvidence: "Representação conceitual",
+  comingSoon: "Em breve",
+  mediaCaption: {
+    cryptovault: "Página inicial do produto",
+    bullledger: "Dashboard inicial de exemplo",
+  },
   destinationPending: "Destino aguardando aprovação",
   productionStatus: "Em produção",
   developmentStatus: "Em desenvolvimento",
@@ -24,7 +28,7 @@ const labels = {
 afterEach(cleanup)
 
 it("keeps a complete product article available in linear mode", () => {
-  const product = getLandingContent("pt").products.items[2]
+  const product = getLandingContent("pt").products.items[1]
 
   render(
     <ProductPanel

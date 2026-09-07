@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useRef, useState, type CSSProperties } from "react"
 
 import {
   ResponsiveMedia,
@@ -12,10 +12,17 @@ export type MediaPoster = {
   height: number
 }
 
+export type MediaAspect = {
+  width: number
+  height: number
+}
+
 type ProductMediaProps = {
   sources: readonly MediaSource[]
   poster: MediaPoster
+  mobileAspect?: MediaAspect
   alt: string
+  caption?: string
   eager?: boolean
   reducedData?: boolean
   onReady?: () => void
@@ -28,7 +35,9 @@ type MediaState = "poster" | "loading" | "ready" | "error"
 export function ProductMedia({
   sources,
   poster,
+  mobileAspect,
   alt,
+  caption,
   eager = false,
   reducedData,
   onReady,
@@ -68,12 +77,21 @@ export function ProductMedia({
   const shouldRenderResponsiveMedia =
     sources.length > 0 && (mediaKind === "video" || !shouldReduceData)
 
-  return (
+  const media = (
     <div
       data-testid="product-media"
       data-media-state={mediaState}
       className={["product-media", className].filter(Boolean).join(" ")}
-      style={{ aspectRatio: `${poster.width} / ${poster.height}` }}
+      style={
+        {
+          "--product-media-ratio": `${poster.width} / ${poster.height}`,
+          ...(mobileAspect
+            ? {
+                "--product-media-ratio-mobile": `${mobileAspect.width} / ${mobileAspect.height}`,
+              }
+            : {}),
+        } as CSSProperties
+      }
     >
       <img
         className="product-media__poster"
@@ -95,5 +113,16 @@ export function ProductMedia({
         />
       ) : null}
     </div>
+  )
+
+  if (!caption) return media
+
+  return (
+    <figure className="product-media-figure">
+      <figcaption className="product-media-figure__caption">
+        {caption}
+      </figcaption>
+      {media}
+    </figure>
   )
 }

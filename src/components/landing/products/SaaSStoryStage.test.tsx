@@ -21,7 +21,11 @@ import { ScrollTrigger } from "@/lib/gsap"
 const labels = {
   sectionLabel: "Produtos",
   progressLabel: "Navegação dos produtos",
-  conceptualEvidence: "Representação conceitual",
+  comingSoon: "Em breve",
+  mediaCaption: {
+    cryptovault: "Página inicial do produto",
+    bullledger: "Dashboard inicial de exemplo",
+  },
   destinationPending: "Destino aguardando aprovação",
   productionStatus: "Em produção",
   developmentStatus: "Em desenvolvimento",
@@ -112,7 +116,7 @@ describe("SaaSStoryStage", () => {
     ).toBeVisible()
 
     const articles = screen.getAllByRole("article")
-    expect(articles).toHaveLength(4)
+    expect(articles).toHaveLength(3)
     expect(
       articles.map(
         (article) =>
@@ -122,17 +126,26 @@ describe("SaaSStoryStage", () => {
     expect(articles.map((article) => article.dataset.productStage)).toEqual([
       "production",
       "production",
-      "production",
       "development",
     ])
-    for (const article of articles) {
+    articles.forEach((article, index) => {
       expect(article).not.toHaveAttribute("aria-hidden")
       expect(article).not.toHaveAttribute("inert")
-      expect(within(article).getByText(labels.conceptualEvidence)).toBeVisible()
-    }
+
+      // Products with approved media show the real screenshot; the rest keep
+      // the labeled conceptual figure.
+      const media = baseContent.items[index].media
+      if (media.approval === "approved") {
+        expect(within(article).getByTestId("product-media")).toBeVisible()
+        expect(within(article).queryByText(labels.comingSoon)).toBeNull()
+      } else {
+        expect(within(article).getByText(labels.comingSoon)).toBeVisible()
+        expect(within(article).queryByTestId("product-media")).toBeNull()
+      }
+    })
     expect(
       document.querySelectorAll(".product-observatory__segment"),
-    ).toHaveLength(4)
+    ).toHaveLength(3)
     expect(document.querySelector(".product-progress__orbit")).toBeNull()
   })
 
@@ -149,7 +162,7 @@ describe("SaaSStoryStage", () => {
       />,
     )
 
-    expect(screen.getAllByTestId("product-media")).toHaveLength(4)
+    expect(screen.getAllByTestId("product-media")).toHaveLength(3)
     await user.click(
       screen.getByRole("link", { name: /Conhecer o BullLedger/ }),
     )
@@ -191,7 +204,7 @@ describe("SaaSStoryStage", () => {
     expect(ScrollTrigger.getById("product-motion-cryptovault")).toBeUndefined()
     expect(
       document.querySelectorAll('.product-panel[aria-hidden="true"]'),
-    ).toHaveLength(3)
+    ).toHaveLength(2)
 
     unmount()
   })
@@ -220,13 +233,13 @@ describe("SaaSStoryStage", () => {
       )
     })
     await user.click(
-      screen.getByRole("link", { name: /SafeNumberEm produção/ }),
+      screen.getByRole("link", { name: /ConstrullyEm desenvolvimento/ }),
     )
 
     expect(scrollIntoView).toHaveBeenCalledWith({ block: "start" })
     expect(scrollIntoView.mock.instances[0]).toHaveAttribute(
       "id",
-      "product-safenumber-segment",
+      "product-constrully-segment",
     )
   })
 
@@ -252,17 +265,17 @@ describe("SaaSStoryStage", () => {
         "desktop",
       )
     })
-    window.location.hash = "#product-safenumber"
+    window.location.hash = "#product-constrully"
     window.dispatchEvent(new HashChangeEvent("hashchange"))
 
     await waitFor(() => {
       expect(
-        document.querySelector('.product-panel[data-product="safenumber"]'),
+        document.querySelector('.product-panel[data-product="constrully"]'),
       ).toHaveAttribute("data-active", "true")
     })
     expect(scrollIntoView.mock.instances.at(-1)).toHaveAttribute(
       "id",
-      "product-safenumber-segment",
+      "product-constrully-segment",
     )
   })
 
@@ -320,12 +333,12 @@ describe("SaaSStoryStage", () => {
     )
 
     await user.click(
-      screen.getByRole("button", { name: /SafeNumber, Em produção/ }),
+      screen.getByRole("button", { name: /BullLedger, Em produção/ }),
     )
 
     await waitFor(() => {
       expect(events).toEqual([
-        { name: "product_view", productId: "safenumber" },
+        { name: "product_view", productId: "bullledger" },
       ])
     })
     expect(screen.getByTestId("mobile-product-explorer")).toHaveAttribute(
