@@ -285,10 +285,10 @@ export const englishLandingContent = {
     ],
     privacyPolicy: {
       label: "Privacy policy",
-      href: "/en/privacy",
+      href: "/privacy",
       approval: "approved",
     },
-    terms: { label: "Terms", href: "/en/terms", approval: "approved" },
+    terms: { label: "Terms", href: "/terms", approval: "approved" },
     copyApproval: "approved",
   },
   footer: {

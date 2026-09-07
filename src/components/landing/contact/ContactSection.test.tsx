@@ -56,7 +56,7 @@ const content = {
   ],
   privacyPolicy: {
     label: "Política de privacidade",
-    href: "/pt/privacidade",
+    href: "/privacy",
     approval: "approved" as const,
   },
   terms: { label: "Termos", approval: "missing" as const },
@@ -102,7 +102,7 @@ it("links the contact notice to the approved privacy policy", () => {
 
   expect(
     screen.getByRole("link", { name: "Política de privacidade" }),
-  ).toHaveAttribute("href", "/pt/privacidade")
+  ).toHaveAttribute("href", "/privacy")
 })
 
 it("announces invalid fields and focuses the accessible error summary", async () => {

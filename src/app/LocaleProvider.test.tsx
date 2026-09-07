@@ -9,7 +9,7 @@ import { useEffect } from "react"
 import { useTranslation } from "react-i18next"
 
 import { AppProviders } from "@/app/AppProviders"
-import { useLocale } from "@/app/LocaleProvider"
+import { useLocale } from "@/app/localeContext"
 import { LOCALE_STORAGE_KEY } from "@/utils/locale"
 
 function setPreferredLanguages(languages: readonly string[]) {

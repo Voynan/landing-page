@@ -1,4 +1,4 @@
-import { useLocale } from "@/app/LocaleProvider"
+import { useLocale } from "@/app/localeContext"
 import { LanguageSwitch } from "@/components/landing/navigation/LanguageSwitch"
 import { SkipLink } from "@/components/ui/SkipLink"
 import {

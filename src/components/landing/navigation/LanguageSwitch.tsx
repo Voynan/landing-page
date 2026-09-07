@@ -1,6 +1,6 @@
 import type { MouseEvent } from "react"
 
-import { useLocale } from "@/app/LocaleProvider"
+import { useLocale } from "@/app/localeContext"
 import type { Locale, SectionId } from "@/content"
 import { track, type AnalyticsTrack } from "@/lib/analytics"
 import { htmlLang, localeHref } from "@/utils/locale"

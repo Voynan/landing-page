@@ -75,10 +75,10 @@ it("renders every footer group without inventing pending destinations", () => {
   ).toBeVisible()
   expect(
     within(footer).getByRole("link", { name: "Privacy policy" }),
-  ).toHaveAttribute("href", "/en/privacy")
+  ).toHaveAttribute("href", "/privacy")
   expect(within(footer).getByRole("link", { name: "Terms" })).toHaveAttribute(
     "href",
-    "/en/terms",
+    "/terms",
   )
   expect(
     within(footer).getByRole("link", { name: "View on GitHub" }),

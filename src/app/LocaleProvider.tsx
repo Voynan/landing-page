@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import type { ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -77,6 +77,10 @@ export function LocaleProvider({
     })
 
     if (resolved !== locale) {
+      // The prerendered document is English, so the visitor's own signals can
+      // only be read once React has hydrated; resolving any earlier would make
+      // the client render disagree with the served HTML.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLocale(resolved)
     }
   }, [locale, setLocale])
@@ -89,14 +93,4 @@ export function LocaleProvider({
   return (
     <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>
   )
-}
-
-export function useLocale(): LocaleContextValue {
-  const value = useContext(LocaleContext)
-
-  if (!value) {
-    throw new Error("useLocale must be used inside a LocaleProvider")
-  }
-
-  return value
 }

@@ -1,4 +1,4 @@
-import { useLocale } from "@/app/LocaleProvider"
+import { useLocale } from "@/app/localeContext"
 import { LandingShell } from "@/components/landing/LandingShell"
 import { getLandingContent, type ProductId } from "@/content"
 import { useTranslation } from "react-i18next"
