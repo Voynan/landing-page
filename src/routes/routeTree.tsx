@@ -2,7 +2,7 @@ import {
   Outlet,
   createRootRoute,
   createRoute,
-  redirect,
+  useRouterState,
 } from "@tanstack/react-router"
 
 import { AppProviders } from "@/app/AppProviders"
@@ -12,65 +12,45 @@ import { LocaleLandingPage } from "@/pages/LocaleLandingPage"
 import { LegalDocumentPage } from "@/pages/LegalDocumentPage"
 import { NotFoundPage } from "@/pages/NotFoundPage"
 import { DesignSystemRoute } from "@/routes/designSystemRoute"
-import { ROOT_LOCALE_STORAGE_KEY, resolveRootLocale } from "@/utils/rootLocale"
+import { LOCALE_QUERY_KEY, resolveLocale } from "@/utils/locale"
 
-const rootRoute = createRootRoute({
-  component: () => (
-    <AppProviders>
+function RootLayout() {
+  const search = useRouterState({
+    select: (state) => state.location.search as Record<string, unknown>,
+  })
+  const searchParam = search[LOCALE_QUERY_KEY]
+  const initialLocale = resolveLocale({
+    searchParam: typeof searchParam === "string" ? searchParam : null,
+  })
+
+  return (
+    <AppProviders initialLocale={initialLocale}>
       <Outlet />
     </AppProviders>
-  ),
+  )
+}
+
+const rootRoute = createRootRoute({
+  component: RootLayout,
   notFoundComponent: NotFoundPage,
 })
 
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
-  beforeLoad: () => {
-    const savedLocale =
-      typeof window === "undefined"
-        ? null
-        : window.localStorage.getItem(ROOT_LOCALE_STORAGE_KEY)
-    const locale = resolveRootLocale(savedLocale)
-
-    throw redirect({ to: locale === "en" ? "/en" : "/pt" })
-  },
+  component: LocaleLandingPage,
 })
 
-const portugueseRoute = createRoute({
+const privacyRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/pt",
-  component: () => <LocaleLandingPage locale="pt" />,
+  path: "/privacy",
+  component: () => <LegalDocumentPage kind="privacy" />,
 })
 
-const englishRoute = createRoute({
+const termsRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/en",
-  component: () => <LocaleLandingPage locale="en" />,
-})
-
-const portuguesePrivacyRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/pt/privacidade",
-  component: () => <LegalDocumentPage locale="pt" kind="privacy" />,
-})
-
-const englishPrivacyRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/en/privacy",
-  component: () => <LegalDocumentPage locale="en" kind="privacy" />,
-})
-
-const portugueseTermsRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/pt/termos",
-  component: () => <LegalDocumentPage locale="pt" kind="terms" />,
-})
-
-const englishTermsRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/en/terms",
-  component: () => <LegalDocumentPage locale="en" kind="terms" />,
+  path: "/terms",
+  component: () => <LegalDocumentPage kind="terms" />,
 })
 
 const designSystemRoute = createRoute({
@@ -86,11 +66,7 @@ const designSystemEnabled = isDesignSystemEnabled({
 
 export const routeTree = rootRoute.addChildren([
   indexRoute,
-  portugueseRoute,
-  englishRoute,
-  portuguesePrivacyRoute,
-  englishPrivacyRoute,
-  portugueseTermsRoute,
-  englishTermsRoute,
+  privacyRoute,
+  termsRoute,
   ...(designSystemEnabled ? [designSystemRoute] : []),
 ])

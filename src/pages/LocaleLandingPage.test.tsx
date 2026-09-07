@@ -5,6 +5,7 @@ import "@testing-library/jest-dom/vitest"
 import { cleanup, render, screen } from "@testing-library/react"
 import { afterEach, beforeEach, expect, it } from "vitest"
 
+import { AppProviders } from "@/app/AppProviders"
 import { LocaleLandingPage } from "@/pages/LocaleLandingPage"
 import { localeHref } from "@/utils/locale"
 
@@ -22,7 +23,11 @@ it.each([
   (locale, label) => {
     window.history.replaceState(null, "", localeHref("/", locale))
 
-    render(<LocaleLandingPage locale={locale} />)
+    render(
+      <AppProviders initialLocale={locale}>
+        <LocaleLandingPage />
+      </AppProviders>,
+    )
 
     expect(screen.getByRole("navigation", { name: label })).toBeVisible()
   },

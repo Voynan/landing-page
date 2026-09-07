@@ -1,22 +1,10 @@
-import { AppProviders } from "@/app/AppProviders"
+import { useLocale } from "@/app/LocaleProvider"
 import { LandingShell } from "@/components/landing/LandingShell"
 import { getLandingContent, type ProductId } from "@/content"
-import type { PublicLocale } from "@/utils/rootLocale"
 import { useTranslation } from "react-i18next"
 
-type LocaleLandingPageProps = {
-  locale: PublicLocale
-}
-
-export function LocaleLandingPage({ locale }: LocaleLandingPageProps) {
-  return (
-    <AppProviders initialLocale={locale}>
-      <LocalizedLandingPage locale={locale} />
-    </AppProviders>
-  )
-}
-
-function LocalizedLandingPage({ locale }: LocaleLandingPageProps) {
+export function LocaleLandingPage() {
+  const { locale } = useLocale()
   const { t } = useTranslation()
   const content = getLandingContent(locale)
 

@@ -1,4 +1,5 @@
 import type { Locale, SectionId } from "@/content/contracts"
+import { localeHref } from "@/utils/locale"
 
 export function buildLocaleUrl(
   origin: string,
@@ -17,11 +18,5 @@ export function buildLocaleUrl(
     throw new TypeError("A valid absolute origin is required")
   }
 
-  const localeUrl = new URL(`/${locale}`, parsedOrigin.origin)
-
-  if (sectionId) {
-    localeUrl.hash = sectionId
-  }
-
-  return localeUrl.toString()
+  return `${parsedOrigin.origin}${localeHref("/", locale, sectionId)}`
 }

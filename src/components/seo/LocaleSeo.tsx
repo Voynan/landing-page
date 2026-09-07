@@ -1,4 +1,5 @@
 import type { Locale } from "@/content/contracts"
+import { htmlLang, localeHref } from "@/utils/locale"
 
 type SeoMetadata = {
   approval?: unknown
@@ -12,13 +13,8 @@ type LocaleSeoProps = {
   locale: Locale
   metadata: SeoMetadata
   origin: string
-  pathsByLocale?: Record<Locale, string>
+  path?: string
 }
-
-const hrefLangByLocale = {
-  pt: "pt-BR",
-  en: "en",
-} as const
 
 const openGraphLocaleByLocale = {
   pt: "pt_BR",
@@ -29,7 +25,7 @@ export function LocaleSeo({
   locale,
   metadata,
   origin,
-  pathsByLocale = { pt: "/pt", en: "/en" },
+  path = "/",
 }: LocaleSeoProps) {
   const { title, description, openGraphTitle, openGraphDescription } = metadata
 
@@ -39,21 +35,24 @@ export function LocaleSeo({
     )
   }
 
-  const canonical = new URL(pathsByLocale[locale], origin).toString()
+  const toAbsolute = (variant: Locale) =>
+    new URL(localeHref(path, variant), origin).toString()
+  const canonical = toAbsolute(locale)
 
   return (
     <>
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={canonical} />
-      {(["pt", "en"] as const).map((alternateLocale) => (
+      {(["en", "pt"] as const).map((alternateLocale) => (
         <link
           key={alternateLocale}
           rel="alternate"
-          hrefLang={hrefLangByLocale[alternateLocale]}
-          href={new URL(pathsByLocale[alternateLocale], origin).toString()}
+          hrefLang={htmlLang(alternateLocale)}
+          href={toAbsolute(alternateLocale)}
         />
       ))}
+      <link rel="alternate" hrefLang="x-default" href={toAbsolute("en")} />
       <meta property="og:type" content="website" />
       <meta property="og:locale" content={openGraphLocaleByLocale[locale]} />
       <meta property="og:title" content={openGraphTitle} />

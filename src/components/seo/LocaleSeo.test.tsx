@@ -6,28 +6,44 @@ import { getLandingContent } from "@/content"
 
 describe("locale SEO", () => {
   it.each([
-    ["pt", "pt-BR", "en", "https://voynan.com/pt"],
-    ["en", "en", "pt-BR", "https://voynan.com/en"],
+    ["pt", "https://voynan.com/?lang=pt"],
+    ["en", "https://voynan.com/"],
   ] as const)(
-    "renders canonical, reciprocal language and Open Graph tags for %s",
-    (locale, ownHrefLang, alternateHrefLang, canonical) => {
-      const metadata = getLandingContent(locale).metadata
+    "points the %s canonical at its own variant",
+    (locale, canonical) => {
       const head = renderToStaticMarkup(
         <LocaleSeo
           locale={locale}
-          metadata={metadata}
+          metadata={getLandingContent(locale).metadata}
           origin="https://voynan.com"
         />,
       ).toLowerCase()
 
       expect(head).toContain(`rel="canonical" href="${canonical}"`)
-      expect(head).toContain(`hreflang="${ownHrefLang.toLowerCase()}"`)
-      expect(head).toContain(`hreflang="${alternateHrefLang.toLowerCase()}"`)
+      expect(head).toContain(`property="og:url" content="${canonical}"`)
       expect(head).toContain('property="og:title"')
       expect(head).toContain('property="og:description"')
-      expect(head).toContain('property="og:url"')
     },
   )
+
+  it("cross-links both variants and names an x-default", () => {
+    const head = renderToStaticMarkup(
+      <LocaleSeo
+        locale="en"
+        metadata={getLandingContent("en").metadata}
+        origin="https://voynan.com"
+        path="/privacy"
+      />,
+    ).toLowerCase()
+
+    expect(head).toContain('hreflang="en" href="https://voynan.com/privacy"')
+    expect(head).toContain(
+      'hreflang="pt-br" href="https://voynan.com/privacy?lang=pt"',
+    )
+    expect(head).toContain(
+      'hreflang="x-default" href="https://voynan.com/privacy"',
+    )
+  })
 
   it("rejects incomplete metadata instead of rendering empty tags", () => {
     expect(() =>

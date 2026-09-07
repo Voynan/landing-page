@@ -4,15 +4,21 @@ import { renderToStaticMarkup, renderToString } from "react-dom/server"
 import { createAppRouter } from "@/app/createAppRouter"
 import { LocaleSeo } from "@/components/seo/LocaleSeo"
 import { publicConfig } from "@/config/publicConfig"
-import { getLandingContent, type Locale } from "@/content"
+import { getLandingContent } from "@/content"
 import {
   getLegalDocument,
   legalPaths,
   type LegalDocumentKind,
 } from "@/content/legal"
+import { htmlLang, LOCALE_QUERY_KEY, resolveLocale } from "@/utils/locale"
 
 export type PublicRoute =
-  "/pt" | "/en" | "/pt/privacidade" | "/en/privacy" | "/pt/termos" | "/en/terms"
+  | "/"
+  | "/privacy"
+  | "/terms"
+  | "/?lang=pt"
+  | "/privacy?lang=pt"
+  | "/terms?lang=pt"
 
 export type RenderedPage = {
   appHtml: string
@@ -26,28 +32,25 @@ type RenderOptions = {
 
 const previewOrigin = "http://localhost:4173"
 
-const legalRouteDescriptors = {
-  "/pt/privacidade": { locale: "pt", kind: "privacy" },
-  "/en/privacy": { locale: "en", kind: "privacy" },
-  "/pt/termos": { locale: "pt", kind: "terms" },
-  "/en/terms": { locale: "en", kind: "terms" },
-} satisfies Partial<
-  Record<PublicRoute, { locale: Locale; kind: LegalDocumentKind }>
->
+const legalKindByPath: Record<string, LegalDocumentKind> = {
+  [legalPaths.privacy]: "privacy",
+  [legalPaths.terms]: "terms",
+}
 
 export async function render(
   url: PublicRoute,
   options: RenderOptions = {},
 ): Promise<RenderedPage> {
-  const router = createAppRouter(url)
-  const legalRoute =
-    legalRouteDescriptors[url as keyof typeof legalRouteDescriptors]
-  const locale: Locale = legalRoute?.locale ?? (url === "/en" ? "en" : "pt")
-  const metadata = legalRoute
-    ? getLegalDocument(locale, legalRoute.kind).metadata
+  const parsedUrl = new URL(url, "https://voynan.local")
+  const locale = resolveLocale({
+    searchParam: parsedUrl.searchParams.get(LOCALE_QUERY_KEY),
+  })
+  const legalKind = legalKindByPath[parsedUrl.pathname]
+  const metadata = legalKind
+    ? getLegalDocument(locale, legalKind).metadata
     : getLandingContent(locale).metadata
-  const pathsByLocale = legalRoute ? legalPaths[legalRoute.kind] : undefined
   const origin = options.origin ?? publicConfig.siteOrigin ?? previewOrigin
+  const router = createAppRouter(url)
 
   await router.load()
 
@@ -58,9 +61,9 @@ export async function render(
         locale={locale}
         metadata={metadata}
         origin={origin}
-        pathsByLocale={pathsByLocale}
+        path={parsedUrl.pathname}
       />,
     ),
-    htmlAttrs: locale === "pt" ? 'lang="pt-BR"' : 'lang="en"',
+    htmlAttrs: `lang="${htmlLang(locale)}"`,
   }
 }

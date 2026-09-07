@@ -111,5 +111,10 @@
     "title": "Página não encontrada",
     "description": "Este endereço não existe, ou deixou de existir.",
     "backLabel": "Voltar para a Voynan"
+  },
+  "legal": {
+    "creatorNotice": "Todos os produtos e serviços apresentados são criados e mantidos por Voynan.",
+    "privacy": "Privacidade",
+    "terms": "Termos"
   }
 }

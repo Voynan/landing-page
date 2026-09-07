@@ -1,46 +1,35 @@
+import { RouterProvider } from "@tanstack/react-router"
+import { renderToString } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 
 import { createAppRouter } from "@/app/createAppRouter"
 import { render } from "@/entry-server"
-import { resolveRootLocale } from "@/utils/rootLocale"
 
-describe("public locale routes", () => {
+describe("public routes", () => {
   it.each([
-    ["/pt", 'lang="pt-BR"', "https://voynan.com/pt", "/en"],
-    ["/en", 'lang="en"', "https://voynan.com/en", "/pt"],
-    [
-      "/pt/privacidade",
-      'lang="pt-BR"',
-      "https://voynan.com/pt/privacidade",
-      "/en/privacy",
-    ],
-    [
-      "/en/privacy",
-      'lang="en"',
-      "https://voynan.com/en/privacy",
-      "/pt/privacidade",
-    ],
-    ["/pt/termos", 'lang="pt-BR"', "https://voynan.com/pt/termos", "/en/terms"],
-    ["/en/terms", 'lang="en"', "https://voynan.com/en/terms", "/pt/termos"],
+    ["/", 'lang="en"', "https://voynan.com/"],
+    ["/?lang=pt", 'lang="pt-BR"', "https://voynan.com/?lang=pt"],
+    ["/privacy", 'lang="en"', "https://voynan.com/privacy"],
+    ["/privacy?lang=pt", 'lang="pt-BR"', "https://voynan.com/privacy?lang=pt"],
+    ["/terms", 'lang="en"', "https://voynan.com/terms"],
+    ["/terms?lang=pt", 'lang="pt-BR"', "https://voynan.com/terms?lang=pt"],
   ] as const)(
     "renders %s as crawlable HTML",
-    async (url, htmlAttrs, canonical, alternatePath) => {
+    async (url, htmlAttrs, canonical) => {
       const result = await render(url, { origin: "https://voynan.com" })
 
       expect(result.appHtml).toContain("<main")
       expect(result.htmlAttrs).toBe(htmlAttrs)
       expect(result.headHtml).toContain(`rel="canonical" href="${canonical}"`)
-      expect(result.headHtml).toContain(
-        `href="https://voynan.com${alternatePath}"`,
-      )
+      expect(result.headHtml).toContain('hrefLang="x-default"')
     },
   )
 
   it.each([
-    ["/pt/privacidade", "Política de privacidade", "Seus direitos"],
-    ["/en/privacy", "Privacy policy", "Your rights"],
-    ["/pt/termos", "Termos de uso", "Produtos e serviços"],
-    ["/en/terms", "Terms of use", "Products and services"],
+    ["/privacy", "Privacy policy", "Your rights"],
+    ["/privacy?lang=pt", "Política de privacidade", "Seus direitos"],
+    ["/terms", "Terms of use", "Products and services"],
+    ["/terms?lang=pt", "Termos de uso", "Produtos e serviços"],
   ] as const)(
     "renders the legal document at %s",
     async (url, title, section) => {
@@ -51,24 +40,28 @@ describe("public locale routes", () => {
     },
   )
 
-  it("defaults to Portuguese without overwriting an explicit preference", () => {
-    expect(resolveRootLocale(null)).toBe("pt")
-    expect(resolveRootLocale("pt")).toBe("pt")
-    expect(resolveRootLocale("en")).toBe("en")
-    expect(resolveRootLocale("fr")).toBe("pt")
-  })
-
-  it("redirects the server-side root request to the default locale", async () => {
+  it("serves English at the root without a redirect", async () => {
     const router = createAppRouter("/")
 
     await router.load()
 
-    expect(router._serverResult?.type).toBe("redirect")
+    expect(router._serverResult?.type).not.toBe("redirect")
+  })
 
-    if (router._serverResult?.type !== "redirect") {
-      throw new Error("Expected the root route to return a redirect response.")
-    }
+  it.each([
+    "/pt",
+    "/en",
+    "/pt/privacidade",
+    "/en/privacy",
+    "/pt/termos",
+    "/en/terms",
+  ])("no longer serves the retired path %s", async (path) => {
+    const router = createAppRouter(path)
 
-    expect(router._serverResult.redirect.headers.get("location")).toBe("/pt")
+    await router.load()
+
+    expect(renderToString(<RouterProvider router={router} />)).toContain(
+      "Page not found",
+    )
   })
 })

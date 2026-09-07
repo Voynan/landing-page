@@ -111,5 +111,10 @@
     "title": "Page not found",
     "description": "This address does not exist, or it no longer does.",
     "backLabel": "Back to Voynan"
+  },
+  "legal": {
+    "creatorNotice": "All featured products and services are created and maintained by Voynan.",
+    "privacy": "Privacy",
+    "terms": "Terms"
   }
 }

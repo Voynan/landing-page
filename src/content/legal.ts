@@ -30,9 +30,9 @@ export type LegalDocument = {
 }
 
 export const legalPaths = {
-  privacy: { pt: "/pt/privacidade", en: "/en/privacy" },
-  terms: { pt: "/pt/termos", en: "/en/terms" },
-} satisfies Record<LegalDocumentKind, Record<Locale, string>>
+  privacy: "/privacy",
+  terms: "/terms",
+} satisfies Record<LegalDocumentKind, string>
 
 const portuguesePrivacy: LegalDocument = {
   locale: "pt",
