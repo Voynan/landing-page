@@ -2453,6 +2453,10 @@
   }
 
   .orbital-field {
+    /* The weave is sliced from one 1440x252 drawing, so the stroke scale keeps
+       its line weight proportional to however much of it a viewport shows. */
+    --orbital-stroke: 1;
+
     position: absolute;
     z-index: 1;
     bottom: -1px;
@@ -2487,40 +2491,36 @@
     mix-blend-mode: screen;
   }
 
-  .orbital-field__thread:nth-child(1),
-  .orbital-field__thread:nth-child(7) {
+  /* The outer threads sit further back in the field. */
+  [data-orbital-thread="0"],
+  [data-orbital-thread="6"] {
     opacity: 0.54;
   }
 
-  .orbital-field__thread:nth-child(2),
-  .orbital-field__thread:nth-child(6) {
+  [data-orbital-thread="1"],
+  [data-orbital-thread="5"] {
     opacity: 0.72;
   }
 
   .orbital-field__halo {
     opacity: 0.21;
-    stroke-width: 8;
+    stroke-width: calc(8px * var(--orbital-stroke));
   }
 
   .orbital-field__core {
     opacity: 0.62;
-    stroke-width: 2.2;
+    stroke-width: calc(2.2px * var(--orbital-stroke));
   }
 
   .orbital-field__filament {
     opacity: 0.94;
-    stroke-width: 0.72;
+    stroke-width: calc(0.72px * var(--orbital-stroke));
   }
 
   .orbital-field__flow {
     opacity: 0.5;
-    stroke-dasharray: 8 34 2 76 18 112;
-    stroke-width: 2.35;
+    stroke-width: calc(2.35px * var(--orbital-stroke));
     will-change: opacity, stroke-dashoffset;
-  }
-
-  .orbital-field__thread:nth-child(even) .orbital-field__flow {
-    stroke-dasharray: 2 48 14 92 6 138;
   }
 
   .saas-story-stage {
@@ -4265,6 +4265,10 @@
     grid-column: 2 / -1;
   }
 
+  .orbital-field {
+    --orbital-stroke: 0.78;
+  }
+
   .product-observatory__overture {
     grid-template-columns: repeat(8, minmax(0, 1fr));
     gap: var(--space-6);
@@ -4570,25 +4574,9 @@
   }
 
   .orbital-field {
+    --orbital-stroke: 0.67;
+
     height: 10.5rem;
-  }
-
-  .orbital-field__thread:nth-child(1),
-  .orbital-field__thread:nth-child(7) {
-    display: none;
-  }
-
-  .orbital-field__halo {
-    opacity: 0.16;
-    stroke-width: 6;
-  }
-
-  .orbital-field__core {
-    stroke-width: 1.75;
-  }
-
-  .orbital-field__flow {
-    stroke-width: 1.8;
   }
 
   .product-observatory__overture {

@@ -1,69 +1,166 @@
 import { useId, useRef, type RefObject } from "react"
 
-import { useChapterMotion } from "@/components/motion/useChapterMotion"
+import {
+  useChapterMotion,
+  type EnhancedMotionProfile,
+} from "@/components/motion/useChapterMotion"
 import { gsap } from "@/lib/gsap"
 
-const orbitalThreads = [
-  "M-120 34C220 14 438 44 654 78C824 104 944 146 1124 116C1280 90 1408 44 1560 54",
-  "M-120 66C198 88 418 40 650 56C840 68 936 114 1106 104C1262 94 1390 82 1560 92",
-  "M-120 104C220 76 446 108 682 118C850 126 932 70 1110 74C1276 78 1404 126 1560 116",
-  "M-120 136C248 160 480 138 702 106C862 82 958 40 1120 56C1284 74 1420 152 1560 148",
-  "M-120 172C184 136 448 166 690 154C858 146 948 188 1124 172C1280 158 1408 116 1560 124",
-  "M-120 208C218 226 452 186 700 184C862 182 978 122 1140 128C1302 134 1430 200 1560 188",
-  "M-120 238C260 208 500 232 730 202C890 180 980 160 1160 190C1320 218 1432 224 1560 206",
+type OrbitalThread = {
+  path: string
+  /** Dash pattern measured against the normalised 1000-unit path length. */
+  flowDash: readonly number[]
+  /** Whole dash cycles travelled per loop; an integer keeps the repeat invisible. */
+  flowCycles: number
+  /** Starting dash phase, so the travelling pulses never line up across the weave. */
+  flowPhase: number
+  flowOpacity: number
+}
+
+const orbitalThreads: readonly OrbitalThread[] = [
+  {
+    path: "M-120 34C220 14 438 44 654 78C824 104 944 146 1124 116C1280 90 1408 44 1560 54",
+    flowDash: [8, 34, 2, 76, 18, 112],
+    flowCycles: 3,
+    flowPhase: 0,
+    flowOpacity: 0.62,
+  },
+  {
+    path: "M-120 66C198 88 418 40 650 56C840 68 936 114 1106 104C1262 94 1390 82 1560 92",
+    flowDash: [2, 48, 14, 92, 6, 138],
+    flowCycles: 2,
+    flowPhase: 96,
+    flowOpacity: 0.8,
+  },
+  {
+    path: "M-120 104C220 76 446 108 682 118C850 126 932 70 1110 74C1276 78 1404 126 1560 116",
+    flowDash: [8, 34, 2, 76, 18, 112],
+    flowCycles: 4,
+    flowPhase: 187,
+    flowOpacity: 0.7,
+  },
+  {
+    path: "M-120 136C248 160 480 138 702 106C862 82 958 40 1120 56C1284 74 1420 152 1560 148",
+    flowDash: [2, 48, 14, 92, 6, 138],
+    flowCycles: 3,
+    flowPhase: 41,
+    flowOpacity: 0.95,
+  },
+  {
+    path: "M-120 172C184 136 448 166 690 154C858 146 948 188 1124 172C1280 158 1408 116 1560 124",
+    flowDash: [8, 34, 2, 76, 18, 112],
+    flowCycles: 5,
+    flowPhase: 268,
+    flowOpacity: 0.72,
+  },
+  {
+    path: "M-120 208C218 226 452 186 700 184C862 182 978 122 1140 128C1302 134 1430 200 1560 188",
+    flowDash: [2, 48, 14, 92, 6, 138],
+    flowCycles: 2,
+    flowPhase: 132,
+    flowOpacity: 0.84,
+  },
+  {
+    path: "M-120 238C260 208 500 232 730 202C890 180 980 160 1160 190C1320 218 1432 224 1560 206",
+    flowDash: [8, 34, 2, 76, 18, 112],
+    flowCycles: 4,
+    flowPhase: 214,
+    flowOpacity: 0.66,
+  },
 ] as const
+
+// The field renders at a uniform scale on every viewport, so a shorter loop on
+// the narrower profiles keeps the light travelling at the same speed on screen.
+const flowLoopSeconds: Record<EnhancedMotionProfile, number> = {
+  desktop: 12,
+  tablet: 10.5,
+  mobile: 9,
+}
+
+function dashPeriodOf(thread: OrbitalThread) {
+  return thread.flowDash.reduce((total, segment) => total + segment, 0)
+}
 
 function useOrbitalFieldMotion(scope: RefObject<SVGSVGElement | null>) {
   useChapterMotion(scope, ({ profile, root, select }) => {
     const isMobile = profile === "mobile"
     const threads = select("[data-orbital-thread]")
     const flows = select("[data-orbital-flow]")
+    let inView = false
 
-    const timeline = gsap.timeline({
+    // The weave breathes in and out, so reversing this one reads as the breath.
+    const breath = gsap.timeline({
       defaults: { ease: "sine.inOut" },
+      paused: true,
       repeat: -1,
       yoyo: true,
+    })
+
+    breath.fromTo(
+      threads,
+      {
+        rotation: (index) => (index % 2 === 0 ? -0.2 : 0.25),
+        scaleY: (index) => (index % 3 === 0 ? 0.96 : 1.02),
+        x: (index) => (index % 2 === 0 ? -12 : 10),
+        y: (index) => (index - 3) * -0.7,
+      },
+      {
+        duration: isMobile ? 7.6 : 10.5,
+        rotation: (index) => (index % 2 === 0 ? 0.28 : -0.22),
+        scaleY: (index) => (index % 3 === 0 ? 1.04 : 0.97),
+        stagger: { amount: isMobile ? 0.45 : 0.9, from: "center" },
+        x: (index) => (index % 2 === 0 ? 14 : -16),
+        y: (index) => (index - 3) * 0.9,
+      },
+    )
+
+    gsap.set(flows, {
+      autoAlpha: (index) => orbitalThreads[index].flowOpacity,
+      strokeDashoffset: (index) => orbitalThreads[index].flowPhase,
+    })
+
+    // The current runs one way at a constant pace. Travelling a whole number of
+    // dash cycles lands the repeat on the picture it started from, so the loop
+    // never stalls at the end of a pass and never runs backwards.
+    const drift = gsap.to(flows, {
+      duration: flowLoopSeconds[profile],
+      ease: "none",
+      repeat: -1,
+      strokeDashoffset: (index) => {
+        const thread = orbitalThreads[index]
+        return thread.flowPhase - dashPeriodOf(thread) * thread.flowCycles
+      },
       scrollTrigger: {
         id: "thesis-orbital-drift",
         trigger: root,
         start: "top bottom",
         end: "bottom top",
         toggleActions: "play pause resume pause",
+        onToggle: ({ isActive }) => {
+          inView = isActive
+          if (isActive && !document.hidden) breath.play()
+          else breath.pause()
+        },
       },
     })
 
-    timeline
-      .addLabel("orbital-breath", 0)
-      .fromTo(
-        threads,
-        {
-          rotation: (index) => (index % 2 === 0 ? -0.2 : 0.25),
-          scaleY: (index) => (index % 3 === 0 ? 0.96 : 1.02),
-          x: (index) => (index % 2 === 0 ? -12 : 10),
-          y: (index) => (index - 3) * -0.7,
-        },
-        {
-          duration: isMobile ? 7.6 : 10.5,
-          rotation: (index) => (index % 2 === 0 ? 0.28 : -0.22),
-          scaleY: (index) => (index % 3 === 0 ? 1.04 : 0.97),
-          stagger: { amount: isMobile ? 0.45 : 0.9, from: "center" },
-          x: (index) => (index % 2 === 0 ? 14 : -16),
-          y: (index) => (index - 3) * 0.9,
-        },
-        "orbital-breath",
-      )
-      .fromTo(
-        flows,
-        { autoAlpha: 0.18, strokeDashoffset: (index) => index * 138 + 920 },
-        {
-          autoAlpha: (index) => (index % 3 === 0 ? 0.98 : 0.7),
-          duration: isMobile ? 5.8 : 7.4,
-          ease: "none",
-          stagger: { amount: isMobile ? 1.2 : 2.4, from: "random" },
-          strokeDashoffset: (index) => index * -112 - 1080,
-        },
-        "orbital-breath+=0.2",
-      )
+    // A hidden tab keeps neither loop running; scroll position decides the rest.
+    const holdWhileHidden = () => {
+      if (inView && !document.hidden) {
+        breath.play()
+        drift.resume()
+        return
+      }
+
+      breath.pause()
+      drift.pause()
+    }
+
+    document.addEventListener("visibilitychange", holdWhileHidden)
+
+    return () => {
+      document.removeEventListener("visibilitychange", holdWhileHidden)
+    }
   })
 }
 
@@ -84,7 +181,10 @@ export function OrbitalField() {
       className="orbital-field"
       data-testid="orbital-field"
       focusable="false"
-      preserveAspectRatio="none"
+      // Slicing from the bottom edge keeps the authored curvature at every
+      // width; a narrow viewport sees a smaller crop of the same weave rather
+      // than a horizontally squashed one.
+      preserveAspectRatio="xMidYMax slice"
       viewBox="0 0 1440 252"
     >
       <defs>
@@ -175,13 +275,15 @@ export function OrbitalField() {
           <stop offset="1" stopColor="var(--color-navy)" stopOpacity="0" />
         </radialGradient>
 
+        {/* Sized to the blur spread rather than a share of the path width: the
+            region is rasterised on every frame of the breath. */}
         <filter
           id={glowFilterId}
           colorInterpolationFilters="sRGB"
-          height="180%"
-          width="160%"
-          x="-30%"
-          y="-40%"
+          height="190%"
+          width="106%"
+          x="-3%"
+          y="-45%"
         >
           <feGaussianBlur
             in="SourceGraphic"
@@ -207,37 +309,39 @@ export function OrbitalField() {
       </g>
 
       <g className="orbital-field__weave">
-        {orbitalThreads.map((path, index) => (
+        {orbitalThreads.map((thread, index) => (
           <g
-            key={path}
+            key={thread.path}
             className="orbital-field__thread"
             data-orbital-thread={index}
           >
+            {/* The glow sits inside the thread so the breath carries both. */}
             <path
               className="orbital-field__halo"
-              d={path}
+              d={thread.path}
               data-orbital-halo={index}
               filter={`url(#${glowFilterId})`}
               stroke={`url(#${haloGradientId})`}
             />
             <path
               className="orbital-field__core"
-              d={path}
+              d={thread.path}
               data-orbital-core={index}
               stroke={`url(#${coreGradientId})`}
             />
             <path
               className="orbital-field__filament"
-              d={path}
+              d={thread.path}
               data-orbital-filament={index}
               stroke={`url(#${coreGradientId})`}
             />
             <path
               className="orbital-field__flow"
-              d={path}
+              d={thread.path}
               data-orbital-flow={index}
               pathLength="1000"
               stroke={`url(#${flowGradientId})`}
+              strokeDasharray={thread.flowDash.join(" ")}
             />
           </g>
         ))}

@@ -10,7 +10,7 @@ web
 
 ## Stack
 
-Documented direction: a bilingual React and TypeScript application built with Bun and Vite, statically rendered for `/pt` and `/en`, then progressively hydrated in the browser. The detailed dependency and responsibility boundaries live in `docs/stack.md` and `docs/v1-todo.md`.
+Documented direction: a bilingual React and TypeScript application built with Bun and Vite, statically rendered for the English routes and a prerendered Portuguese `?lang=pt` variant, then progressively hydrated in the browser. The detailed dependency and responsibility boundaries live in `docs/stack.md` and `docs/v1-todo.md`.
 
 ## Users
 
@@ -51,7 +51,7 @@ The public experience ends in external product destinations, approved Aegis dest
 
 Documented direction:
 
-- Public routes are `/pt`, `/en` and the localized privacy and terms routes; the root defaults to Portuguese while preserving an explicit saved preference.
+- Public routes are English and locale-free: `/`, `/privacy` and `/terms`. Language is application state rather than a route segment, so changing it re-renders in place with no reload. An optional `?lang=pt` query selects Portuguese, is prerendered as a crawlable variant, and is written into the URL whenever Portuguese is active. A first-time visitor with no saved preference is served the language their browser asks for, falling back to English.
 - The page includes navigation, hero, thesis, four SaaS chapters, custom software, Aegis, founder, contact, and footer in that narrative order. The first three chapters represent production products; Constrully is explicitly marked as in development.
 - Primary content, landmarks, headings, links, and calls to action exist in static HTML before hydration.
 - Motion, media playback, analytics, and contact submission are independent progressive enhancements with meaningful failure states.
@@ -63,7 +63,7 @@ Documented direction:
 
 Open decisions and missing product facts:
 
-- Final product and future released-stage Aegis destinations; legal pages are now internal localized routes.
+- Final product and future released-stage Aegis destinations; legal pages are now internal routes at `/privacy` and `/terms`, served in both languages.
 - Approved metrics, testimonials, permissions, product media, claims, and translations.
 - Contact endpoint, message owner, retention policy, antispam provider, and public configuration.
 - Production domain/canonical origin, deployment owner, hosting policy, and rollback target.
