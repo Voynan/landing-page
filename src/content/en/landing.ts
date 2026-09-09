@@ -19,7 +19,7 @@ export const englishLandingContent = {
     openGraphTitle: "Voynan — We build digital products. For us. For you.",
     openGraphDescription:
       "Our own SaaS products and software engineering that turn ideas into systems built for the real world.",
-    approval: "received",
+    approval: "approved",
   },
   hero: {
     id: "hero",
@@ -31,13 +31,13 @@ export const englishLandingContent = {
       "2 SaaS products in production · 1 product in development · 1 open-source project in development",
     productCta: { label: "Explore our products", sectionId: "products" },
     contactCta: { label: "Build with us", sectionId: "contact" },
-    approval: "received",
+    approval: "approved",
   },
   thesis: {
     id: "thesis",
     statement:
       "We do more than deliver software. We launch it, run it and evolve it. That experience shapes every project we build.",
-    approval: "received",
+    approval: "approved",
   },
   products: {
     id: "products",
@@ -83,7 +83,7 @@ export const englishLandingContent = {
             "src/assets/crypto-vault/cryptovault-evidence-desktop.avif, -mobile.avif and -poster.jpg — captured from https://cryptovault.rosetta-solutions.com/ on 2026-09-07; Voynan-owned product, capture approved by Kaio Vinícios",
           approval: "approved",
         },
-        copyApproval: "received",
+        copyApproval: "approved",
       },
       {
         id: "bullledger",
@@ -121,7 +121,7 @@ export const englishLandingContent = {
             "src/assets/bull-ledger/bullledger-evidence-desktop.avif, -mobile.avif and -poster.jpg — captured from http://localhost:5173/app, a development build of https://bull-ledger.voynan.com, on 2026-09-07 with seeded demonstration data; the signed-in account address and the development-build label were hidden before capture, nothing was added or altered; Voynan-owned product, capture approved by Kaio Vinícios",
           approval: "approved",
         },
-        copyApproval: "received",
+        copyApproval: "approved",
       },
       {
         id: "constrully",
@@ -156,7 +156,7 @@ export const englishLandingContent = {
           approval: "missing",
         },
         media: { approval: "missing" },
-        copyApproval: "received",
+        copyApproval: "approved",
       },
     ],
   },
@@ -182,7 +182,7 @@ export const englishLandingContent = {
       },
     ],
     cta: { label: "Start a conversation", sectionId: "contact" },
-    approval: "received",
+    approval: "approved",
   },
   aegis: {
     id: "aegis",

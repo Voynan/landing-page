@@ -20,7 +20,7 @@ export const portugueseLandingContent = {
       "Voynan — Construímos produtos digitais. Para nós. Para você.",
     openGraphDescription:
       "Produtos SaaS próprios e engenharia de software para transformar ideias em sistemas que operam no mundo real.",
-    approval: "received",
+    approval: "approved",
   },
   hero: {
     id: "hero",
@@ -32,13 +32,13 @@ export const portugueseLandingContent = {
       "2 SaaS em produção · 1 produto em desenvolvimento · 1 projeto open source em desenvolvimento",
     productCta: { label: "Conheça os produtos", sectionId: "products" },
     contactCta: { label: "Construa conosco", sectionId: "contact" },
-    approval: "received",
+    approval: "approved",
   },
   thesis: {
     id: "thesis",
     statement:
       "Não apenas entregamos software. Nós o lançamos, operamos e evoluímos. É essa experiência que levamos para cada projeto.",
-    approval: "received",
+    approval: "approved",
   },
   products: {
     id: "products",
@@ -84,7 +84,7 @@ export const portugueseLandingContent = {
             "src/assets/crypto-vault/cryptovault-evidence-desktop.avif, -mobile.avif and -poster.jpg — captured from https://cryptovault.rosetta-solutions.com/ on 2026-09-07; Voynan-owned product, capture approved by Kaio Vinícios",
           approval: "approved",
         },
-        copyApproval: "received",
+        copyApproval: "approved",
       },
       {
         id: "bullledger",
@@ -122,7 +122,7 @@ export const portugueseLandingContent = {
             "src/assets/bull-ledger/bullledger-evidence-desktop.avif, -mobile.avif and -poster.jpg — captured from http://localhost:5173/app, a development build of https://bull-ledger.voynan.com, on 2026-09-07 with seeded demonstration data; the signed-in account address and the development-build label were hidden before capture, nothing was added or altered; Voynan-owned product, capture approved by Kaio Vinícios",
           approval: "approved",
         },
-        copyApproval: "received",
+        copyApproval: "approved",
       },
       {
         id: "constrully",
@@ -157,7 +157,7 @@ export const portugueseLandingContent = {
           approval: "missing",
         },
         media: { approval: "missing" },
-        copyApproval: "received",
+        copyApproval: "approved",
       },
     ],
   },
@@ -186,7 +186,7 @@ export const portugueseLandingContent = {
       },
     ],
     cta: { label: "Iniciar uma conversa", sectionId: "contact" },
-    approval: "received",
+    approval: "approved",
   },
   aegis: {
     id: "aegis",
