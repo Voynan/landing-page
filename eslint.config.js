@@ -28,4 +28,10 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: ["functions/**/*.ts"],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
 )
