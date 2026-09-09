@@ -9,6 +9,23 @@ import { getLandingContent } from "@/content"
 import { createI18n } from "@/i18n"
 
 describe("landing content contracts", () => {
+  // products.items is a fixed three-element tuple, so fixtures rebuild it
+  // element by element rather than mapping over it.
+  const reopenClaim = <
+    T extends {
+      claimReview: { text: string; category: "legal" | "financial" | "tax" }
+    },
+  >(
+    item: T,
+  ) => ({
+    ...item,
+    claimReview: {
+      text: item.claimReview.text,
+      category: item.claimReview.category,
+      approval: "missing" as const,
+    },
+  })
+
   it.each(["pt", "en"] as const)(
     "validates the %s draft structure",
     (locale) => {
@@ -100,7 +117,24 @@ describe("landing content contracts", () => {
   })
 
   it("reports all production-product blockers instead of stopping at the first", () => {
-    expect(() => assertPublishableContent(getLandingContent("en"))).toThrow(
+    // The published content is fully approved, so the aggregation behaviour is
+    // exercised against a fixture that reopens the first two claim reviews.
+    const content = getLandingContent("en")
+    const [cryptovault, bullledger, constrully] = content.products.items
+
+    expect(() =>
+      assertPublishableContent({
+        ...content,
+        products: {
+          ...content.products,
+          items: [
+            reopenClaim(cryptovault),
+            reopenClaim(bullledger),
+            constrully,
+          ],
+        },
+      }),
+    ).toThrow(
       /products\.items\.0\.claimReview[\s\S]*products\.items\.1\.claimReview/i,
     )
   })
@@ -124,7 +158,15 @@ describe("landing content contracts", () => {
   })
 
   it("does not require a destination or media for development-stage Constrully", () => {
-    const blockers = getPublicationBlockers(getLandingContent("pt"))
+    const content = getLandingContent("pt")
+    const [cryptovault, bullledger, constrully] = content.products.items
+    const blockers = getPublicationBlockers({
+      ...content,
+      products: {
+        ...content.products,
+        items: [cryptovault, bullledger, reopenClaim(constrully)],
+      },
+    })
 
     expect(blockers).not.toContain(
       "products.items.2.destination must be approved (currently missing)",
@@ -132,6 +174,7 @@ describe("landing content contracts", () => {
     expect(blockers).not.toContain(
       "products.items.2.media must be approved (currently missing)",
     )
+    // A development stage waives the destination and the media, never the claim.
     expect(blockers).toContain(
       "products.items.2.claimReview must be approved (currently missing)",
     )
