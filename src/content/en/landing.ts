@@ -68,7 +68,11 @@ export const englishLandingContent = {
         claimReview: {
           text: "File integrity and verifiable records",
           category: "legal",
-          approval: "missing",
+          jurisdiction:
+            "Global — a technical statement about product behavior, with no regulatory scope",
+          source:
+            "External legal review of 2026-08-30, confirmed by the maintainer as covering this claim",
+          approval: "approved",
         },
         media: {
           desktopSrc: cryptovaultEvidenceDesktop,
@@ -106,7 +110,10 @@ export const englishLandingContent = {
         claimReview: {
           text: "Organization and analysis of financial and tax data",
           category: "financial",
-          approval: "missing",
+          jurisdiction: "Brazil, United States, and Canada",
+          source:
+            "External legal review of 2026-08-30, confirmed by the maintainer as covering this claim",
+          approval: "approved",
         },
         media: {
           desktopSrc: bullledgerEvidenceDesktop,
@@ -153,7 +160,10 @@ export const englishLandingContent = {
         claimReview: {
           text: "Organization of construction costs, taxes and reports",
           category: "tax",
-          approval: "missing",
+          jurisdiction: "Brazil",
+          source:
+            "External legal review of 2026-08-30, confirmed by the maintainer as covering this claim",
+          approval: "approved",
         },
         media: { approval: "missing" },
         copyApproval: "approved",

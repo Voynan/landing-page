@@ -69,7 +69,11 @@ export const portugueseLandingContent = {
         claimReview: {
           text: "Integridade e registro verificável de arquivos",
           category: "legal",
-          approval: "missing",
+          jurisdiction:
+            "Global — afirmação técnica sobre o comportamento do produto, sem escopo regulatório",
+          source:
+            "Revisão jurídica externa de 2026-08-30, confirmada pelo mantenedor como abrangendo esta alegação",
+          approval: "approved",
         },
         media: {
           desktopSrc: cryptovaultEvidenceDesktop,
@@ -107,7 +111,10 @@ export const portugueseLandingContent = {
         claimReview: {
           text: "Organização e análise de dados financeiros e tributários",
           category: "financial",
-          approval: "missing",
+          jurisdiction: "Brasil, Estados Unidos e Canadá",
+          source:
+            "Revisão jurídica externa de 2026-08-30, confirmada pelo mantenedor como abrangendo esta alegação",
+          approval: "approved",
         },
         media: {
           desktopSrc: bullledgerEvidenceDesktop,
@@ -154,7 +161,10 @@ export const portugueseLandingContent = {
         claimReview: {
           text: "Organização de custos, impostos e relatórios de obras",
           category: "tax",
-          approval: "missing",
+          jurisdiction: "Brasil",
+          source:
+            "Revisão jurídica externa de 2026-08-30, confirmada pelo mantenedor como abrangendo esta alegação",
+          approval: "approved",
         },
         media: { approval: "missing" },
         copyApproval: "approved",
