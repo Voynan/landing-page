@@ -73,10 +73,12 @@ const portuguesePrivacy: LegalDocument = {
       id: "dados-tecnologias",
       title: "3. Dados e tecnologias utilizados",
       paragraphs: [
-        "Na versão atual, o site não oferece contas nem pagamentos e não utiliza analytics ativo. O formulário de contato está ativo e envia sua mensagem para a Voynan. A preferência de idioma pode ser armazenada localmente no seu navegador para que a próxima visita abra no idioma escolhido.",
+        "Na versão atual, o site não oferece contas nem pagamentos. O formulário de contato está ativo e envia sua mensagem para a Voynan, e utilizamos analytics de conversão. A preferência de idioma pode ser armazenada localmente no seu navegador para que a próxima visita abra no idioma escolhido.",
         "A infraestrutura que entrega o site pode processar automaticamente dados técnicos, como endereço IP, data e hora da requisição, tipo de navegador e registros de segurança, quando isso for necessário para disponibilizar e proteger o serviço. Esses registros são administrados conforme as práticas do provedor de hospedagem utilizado.",
         "Para distinguir pessoas de tráfego automatizado, o formulário de contato é protegido pelo Cloudflare Turnstile, que processa seu endereço IP e sinais técnicos do navegador no momento do envio. O Turnstile não é usado para publicidade e não acompanha sua navegação entre sites.",
-        "Se ferramentas de analytics ou outras tecnologias de acompanhamento forem ativadas no futuro, esta política será atualizada antes ou no momento dessa mudança e os controles exigidos serão adotados.",
+        "O analytics é feito pelo PostHog e registra apenas uma lista fechada de onze eventos de conversão, como abrir um produto, iniciar o contato ou trocar de idioma. Não há captura automática de cliques, digitação ou visualizações de página, não há gravação de sessão, e o conteúdo do formulário, os valores copiados e o que aparece nas mídias de produto nunca são enviados.",
+        "O PostHog não grava cookie nem armazenamento local no seu navegador: os dados existem apenas na memória da aba e desaparecem quando você a fecha, de modo que não há como acompanhar você entre visitas. Os eventos são processados na nuvem do PostHog nos Estados Unidos, o que caracteriza transferência internacional de dados, e o endereço IP da requisição é processado por lá para estimativa de localização aproximada.",
+        "Se novas tecnologias de acompanhamento forem ativadas no futuro, esta política será atualizada antes ou no momento dessa mudança e os controles exigidos serão adotados.",
       ],
     },
     {
@@ -98,7 +100,7 @@ const portuguesePrivacy: LegalDocument = {
       id: "compartilhamento",
       title: "6. Compartilhamento e links externos",
       paragraphs: [
-        "Não vendemos dados pessoais. Informações podem ser processadas por fornecedores necessários à operação — hospedagem, a Amazon Web Services para o envio de e-mail e a Cloudflare para a proteção antispam do formulário — ou compartilhadas quando houver obrigação legal, ordem válida ou necessidade de proteger direitos e segurança.",
+        "Não vendemos dados pessoais. Informações podem ser processadas por fornecedores necessários à operação — hospedagem, a Amazon Web Services para o envio de e-mail, a Cloudflare para a proteção antispam do formulário e o PostHog para o analytics de conversão — ou compartilhadas quando houver obrigação legal, ordem válida ou necessidade de proteger direitos e segurança.",
         "Links para GitHub, redes sociais e outros sites levam a ambientes controlados por terceiros. Recomendamos consultar as políticas desses serviços antes de fornecer dados a eles.",
       ],
     },
@@ -179,10 +181,12 @@ const englishPrivacy: LegalDocument = {
       id: "data-technologies",
       title: "3. Data and technologies used",
       paragraphs: [
-        "The current version of the website does not offer accounts or payments, and it does not use active analytics. The contact form is active and sends your message to Voynan. Your language preference may be stored locally in your browser so a future visit opens in the language you selected.",
+        "The current version of the website does not offer accounts or payments. The contact form is active and sends your message to Voynan, and we use conversion analytics. Your language preference may be stored locally in your browser so a future visit opens in the language you selected.",
         "The infrastructure that delivers the website may automatically process technical data such as IP address, request date and time, browser type, and security logs when needed to provide and protect the service. These records are managed according to the practices of the hosting provider in use.",
         "To tell people apart from automated traffic, the contact form is protected by Cloudflare Turnstile, which processes your IP address and technical browser signals at the moment you submit. Turnstile is not used for advertising and does not follow your browsing across websites.",
-        "If analytics or other tracking technologies are enabled in the future, this policy will be updated before or when that change takes place, and any required controls will be implemented.",
+        "Analytics runs on PostHog and records only a closed list of eleven conversion events, such as opening a product, starting the contact flow, or switching language. There is no automatic capture of clicks, typing, or page views, no session recording, and form content, copied values, and anything shown in product media are never sent.",
+        "PostHog writes no cookie and no local storage in your browser: the data exists only in the tab's memory and disappears when you close it, so there is no way to follow you between visits. Events are processed in PostHog's United States cloud, which constitutes an international transfer of data, and the request IP address is processed there to estimate approximate location.",
+        "If new tracking technologies are enabled in the future, this policy will be updated before or when that change takes place, and any required controls will be implemented.",
       ],
     },
     {
@@ -204,7 +208,7 @@ const englishPrivacy: LegalDocument = {
       id: "sharing",
       title: "6. Sharing and external links",
       paragraphs: [
-        "We do not sell personal data. Information may be processed by the providers required for operations — hosting, Amazon Web Services for email delivery, and Cloudflare for the form's antispam protection — or shared when required by law, a valid order, or the need to protect rights and security.",
+        "We do not sell personal data. Information may be processed by the providers required for operations — hosting, Amazon Web Services for email delivery, Cloudflare for the form's antispam protection, and PostHog for conversion analytics — or shared when required by law, a valid order, or the need to protect rights and security.",
         "Links to GitHub, social networks, and other websites lead to environments controlled by third parties. We recommend reviewing their policies before giving them your data.",
       ],
     },
