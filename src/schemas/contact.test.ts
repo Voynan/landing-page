@@ -32,3 +32,35 @@ describe("contactInputSchema", () => {
     ])
   })
 })
+
+describe("contactInputSchema length limits", () => {
+  const valid = {
+    name: "Ada Lovelace",
+    email: "ada@example.org",
+    message: "Hello.",
+  }
+
+  it("accepts a message at the maximum length", () => {
+    const result = contactInputSchema.safeParse({
+      ...valid,
+      message: "a".repeat(5000),
+    })
+
+    expect(result.success).toBe(true)
+  })
+
+  it("rejects fields above their maximum length", () => {
+    const result = contactInputSchema.safeParse({
+      name: "a".repeat(101),
+      email: `${"a".repeat(200)}@example.org`,
+      message: "a".repeat(5001),
+    })
+
+    expect(result.success).toBe(false)
+    expect(result.error?.issues.map((issue) => issue.path.join("."))).toEqual([
+      "name",
+      "email",
+      "message",
+    ])
+  })
+})
