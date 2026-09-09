@@ -23,6 +23,7 @@
     "check": "bun run typecheck && bun run lint && bun run format:check && bun run test && bun run design:detect"
   },
   "dependencies": {
+    "@aws-sdk/client-sesv2": "^3.1128.0",
     "@fontsource/jetbrains-mono": "^5.3.0",
     "@fontsource/poppins": "^5.3.0",
     "@gsap/react": "^2.1.2",

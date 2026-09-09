@@ -51,9 +51,9 @@ describe("parseContactRequest", () => {
   })
 
   it("rejects a request with no origin at all", () => {
-    expect(parseContactRequest(buildEvent({ headers: {} }), allowedOrigin)).toEqual(
-      { ok: false, status: 403 },
-    )
+    expect(
+      parseContactRequest(buildEvent({ headers: {} }), allowedOrigin),
+    ).toEqual({ ok: false, status: 403 })
   })
 
   it("rejects a body that is not JSON", () => {
