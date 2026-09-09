@@ -4130,6 +4130,14 @@
     text-underline-offset: 0.2em;
   }
 
+  /* Turnstile stays invisible unless it challenges, and it challenges after
+     the visitor has already clicked. Reserving its height on every visit would
+     leave a permanent gap for something almost nobody sees, so the slot takes
+     space only once it holds a widget. */
+  .essential-contact-form__antispam:not(:empty) {
+    margin-top: var(--space-6);
+  }
+
   .essential-contact-form__footer {
     display: flex;
     justify-content: space-between;
@@ -4139,7 +4147,9 @@
   }
 
   .essential-contact-form__footer p {
-    max-width: 42rem;
+    /* ~73 characters per line at 0.875rem, now that this paragraph carries the
+       privacy notice and the Turnstile attribution together. */
+    max-width: 32rem;
     margin: 0;
     color: var(--color-slate);
     font-size: 0.875rem;

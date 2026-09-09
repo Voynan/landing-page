@@ -82,6 +82,12 @@ export function LocaleLandingPage() {
             manualEmailLabel: t("feedback.manualEmailLabel"),
           },
           privacyNotice: t("form.privacyNotice"),
+          antispam: {
+            notice: t("form.antispam.notice"),
+            privacyLabel: t("form.antispam.privacyLabel"),
+            conjunction: t("form.antispam.conjunction"),
+            termsLabel: t("form.antispam.termsLabel"),
+          },
         },
         footer: {
           sectionLabel: t("footer.sectionLabel"),

@@ -27,6 +27,12 @@ const labels = {
   },
   privacyNotice:
     "Technical fixture: these values are never sent to a production endpoint.",
+  antispam: {
+    notice: "This form is protected by Cloudflare Turnstile — see its",
+    privacyLabel: "privacy policy",
+    conjunction: "and",
+    termsLabel: "terms",
+  },
 } as const
 
 const emptyValues = { name: "", email: "", message: "" }

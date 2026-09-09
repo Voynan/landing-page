@@ -96,6 +96,12 @@ const supportingChapterLabels = {
       manualEmailLabel: "Email for manual copying",
     },
     privacyNotice: "We use these details only to reply to this conversation.",
+    antispam: {
+      notice: "This form is protected by Cloudflare Turnstile — see its",
+      privacyLabel: "privacy policy",
+      conjunction: "and",
+      termsLabel: "terms",
+    },
   },
   footer: {
     sectionLabel: "Voynan footer",

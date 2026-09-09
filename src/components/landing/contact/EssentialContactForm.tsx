@@ -23,6 +23,7 @@ import {
   type ContactError,
 } from "@/services/contact"
 import { track, type AnalyticsTrack } from "@/lib/analytics"
+import { antispamSlotAttribute } from "@/lib/turnstile"
 
 type ContactFormPhase =
   "empty" | "submitting" | "success" | "failure" | "timeout"
@@ -45,6 +46,12 @@ type ContactFormLabels = {
     emailPending: string
   }
   privacyNotice: string
+  antispam: {
+    notice: string
+    privacyLabel: string
+    conjunction: string
+    termsLabel: string
+  }
 }
 
 type EssentialContactFormProps = {
@@ -242,12 +249,26 @@ export function EssentialContactForm({
           )}
         </form.Subscribe>
 
+        <div
+          className="essential-contact-form__antispam"
+          {...{ [antispamSlotAttribute]: "" }}
+        />
+
         <div className="essential-contact-form__footer">
           <p>
             {labels.privacyNotice}{" "}
             {privacyPolicy ? (
               <a href={privacyPolicy.href}>{privacyPolicy.label}</a>
-            ) : null}
+            ) : null}{" "}
+            {labels.antispam.notice}{" "}
+            <a href="https://www.cloudflare.com/privacypolicy/">
+              {labels.antispam.privacyLabel}
+            </a>{" "}
+            {labels.antispam.conjunction}{" "}
+            <a href="https://www.cloudflare.com/website-terms/">
+              {labels.antispam.termsLabel}
+            </a>
+            .
           </p>
           <Button
             type="submit"

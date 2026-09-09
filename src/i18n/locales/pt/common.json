@@ -65,7 +65,13 @@
       "summary": "Revise os campos indicados."
     },
     "submit": "Iniciar conversa",
-    "privacyNotice": "Usaremos estes dados somente para responder à sua mensagem; nenhum cadastro de marketing será realizado."
+    "privacyNotice": "Usaremos estes dados somente para responder à sua mensagem; nenhum cadastro de marketing será realizado.",
+    "antispam": {
+      "notice": "Este formulário é protegido pelo Cloudflare Turnstile — veja sua",
+      "privacyLabel": "política de privacidade",
+      "conjunction": "e seus",
+      "termsLabel": "termos"
+    }
   },
   "status": {
     "submitting": "Enviando…",

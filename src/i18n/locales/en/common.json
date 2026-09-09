@@ -65,7 +65,13 @@
       "summary": "Review the highlighted fields."
     },
     "submit": "Start a conversation",
-    "privacyNotice": "We use these details only to reply to your message; no marketing subscription is added."
+    "privacyNotice": "We use these details only to reply to your message; no marketing subscription is added.",
+    "antispam": {
+      "notice": "This form is protected by Cloudflare Turnstile — see its",
+      "privacyLabel": "privacy policy",
+      "conjunction": "and",
+      "termsLabel": "terms"
+    }
   },
   "status": {
     "submitting": "Sending…",

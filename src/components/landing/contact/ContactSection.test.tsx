@@ -35,6 +35,12 @@ const labels: ContactSectionLabels = {
     manualEmailLabel: "E-mail para cópia manual",
   },
   privacyNotice: "Usaremos seus dados apenas para responder a esta conversa.",
+  antispam: {
+    notice: "Este formulário é protegido pelo Cloudflare Turnstile — veja sua",
+    privacyLabel: "política de privacidade",
+    conjunction: "e seus",
+    termsLabel: "termos",
+  },
 }
 
 const content = {
@@ -279,4 +285,17 @@ it("selects the address for manual copying when Clipboard API is unavailable", a
   await waitFor(() => expect(manualEmail.selectionStart).toBe(0))
   expect(manualEmail.selectionEnd).toBe("hello@voynan.com".length)
   expect(screen.getByText(labels.feedback.copyUnavailable)).toBeVisible()
+})
+
+it("renders the antispam slot and the Cloudflare attribution inside the form", () => {
+  renderContact(async () => ({ submissionId: "fixture-submission" }))
+
+  expect(document.querySelector("[data-antispam-slot]")).toBeInTheDocument()
+  expect(
+    screen.getByRole("link", { name: "política de privacidade" }),
+  ).toHaveAttribute("href", "https://www.cloudflare.com/privacypolicy/")
+  expect(screen.getByRole("link", { name: "termos" })).toHaveAttribute(
+    "href",
+    "https://www.cloudflare.com/website-terms/",
+  )
 })
