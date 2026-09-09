@@ -24,23 +24,24 @@ Parameters:
 Resources:
   ContactFunction:
     Type: AWS::Serverless::Function
-    Metadata:
-      BuildMethod: esbuild
-      BuildProperties:
-        Minify: true
-        Target: es2022
-        Sourcemap: false
-        EntryPoints:
-          - handler.ts
     Properties:
-      CodeUri: .
+      # Bundled by `bun run build:contact` into build/, because SAM's esbuild
+      # builder copies only CodeUri and so cannot reach the shared schema in
+      # src/. Pointing CodeUri at the repository root instead would copy 554 MB
+      # on every build.
+      CodeUri: build/
       Handler: handler.handler
       Runtime: nodejs22.x
       Architectures:
         - arm64
       MemorySize: 512
       Timeout: 10
-      ReservedConcurrentExecutions: 5
+      # ReservedConcurrentExecutions is deliberately absent. This account's
+      # total concurrency limit is 10, the new-account default, and AWS refuses
+      # any reservation that leaves fewer than 10 unreserved. That account limit
+      # is itself a tighter cap than the 5 this function wanted, and this is the
+      # only Lambda in the account. Restore `ReservedConcurrentExecutions: 5`
+      # once the account limit is raised, or the cap disappears with it.
       Environment:
         Variables:
           TURNSTILE_SECRET: !Ref TurnstileSecret

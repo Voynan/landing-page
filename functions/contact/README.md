@@ -26,18 +26,23 @@ under `src/` may import from here, and `boundary.test.ts` asserts it.
 
 ## Deploy
 
+    bun run build:contact
     cd functions/contact
     sam build
     sam deploy --region sa-east-1 --capabilities CAPABILITY_IAM
 
-The first deploy uses `--guided` and asks for every parameter. Parameters are
-then stored in `samconfig.toml`, which is git-ignored because it holds the AWS
-account id and the recipient addresses. On a fresh machine, run
-`sam deploy --guided` and supply them again.
+`build:contact` bundles `handler.ts` and everything it imports into
+`build/handler.js` with Bun, and `CodeUri` points at that directory. SAM's own
+esbuild builder cannot be used here: it copies only `CodeUri` into the build
+sandbox, so the shared schema in `src/` is unreachable, and pointing `CodeUri`
+at the repository root instead would copy 554 MB on every build.
 
-If esbuild refuses to follow `../../src/schemas/contact` outside `CodeUri`, set
-`CodeUri: ../..` and `EntryPoints: [functions/contact/handler.ts]` in
-`template.yaml`, leaving everything else unchanged.
+The bundle must be rebuilt before every deploy. `sam build` will happily package
+a stale `build/handler.js`.
+
+Parameters are stored in `samconfig.toml`, which is git-ignored because it holds
+the AWS account id and the recipient addresses. On a fresh machine, run
+`sam deploy --guided` and supply them again.
 
 ## Parameters
 
@@ -65,8 +70,23 @@ Both of these must answer `403`, and neither may deliver an email:
       -H 'origin: https://voynan.com' \
       -d '{"name":"a","email":"a@example.org","message":"a","antispamToken":"invalid"}'
 
-A `200` on the second means the Turnstile secret is wrong. Fix it before
-announcing the form.
+A `200` on either one is a defect: the endpoint accepted a request it should
+have refused.
+
+These prove the rejection paths only. They cannot prove the Turnstile secret is
+correct, because an invalid token and a wrong secret both produce `403`. The
+secret is only proven by a real submission from the live site, where a genuine
+token must be accepted.
+
+## Concurrency
+
+`ReservedConcurrentExecutions` is absent from the template. This account's total
+Lambda concurrency limit is 10, the new-account default, and AWS refuses any
+reservation that leaves fewer than 10 unreserved. That account limit is a
+tighter cap than the 5 this function wanted, and this is the only Lambda in the
+account, so the blast radius is bounded either way. Restore
+`ReservedConcurrentExecutions: 5` once the account limit is raised, or the cap
+disappears along with it.
 
 ## Rotating the Turnstile secret
 

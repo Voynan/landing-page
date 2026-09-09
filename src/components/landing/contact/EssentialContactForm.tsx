@@ -261,7 +261,7 @@ export function EssentialContactForm({
               <a href={privacyPolicy.href}>{privacyPolicy.label}</a>
             ) : null}{" "}
             {labels.antispam.notice}{" "}
-            <a href="https://www.cloudflare.com/privacypolicy/">
+            <a href="https://www.cloudflare.com/turnstile-privacy-policy/">
               {labels.antispam.privacyLabel}
             </a>{" "}
             {labels.antispam.conjunction}{" "}

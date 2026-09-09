@@ -293,7 +293,10 @@ it("renders the antispam slot and the Cloudflare attribution inside the form", (
   expect(document.querySelector("[data-antispam-slot]")).toBeInTheDocument()
   expect(
     screen.getByRole("link", { name: "política de privacidade" }),
-  ).toHaveAttribute("href", "https://www.cloudflare.com/privacypolicy/")
+  ).toHaveAttribute(
+    "href",
+    "https://www.cloudflare.com/turnstile-privacy-policy/",
+  )
   expect(screen.getByRole("link", { name: "termos" })).toHaveAttribute(
     "href",
     "https://www.cloudflare.com/website-terms/",

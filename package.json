@@ -10,6 +10,7 @@
     "prerender": "bun scripts/prerender.ts",
     "build:app": "bun run build:client && bun run build:server && bun run prerender",
     "build:preview": "VITE_ENABLE_DESIGN_SYSTEM=true bun run build:app",
+    "build:contact": "bun build functions/contact/handler.ts --target=node --format=cjs --minify --outfile=functions/contact/build/handler.js",
     "validate:content": "bun scripts/validate-content.ts",
     "build": "bun run validate:content && bun run build:app",
     "preview": "vite preview --outDir dist/client",

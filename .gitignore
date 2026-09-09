@@ -408,6 +408,8 @@ docs/backend-requests/
 .superpowers/
 
 ### AWS SAM ###
+# The bundled Lambda artifact is build output.
+functions/contact/build/
 # samconfig.toml carries the AWS account id and the recipient addresses.
 # Neither is a credential, but neither belongs in a public repository.
 .aws-sam/
