@@ -29,11 +29,12 @@ When implementation is scaffolded, declare the dependencies below in `package.js
 | **shadcn/ui** + **Radix Primitives** | Selective accessible foundations for controls; not the page's visual language |
 | **gsap** + **ScrollTrigger** | Scroll-linked timelines, pinned desktop scenes, and the eclipse thread |
 | **@gsap/react** | React lifecycle integration and automatic animation cleanup |
-| **@tanstack/react-router** | Typed `/pt` and `/en` routes and language-preserving navigation |
+| **@tanstack/react-router** | Typed locale-free routes and anchor-preserving navigation |
 | **@tanstack/react-query** | Contact submission state and future server-backed content where caching is useful |
 | **@tanstack/react-form** | Accessible contact-form state and field coordination |
 | **zod** | Contact validation, public configuration validation, and content contracts |
 | **axios** | Contact endpoint transport with a centralized timeout and normalized errors |
+| **@aws-sdk/client-sesv2** | Contact delivery from the endpoint function in `functions/`; never reachable from the client graph |
 | **zustand** | Small cross-section UI state only when state cannot stay local |
 | **react-i18next** | Interface translations, validation messages, metadata, and locale persistence |
 | **posthog-js** | Allowlisted conversion analytics without contact text or sensitive media data |
@@ -51,19 +52,21 @@ When implementation is scaffolded, declare the dependencies below in `package.js
 | Concern | Choice | Rationale and constraints |
 |---|---|---|
 | Core | **React + TypeScript + Vite** | Keeps component and tooling boundaries explicit while supporting the media-heavy experience. |
-| Rendering | **Static prerender for `/pt` and `/en`, then hydrate** | Primary copy, landmarks, and links remain available before JavaScript. Hydration adds navigation behavior, analytics, the form, and motion. |
+| Rendering | **Static prerender for both language variants, then hydrate** | Primary copy, landmarks, and links remain available before JavaScript. Hydration adds navigation behavior, analytics, the form, and motion. |
 | Styling | **Tailwind CSS backed by CSS custom properties** | Voynan's navy, ivory, copper, typography, spacing, and motion tokens remain centralized. Arbitrary one-off values should not replace named tokens. |
 | UI primitives | **Selective shadcn/ui and Radix** | Use for behavior-heavy controls such as the compact menu, labels, and accessible announcements. Copied shadcn code may be restyled substantially. Narrative sections are custom Voynan components. |
 | Narrative motion | **GSAP + ScrollTrigger** | Supports scrubbed progress, pinned product acts, SVG sequencing, responsive timelines, and explicit cleanup. It must not trap or smooth the user's scroll. |
 | Microinteractions | **CSS transitions and keyframes** | Hover, focus, button feedback, and small state changes do not need GSAP. CSS is not a second orchestration layer. |
 | Responsive motion | **`gsap.matchMedia()`** | Desktop may use the continuous thread and pinned stages. Tablet shortens them; mobile returns products to document flow and uses local thread states. |
 | Reduced motion | **Static-first rendering plus media-query variants** | `prefers-reduced-motion: reduce` removes scrubbing, long pins, and video-dependent reveals while preserving the same copy, order, and CTAs. |
-| Routing | **TanStack Router** | `/pt` and `/en` are first-class routes. A language change preserves the current chapter anchor and selected preference. |
+| Routing | **TanStack Router** | `/`, `/privacy` and `/terms` are first-class routes; language is application state carried in an optional `?lang=pt` query. A language change re-renders in place without a reload, preserving the current chapter anchor and the saved preference. |
 | Editorial content | **Typed locale content modules** | Long-form section content, claims, product capabilities, evidence, alt text, and links are data rather than JSX. English is an editorial adaptation, not a runtime machine translation. |
 | UI translation | **react-i18next** | Owns short interface strings, validation, statuses, metadata labels, and language persistence. It does not fragment the editorial narrative into opaque inline keys. |
 | Forms | **TanStack Form + Zod** | The three-field form keeps persistent labels, field errors, an accessible summary, submitted data on failure, and explicit empty/submitting/success/failure states. |
 | Server state | **TanStack Query** | The contact mutation owns retries and request state. Automatic retries stay disabled for submissions to prevent duplicate messages. |
 | HTTP | **axios through one contact client** | Adds a bounded timeout, antispam token transport, and error normalization. Components never call axios directly. |
+| Contact endpoint | **AWS Lambda Function URL in `sa-east-1`** | Chosen over a Vercel Function because the Lambda free tier is permanent, permits commercial use, and bills real usage beyond it, while Vercel's Hobby plan is a hard ceiling restricted to non-commercial projects. Defined in `functions/contact/template.yaml` with AWS SAM. |
+| Antispam | **Cloudflare Turnstile, verified server-side** | Free at any volume, invisible on most visits, and no tracking cookie. The site key is public; the secret exists only as a Lambda environment variable. |
 | Client state | **Local state first; Zustand only across sections** | The active product chapter or global thread state may use a small store if DOM-local coordination is insufficient. Form and server state stay in their dedicated tools. |
 | Analytics | **PostHog through an allowlisted adapter** | Only events listed in the landing-page guide may be emitted. Event payload types must make message text, copied values, and sensitive screenshot data unrepresentable. |
 | Testing | **Vitest + Testing Library + MSW + Playwright** | Covers isolated content variants, controls, form states, routing, analytics contracts, responsive flow, media fallback, and reduced motion. |
@@ -80,7 +83,7 @@ Likely primitives are `Button`, `Field`, `Label`, a compact navigation control, 
 
 ### Voynan narrative components
 
-All distinctive composition lives in `components/landing/`: the progressive navigation, hero, thesis, three equal SaaS chapters, credibility field, services flow, Aegis chapter, founder note, contact, and footer. These components accept typed content and render a complete static state before attaching motion.
+All distinctive composition lives in `components/landing/`: the progressive navigation, hero, thesis, three equal SaaS chapters, services flow, Aegis chapter, founder note, contact, and footer. These components accept typed content and render a complete static state before attaching motion.
 
 Shared motion infrastructure lives separately in `components/motion/`. The continuous eclipse thread may coordinate the page, but it must never own or conceal semantic content.
 
@@ -106,7 +109,7 @@ Performance acceptance must include profiling on a representative mid-range phon
 
 ## Rendering, SEO, and Internationalization
 
-- Generate crawlable HTML for `/pt` and `/en` during the production build.
+- Generate crawlable HTML for every public route in both languages during the production build.
 - The root route chooses Portuguese by default while preserving a visitor's explicit saved preference.
 - Each locale owns its title, description, Open Graph copy, canonical URL, and reciprocal `hreflang` links.
 - The language switch keeps the current section id when moving between locale routes.

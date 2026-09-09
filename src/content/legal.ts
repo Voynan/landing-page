@@ -41,7 +41,7 @@ const portuguesePrivacy: LegalDocument = {
   summary:
     "Esta política explica de forma direta quais dados podem ser tratados quando você visita o site da Voynan ou entra em contato conosco.",
   updatedLabel: "Última atualização",
-  updatedDate: "30 de agosto de 2026",
+  updatedDate: "9 de setembro de 2026",
   backLabel: "Voltar para a Voynan",
   contentsLabel: "Nesta página",
   languageLabel: "Idioma",
@@ -73,8 +73,9 @@ const portuguesePrivacy: LegalDocument = {
       id: "dados-tecnologias",
       title: "3. Dados e tecnologias utilizados",
       paragraphs: [
-        "Na versão atual, o site não oferece contas, pagamentos ou envio ativo de formulários e não utiliza analytics ativo. A preferência de idioma pode ser armazenada localmente no seu navegador para que a próxima visita abra no idioma escolhido.",
+        "Na versão atual, o site não oferece contas nem pagamentos e não utiliza analytics ativo. O formulário de contato está ativo e envia sua mensagem para a Voynan. A preferência de idioma pode ser armazenada localmente no seu navegador para que a próxima visita abra no idioma escolhido.",
         "A infraestrutura que entrega o site pode processar automaticamente dados técnicos, como endereço IP, data e hora da requisição, tipo de navegador e registros de segurança, quando isso for necessário para disponibilizar e proteger o serviço. Esses registros são administrados conforme as práticas do provedor de hospedagem utilizado.",
+        "Para distinguir pessoas de tráfego automatizado, o formulário de contato é protegido pelo Cloudflare Turnstile, que processa seu endereço IP e sinais técnicos do navegador no momento do envio. O Turnstile não é usado para publicidade e não acompanha sua navegação entre sites.",
         "Se ferramentas de analytics ou outras tecnologias de acompanhamento forem ativadas no futuro, esta política será atualizada antes ou no momento dessa mudança e os controles exigidos serão adotados.",
       ],
     },
@@ -83,6 +84,7 @@ const portuguesePrivacy: LegalDocument = {
       title: "4. Contato por e-mail",
       paragraphs: [
         "Quando você entra em contato, podemos receber seu nome, endereço de e-mail, conteúdo da mensagem e outras informações que decidir compartilhar. Usamos esses dados para responder, avaliar uma possível relação comercial, dar continuidade à conversa e cumprir obrigações legais quando aplicável.",
+        "O envio do formulário é entregue por e-mail pela Amazon Simple Email Service, na região sa-east-1, no Brasil. A mensagem fica na caixa de e-mail da Voynan; o serviço que recebe o formulário registra apenas o identificador do envio, a data e o resultado, sem o seu nome, endereço ou o conteúdo da mensagem. Se preferir, você pode escrever diretamente para contact@voynan.com.",
       ],
     },
     {
@@ -96,7 +98,7 @@ const portuguesePrivacy: LegalDocument = {
       id: "compartilhamento",
       title: "6. Compartilhamento e links externos",
       paragraphs: [
-        "Não vendemos dados pessoais. Informações podem ser processadas por fornecedores necessários à operação, como hospedagem e e-mail, ou compartilhadas quando houver obrigação legal, ordem válida ou necessidade de proteger direitos e segurança.",
+        "Não vendemos dados pessoais. Informações podem ser processadas por fornecedores necessários à operação — hospedagem, a Amazon Web Services para o envio de e-mail e a Cloudflare para a proteção antispam do formulário — ou compartilhadas quando houver obrigação legal, ordem válida ou necessidade de proteger direitos e segurança.",
         "Links para GitHub, redes sociais e outros sites levam a ambientes controlados por terceiros. Recomendamos consultar as políticas desses serviços antes de fornecer dados a eles.",
       ],
     },
@@ -145,7 +147,7 @@ const englishPrivacy: LegalDocument = {
   summary:
     "This policy explains in plain language which data may be processed when you visit Voynan’s website or contact us.",
   updatedLabel: "Last updated",
-  updatedDate: "August 30, 2026",
+  updatedDate: "September 9, 2026",
   backLabel: "Back to Voynan",
   contentsLabel: "On this page",
   languageLabel: "Language",
@@ -177,8 +179,9 @@ const englishPrivacy: LegalDocument = {
       id: "data-technologies",
       title: "3. Data and technologies used",
       paragraphs: [
-        "The current version of the website does not offer accounts, payments, or active form submission, and it does not use active analytics. Your language preference may be stored locally in your browser so a future visit opens in the language you selected.",
+        "The current version of the website does not offer accounts or payments, and it does not use active analytics. The contact form is active and sends your message to Voynan. Your language preference may be stored locally in your browser so a future visit opens in the language you selected.",
         "The infrastructure that delivers the website may automatically process technical data such as IP address, request date and time, browser type, and security logs when needed to provide and protect the service. These records are managed according to the practices of the hosting provider in use.",
+        "To tell people apart from automated traffic, the contact form is protected by Cloudflare Turnstile, which processes your IP address and technical browser signals at the moment you submit. Turnstile is not used for advertising and does not follow your browsing across websites.",
         "If analytics or other tracking technologies are enabled in the future, this policy will be updated before or when that change takes place, and any required controls will be implemented.",
       ],
     },
@@ -187,6 +190,7 @@ const englishPrivacy: LegalDocument = {
       title: "4. Contact by email",
       paragraphs: [
         "When you contact us, we may receive your name, email address, message content, and any other information you choose to share. We use this data to respond, evaluate a potential business relationship, continue the conversation, and meet legal obligations where applicable.",
+        "Form submissions are delivered by email through Amazon Simple Email Service, in the sa-east-1 region, in Brazil. The message is kept in the Voynan mailbox; the service that receives the form records only the submission identifier, the date, and the outcome, never your name, address, or message content. You can also write directly to contact@voynan.com instead.",
       ],
     },
     {
@@ -200,7 +204,7 @@ const englishPrivacy: LegalDocument = {
       id: "sharing",
       title: "6. Sharing and external links",
       paragraphs: [
-        "We do not sell personal data. Information may be processed by providers required for operations, such as hosting and email, or shared when required by law, a valid order, or the need to protect rights and security.",
+        "We do not sell personal data. Information may be processed by the providers required for operations — hosting, Amazon Web Services for email delivery, and Cloudflare for the form's antispam protection — or shared when required by law, a valid order, or the need to protect rights and security.",
         "Links to GitHub, social networks, and other websites lead to environments controlled by third parties. We recommend reviewing their policies before giving them your data.",
       ],
     },

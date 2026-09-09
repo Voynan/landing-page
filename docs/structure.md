@@ -2,7 +2,7 @@
 
 # Voynan Landing Page — Project Structure
 
-All application code lives under `src/`. The structure separates semantic content, accessible controls, narrative composition, motion orchestration, and external effects so each part can be understood and tested without running the complete cinematic page.
+Application code lives under `src/`. The one exception is `functions/`, which holds deployed server code and is described at the end of this document. The structure separates semantic content, accessible controls, narrative composition, motion orchestration, and external effects so each part can be understood and tested without running the complete cinematic page.
 
 This is a target structure, not evidence that every listed file already exists. Add a file when its responsibility is implemented; do not create empty architecture for hypothetical features.
 
@@ -18,7 +18,6 @@ src/
 │   ├── landing/               # Voynan-specific narrative components
 │   │   ├── aegis/
 │   │   ├── contact/
-│   │   ├── credibility/
 │   │   ├── footer/
 │   │   ├── founder/
 │   │   ├── hero/
@@ -48,7 +47,8 @@ src/
 │   ├── analytics.ts
 │   ├── apiClient.ts
 │   ├── gsap.ts
-│   └── queryClient.ts
+│   ├── queryClient.ts
+│   └── turnstile.ts           # Loads Turnstile on demand and supplies antispam tokens
 ├── mocks/                     # MSW contact handlers and fixtures
 ├── pages/                     # Locale landing page and route-level fallbacks
 ├── routes/                    # Typed locale routes and chapter-aware language links
@@ -61,10 +61,31 @@ src/
 ├── types/                     # Shared TypeScript types not owned by another module
 ├── utils/                     # Pure locale, anchor, clipboard, and media helpers
 ├── entry-client.tsx           # Hydration entry
-└── entry-server.tsx           # Static rendering entry for `/pt` and `/en`
+└── entry-server.tsx           # Static rendering entry for both language variants
 ```
 
 Tests stay close to their owner as `*.test.ts` or `*.test.tsx`. Browser journeys live under the root `e2e/` directory, and static-build checks live under `scripts/` only when they cannot be expressed as application tests.
+
+## `functions/`
+
+Server code that is deployed rather than bundled into the page.
+
+```text
+functions/
+└── contact/
+    ├── request.ts             # Method, origin, and body validation
+    ├── turnstile.ts           # Cloudflare siteverify, including the hostname
+    ├── email.ts               # SES message construction and input sanitizing
+    ├── handler.ts             # Composition, configuration, and logging
+    ├── template.yaml          # AWS SAM: function, IAM role, Function URL, CORS
+    └── README.md              # Deploy and rotation notes
+```
+
+This directory sits outside the Vite client graph, which starts at
+`src/entry-*`, so nothing here can reach the browser bundle. It reads
+`src/schemas/contact.ts` so the form and the endpoint validate against one
+contract; the reverse import is forbidden and `functions/contact/boundary.test.ts`
+asserts it.
 
 ---
 
@@ -112,12 +133,12 @@ LandingShell
 │   └── CTAGroup
 ├── StudioThesis
 ├── SaaSStoryStage
-│   ├── ProductChapter × 3
-│   ├── ProductMedia
-│   └── ProgressOrbit
-├── CredibilityField
-│   ├── VerifiedMetric
-│   └── Testimonial
+│   ├── ProductProgressIndex
+│   ├── MobileProductExplorer
+│   ├── ProductPanel × 4
+│   │   └── ProductEvidence
+│   │       └── ProductMedia (approved assets only)
+│   └── useProductObservatory
 ├── BuildWithUsFlow
 │   └── CapabilityLayer × 4
 ├── AegisOpenSourceChapter
@@ -131,7 +152,11 @@ LandingShell
 └── AtmosphericFooter
 ```
 
-The products stage preserves equal timing, scale, and CTA weight for CryptoVault, InvestFusion, and Constrully. It is pinned only at desktop breakpoints. Mobile renders the same three chapters in normal document order.
+The product observatory presents CryptoVault and BullLedger as production products, followed by development-stage Constrully. At the desktop motion breakpoint, one native sticky stage keeps the horizontal index and active panel in view while three ordinary scroll segments drive the active product through `IntersectionObserver`. The index has no continuous progress track: direct index actions move to the matching segment, the active item exposes `aria-current="step"`, and inactive enhanced panels are inert.
+
+Static mode, tablet, and pre-enhancement markup render all three complete `ProductPanel` chapters in document order. On mobile, `MobileProductExplorer` starts with a short tap instruction and a stacked column of concise selectors; opening a product removes the instruction, rearranges those selectors into a contained 1 × 3 row, and mounts only the selected panel, followed by non-wrapping previous, close, and next controls. The selected panel keeps its product index, name, and lifecycle status on one identity line, with the status aligned to the right. Reduced motion preserves the presentation selected for the viewport but makes every state change immediate. `ProductEvidence` uses approved product media when present, labeled by a short caption bar inside the frame; otherwise it presents the approved product mark with the product name and a coming-soon label, never a fabricated product screenshot. Alt text is approval-gated content in `content/`, while every visible interface string, including that caption and the coming-soon label, is provided by i18n.
+
+Mobile grid rearrangement uses GSAP Flip, while panel entry and exit use coordinated transform and opacity transitions. Acceptance requires these movements to remain fluid and ordered, without internal x/y scrolling, visible overlap, layout flashes, or delayed input; only elements in an active transition may receive animation-specific rendering hints.
 
 Do not create a generic `SectionCard` or force all chapters through one configurable mega-component. Reuse small structural primitives when their semantics match; preserve individual chapter composition where the narrative differs.
 
@@ -182,13 +207,13 @@ Publication-sensitive data carries explicit state:
 - Product claims require review status where legal, financial, or tax wording is involved.
 - Aegis content requires confirmed release status, license, real code, environments, and URLs.
 
-The production build rejects unapproved evidence, invented placeholders, and missing destinations instead of silently publishing them.
+The production build rejects unapproved evidence, invented placeholders, and missing destinations for products in production instead of silently publishing them. Development-stage products may omit destinations and media only when the lifecycle status and fallback state remain explicit.
 
 ### `i18n/`
 
 Owns short interface strings such as navigation labels, form messages, copy confirmation, loading states, and accessible announcements. Editorial content stays in `content/` so translators can review complete passages in context.
 
-The selected locale is persisted. Changing `/pt` to `/en`, or the reverse, keeps the visitor at the same stable chapter anchor. No content block mixes languages except proper names and established technical terms.
+The selected locale is persisted. Changing language swaps the rendered copy in place, without a reload, and keeps the visitor at the same stable chapter anchor. No content block mixes languages except proper names and established technical terms.
 
 ### `forms/`
 
@@ -239,9 +264,9 @@ Payload types must not accept form text, copied content, financial data visible 
 
 ### `routes/` and `pages/`
 
-Routes define `/pt` and `/en` as crawlable locale entries plus the root locale decision. The locale landing page composes `LandingShell` from validated content and owns route-level metadata. Sections are anchors within the locale route, not separate client-only pages.
+Routes are English and locale-free: `/`, `/privacy` and `/terms`. Locale is held in application state by `LocaleProvider` and surfaced in the URL as an optional `?lang=pt` query, so a language change is a re-render rather than a navigation. The landing page composes `LandingShell` from validated content and owns route-level metadata. Sections are anchors within the route, not separate client-only pages.
 
-The production build statically renders both locale routes. Client hydration adds progressive navigation and enhancement; primary copy and ordinary links are already present in HTML.
+The production build statically renders both language variants: the English documents at their public paths and the Portuguese ones under an internal `_lang/pt/` tree that query-keyed rewrites serve at those same paths. Client hydration adds progressive navigation and enhancement; primary copy and ordinary links are already present in HTML.
 
 ### `schemas/`
 
@@ -303,13 +328,18 @@ failure
 → emphasize copyable public email
 ```
 
-### Product chapter activation
+### Product observatory activation
 
 ```text
-semantic product chapters in document order
-→ breakpoint-appropriate observer/ScrollTrigger
-→ active chapter presentation + eclipse state
+semantic product panels and desktop scroll segments in product order
+→ `useProductObservatory` with IntersectionObserver hysteresis
+→ active panel + direct clickable index state, without a progress ScrollTrigger
 → deduplicated `product_view`
+
+mobile 2 × 2 selector grid
+→ selected state rearranges selectors to 1 × 4 with Flip
+→ mount one product panel + previous / close / next controls
+→ `product_view` only after a panel opens
 ```
 
 Analytics observes outcomes; it never controls navigation, submission, or animation.
@@ -336,9 +366,9 @@ Analytics observes outcomes; it never controls navigation, submission, or animat
 
 ### End-to-end tests
 
-- `/pt` and `/en` load with correct metadata, canonical, and `hreflang` values.
+- `/`, `/privacy` and `/terms` load with correct metadata, canonical, `hreflang` and `x-default` values in both languages.
 - Language changes preserve chapter position.
-- The three products receive equal navigation and CTA treatment.
+- The four products receive consistent navigation and CTA treatment, with Constrully explicitly labeled as in development.
 - Desktop uses the intended sticky product stage without trapping scroll.
 - Mobile returns products to normal flow and exposes `44 × 44px` minimum targets.
 - Contact success, server rejection, timeout, and email fallback all work without losing input.
