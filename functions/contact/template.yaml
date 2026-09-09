@@ -1,0 +1,76 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Voynan landing page contact endpoint
+
+Parameters:
+  TurnstileSecret:
+    Type: String
+    NoEcho: true
+    Description: Cloudflare Turnstile secret key.
+  ContactFromAddress:
+    Type: String
+    Description: Verified sender address.
+  ContactRecipients:
+    Type: CommaDelimitedList
+    Description: Fixed recipient list. Supplied at deploy time, never committed.
+  AllowedOrigin:
+    Type: String
+    Description: The only origin permitted to call the endpoint.
+  SesIdentityName:
+    Type: String
+    Default: voynan.com
+    Description: The verified SES identity the function may send from.
+
+Resources:
+  ContactFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2022
+        Sourcemap: false
+        EntryPoints:
+          - handler.ts
+    Properties:
+      CodeUri: .
+      Handler: handler.handler
+      Runtime: nodejs22.x
+      Architectures:
+        - arm64
+      MemorySize: 512
+      Timeout: 10
+      ReservedConcurrentExecutions: 5
+      Environment:
+        Variables:
+          TURNSTILE_SECRET: !Ref TurnstileSecret
+          CONTACT_FROM_ADDRESS: !Ref ContactFromAddress
+          CONTACT_RECIPIENTS: !Join [",", !Ref ContactRecipients]
+          ALLOWED_ORIGIN: !Ref AllowedOrigin
+      FunctionUrlConfig:
+        AuthType: NONE
+        Cors:
+          AllowOrigins:
+            - !Ref AllowedOrigin
+          AllowMethods:
+            - POST
+          AllowHeaders:
+            - content-type
+          MaxAge: 3600
+      Policies:
+        # The recipient list is enforced here as well as in the handler, so a
+        # future bug cannot widen the destination: AWS refuses the call.
+        - Statement:
+            - Effect: Allow
+              Action: ses:SendEmail
+              Resource: !Sub arn:${AWS::Partition}:ses:${AWS::Region}:${AWS::AccountId}:identity/${SesIdentityName}
+              Condition:
+                StringEquals:
+                  ses:FromAddress: !Ref ContactFromAddress
+                ForAllValues:StringEquals:
+                  ses:Recipients: !Ref ContactRecipients
+
+Outputs:
+  ContactEndpoint:
+    Description: Value for VITE_CONTACT_ENDPOINT.
+    Value: !GetAtt ContactFunctionUrl.FunctionUrl

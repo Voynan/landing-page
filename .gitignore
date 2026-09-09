@@ -406,3 +406,9 @@ docs/backend-requests/
 # holds the companion server's auth token.
 .impeccable/
 .superpowers/
+
+### AWS SAM ###
+# samconfig.toml carries the AWS account id and the recipient addresses.
+# Neither is a credential, but neither belongs in a public repository.
+.aws-sam/
+samconfig.toml
