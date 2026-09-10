@@ -110,6 +110,19 @@ describe("contact handler", () => {
     expect(response.body).not.toContain("quota")
   })
 
+  it("fails closed when a configured recipient is not a valid address", async () => {
+    // A malformed recipient would otherwise surface as an opaque SES
+    // BadRequestException, indistinguishable from a delivery outage.
+    process.env.CONTACT_RECIPIENTS = "kvsgpro@outlook.com\\,contact@voynan.com"
+    acceptToken()
+    const send = vi.fn()
+
+    const response = await createContactHandler({ send })(buildEvent())
+
+    expect(response.statusCode).toBe(500)
+    expect(send).not.toHaveBeenCalled()
+  })
+
   it("fails closed when configuration is missing", async () => {
     delete process.env.TURNSTILE_SECRET
     const send = vi.fn()

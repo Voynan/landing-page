@@ -1,4 +1,5 @@
 import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2"
+import { z } from "zod"
 
 import { buildContactEmail } from "./email"
 import { parseContactRequest, type FunctionUrlEvent } from "./request"
@@ -29,18 +30,32 @@ function reply(statusCode: number, payload: unknown = {}): FunctionUrlResult {
   }
 }
 
+const addressSchema = z.string().trim().min(1).email()
+const addressListSchema = z.array(addressSchema).min(1)
+
 function readConfiguration(): Configuration | null {
   const turnstileSecret = process.env.TURNSTILE_SECRET
-  const from = process.env.CONTACT_FROM_ADDRESS
   const allowedOrigin = process.env.ALLOWED_ORIGIN
-  const recipients = process.env.CONTACT_RECIPIENTS?.split(",")
-    .map((address) => address.trim())
-    .filter(Boolean)
+  const from = addressSchema.safeParse(process.env.CONTACT_FROM_ADDRESS)
+  // Addresses are validated here rather than trusted, because a malformed
+  // recipient reaches SES as an opaque BadRequestException that looks exactly
+  // like a delivery outage. Catching it as configuration keeps the diagnosis
+  // in the deploy, where the mistake actually is.
+  const recipients = addressListSchema.safeParse(
+    process.env.CONTACT_RECIPIENTS?.split(",")
+      .map((address) => address.trim())
+      .filter(Boolean),
+  )
 
-  if (!turnstileSecret || !from || !allowedOrigin) return null
-  if (!recipients || recipients.length === 0) return null
+  if (!turnstileSecret || !allowedOrigin) return null
+  if (!from.success || !recipients.success) return null
 
-  return { turnstileSecret, from, recipients, allowedOrigin }
+  return {
+    turnstileSecret,
+    from: from.data,
+    recipients: recipients.data,
+    allowedOrigin,
+  }
 }
 
 export function createContactHandler(ses: SesSender) {

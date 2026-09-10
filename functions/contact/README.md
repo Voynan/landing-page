@@ -41,8 +41,14 @@ The bundle must be rebuilt before every deploy. `sam build` will happily package
 a stale `build/handler.js`.
 
 Parameters are stored in `samconfig.toml`, which is git-ignored because it holds
-the AWS account id and the recipient addresses. On a fresh machine, run
+the Turnstile secret and the recipient addresses. On a fresh machine, run
 `sam deploy --guided` and supply them again.
+
+Do not pass `--parameter-overrides` on the command line for `ContactRecipients`.
+The shorthand splits on spaces and treats a comma as a list separator, so an
+escaped comma survives into the value as a literal backslash and produces an
+invalid recipient. Quote the value inside `samconfig.toml` instead, as it is
+already written there.
 
 ## Parameters
 
