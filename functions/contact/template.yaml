@@ -59,15 +59,26 @@ Resources:
             - content-type
           MaxAge: 3600
       Policies:
-        # The recipient list is enforced here as well as in the handler, so a
-        # future bug cannot widen the destination: AWS refuses the call.
+        # This policy restricts the sender identity and nothing more.
+        #
+        # ses:FromAddress and ses:Recipients are condition keys of the SES v1
+        # API. The v2 SendEmail call this function makes does not populate
+        # them, and StringEquals over an absent key denies, which is why an
+        # earlier ses:FromAddress condition rejected every message with
+        # AccessDeniedException. The ForAllValues:StringEquals below is kept
+        # for the day the keys are populated, but it is vacuously true today:
+        # `aws iam simulate-custom-policy` returns `allowed` for this statement
+        # with no context supplied.
+        #
+        # The recipient list is therefore enforced in the handler alone, where
+        # it is read from configuration, validated as addresses, and never
+        # taken from the request. Restoring an IAM-level guarantee would mean
+        # sending through the SES v1 API instead.
         - Statement:
             - Effect: Allow
               Action: ses:SendEmail
               Resource: !Sub arn:${AWS::Partition}:ses:${AWS::Region}:${AWS::AccountId}:identity/${SesIdentityName}
               Condition:
-                StringEquals:
-                  ses:FromAddress: !Ref ContactFromAddress
                 ForAllValues:StringEquals:
                   ses:Recipients: !Ref ContactRecipients
 

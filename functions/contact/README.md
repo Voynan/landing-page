@@ -84,6 +84,28 @@ correct, because an invalid token and a wrong secret both produce `403`. The
 secret is only proven by a real submission from the live site, where a genuine
 token must be accepted.
 
+## What the IAM policy does and does not guarantee
+
+The execution role allows `ses:SendEmail` only on the `voynan.com` identity, so
+the function cannot send as any other domain. That part is real.
+
+It does **not** enforce the recipient list. `ses:FromAddress` and
+`ses:Recipients` are SES v1 condition keys, and the v2 API this function calls
+does not populate them; a `StringEquals` over an absent key denies outright,
+which is how an earlier `ses:FromAddress` condition made every message fail
+with `AccessDeniedException`. Verify with:
+
+    aws iam simulate-custom-policy --policy-input-list file://policy.json \
+      --action-names ses:SendEmail --resource-arns <identity-arn>
+
+With no context entries supplied it answers `allowed`, which is exactly the
+situation at runtime.
+
+The recipients are therefore guaranteed by the handler alone: they come from
+configuration, are validated as addresses at startup, and are never read from
+the request body. An IAM-level guarantee would require switching to the SES v1
+API, which does populate those keys.
+
 ## Concurrency
 
 `ReservedConcurrentExecutions` is absent from the template. This account's total
