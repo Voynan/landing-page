@@ -1,0 +1,25 @@
+{
+  "// yaml.customTags": "CloudFormation intrinsic functions are YAML custom tags. Without this list the YAML language server reports every !Ref, !Sub, !GetAtt and !Join in functions/contact/template.yaml as an unknown tag. The template itself is valid: `sam validate --lint` confirms it.",
+  "yaml.customTags": [
+    "!And sequence",
+    "!Base64 scalar",
+    "!Cidr sequence",
+    "!Condition scalar",
+    "!Equals sequence",
+    "!FindInMap sequence",
+    "!GetAZs scalar",
+    "!GetAtt scalar",
+    "!GetAtt sequence",
+    "!If sequence",
+    "!ImportValue scalar",
+    "!Join sequence",
+    "!Not sequence",
+    "!Or sequence",
+    "!Ref scalar",
+    "!Select sequence",
+    "!Split sequence",
+    "!Sub scalar",
+    "!Sub sequence",
+    "!Transform mapping"
+  ]
+}

@@ -37,6 +37,10 @@ esbuild builder cannot be used here: it copies only `CodeUri` into the build
 sandbox, so the shared schema in `src/` is unreachable, and pointing `CodeUri`
 at the repository root instead would copy 554 MB on every build.
 
+There is no `package.json` in this directory, deliberately. Dependencies are
+resolved from the repository root at bundle time, and a second manifest here
+would be read by nothing while being free to drift from the first.
+
 The bundle must be rebuilt before every deploy. `sam build` will happily package
 a stale `build/handler.js`.
 
@@ -89,22 +93,29 @@ token must be accepted.
 The execution role allows `ses:SendEmail` only on the `voynan.com` identity, so
 the function cannot send as any other domain. That part is real.
 
-It does **not** enforce the recipient list. `ses:FromAddress` and
-`ses:Recipients` are SES v1 condition keys, and the v2 API this function calls
-does not populate them; a `StringEquals` over an absent key denies outright,
-which is how an earlier `ses:FromAddress` condition made every message fail
-with `AccessDeniedException`. Verify with:
+It does **not** enforce the recipient list. Two condition keys were tried and
+both had to be removed, for different reasons.
 
-    aws iam simulate-custom-policy --policy-input-list file://policy.json \
-      --action-names ses:SendEmail --resource-arns <identity-arn>
+`ses:FromAddress` is not populated by the v2 `SendEmail` call. `StringEquals`
+over an absent key denies outright, so that condition rejected every message
+with `AccessDeniedException`.
 
-With no context entries supplied it answers `allowed`, which is exactly the
-situation at runtime.
+`ses:Recipients` *is* populated, but with more than the `To` list: the
+visitor's `Reply-To` address appears in it. That address is different on every
+submission and cannot be listed in advance, so `ForAllValues:StringEquals`
+denied every legitimate send. Reproduce it against the live role:
+
+    aws iam simulate-principal-policy --policy-source-arn <role-arn> \
+      --action-names ses:SendEmail --resource-arns <identity-arn> \
+      --context-entries file://context.json
+
+With `ses:Recipients` holding only the two configured addresses it answers
+`allowed`; add any third address and it answers `implicitDeny`.
 
 The recipients are therefore guaranteed by the handler alone: they come from
 configuration, are validated as addresses at startup, and are never read from
-the request body. An IAM-level guarantee would require switching to the SES v1
-API, which does populate those keys.
+the request body. No IAM condition can express "these two in `To`, anybody in
+`Reply-To`", so this is a limit of the mechanism rather than a shortcut.
 
 ## Concurrency
 

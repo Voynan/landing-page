@@ -59,28 +59,28 @@ Resources:
             - content-type
           MaxAge: 3600
       Policies:
-        # This policy restricts the sender identity and nothing more.
+        # This policy restricts the sender identity, and deliberately nothing
+        # else. Two condition keys were tried here and both had to go:
         #
-        # ses:FromAddress and ses:Recipients are condition keys of the SES v1
-        # API. The v2 SendEmail call this function makes does not populate
-        # them, and StringEquals over an absent key denies, which is why an
-        # earlier ses:FromAddress condition rejected every message with
-        # AccessDeniedException. The ForAllValues:StringEquals below is kept
-        # for the day the keys are populated, but it is vacuously true today:
-        # `aws iam simulate-custom-policy` returns `allowed` for this statement
-        # with no context supplied.
+        # ses:FromAddress is not populated by the v2 SendEmail call, and
+        # StringEquals over an absent key denies, so it rejected every message
+        # with AccessDeniedException.
+        #
+        # ses:Recipients is populated, but with more than the To list: the
+        # visitor's Reply-To address appears in it. Since that address is
+        # different on every submission and cannot be listed in advance,
+        # ForAllValues:StringEquals denied every legitimate send. Confirmed
+        # with `aws iam simulate-principal-policy`: the same role is `allowed`
+        # for the two configured recipients and `implicitDeny` as soon as a
+        # third address joins them.
         #
         # The recipient list is therefore enforced in the handler alone, where
         # it is read from configuration, validated as addresses, and never
-        # taken from the request. Restoring an IAM-level guarantee would mean
-        # sending through the SES v1 API instead.
+        # taken from the request.
         - Statement:
             - Effect: Allow
               Action: ses:SendEmail
               Resource: !Sub arn:${AWS::Partition}:ses:${AWS::Region}:${AWS::AccountId}:identity/${SesIdentityName}
-              Condition:
-                ForAllValues:StringEquals:
-                  ses:Recipients: !Ref ContactRecipients
 
 Outputs:
   ContactEndpoint:
