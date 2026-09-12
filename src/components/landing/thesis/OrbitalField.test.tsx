@@ -65,6 +65,10 @@ function driftAnimation() {
 afterEach(() => {
   cleanup()
   ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
+  // The breath is an unnamed repeat: -1 timeline, so killing the triggers does
+  // not reach it. Left alive it keeps ticking for the rest of the process and
+  // starves the slower suites of CPU.
+  gsap.globalTimeline.getChildren().forEach((child) => child.kill())
   vi.unstubAllGlobals()
 })
 
