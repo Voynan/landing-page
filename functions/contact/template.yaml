@@ -20,6 +20,12 @@ Parameters:
     Type: String
     Default: voynan.com
     Description: The verified SES identity the function may send from.
+  SesConfigurationSetName:
+    Type: String
+    Default: my-first-configuration-set
+    Description: >-
+      The default configuration set attached to the SES identity. SES applies it
+      to every message from that identity, so the role must be allowed to use it.
 
 Resources:
   ContactFunction:
@@ -77,10 +83,25 @@ Resources:
         # The recipient list is therefore enforced in the handler alone, where
         # it is read from configuration, validated as addresses, and never
         # taken from the request.
+        #
+        # The configuration set is the second resource because SES evaluates it
+        # whether or not the call names it. The identity carries a default
+        # configuration set, and a default applies to every message sent from
+        # that identity, so `ses:SendEmail` is authorized against the identity
+        # and the configuration set together. Granting the identity alone
+        # answered `AccessDeniedException` on every send, which the handler
+        # caught and reported to the browser as a 502.
+        #
+        # `aws iam simulate-principal-policy` cannot check this half. It answers
+        # `implicitDeny` for the configuration-set ARN even when the deployed
+        # policy allows it, because it does not treat `configuration-set` as a
+        # resource type for `ses:SendEmail`. A real send is the only proof.
         - Statement:
             - Effect: Allow
               Action: ses:SendEmail
-              Resource: !Sub arn:${AWS::Partition}:ses:${AWS::Region}:${AWS::AccountId}:identity/${SesIdentityName}
+              Resource:
+                - !Sub arn:${AWS::Partition}:ses:${AWS::Region}:${AWS::AccountId}:identity/${SesIdentityName}
+                - !Sub arn:${AWS::Partition}:ses:${AWS::Region}:${AWS::AccountId}:configuration-set/${SesConfigurationSetName}
 
 Outputs:
   ContactEndpoint:

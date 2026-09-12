@@ -63,6 +63,7 @@ already written there.
 | `ContactRecipients` | the fixed recipient list |
 | `AllowedOrigin` | `https://voynan.com` |
 | `SesIdentityName` | `voynan.com` |
+| `SesConfigurationSetName` | the identity's default configuration set |
 
 The `ContactEndpoint` output is the value for `VITE_CONTACT_ENDPOINT`.
 
@@ -116,6 +117,31 @@ The recipients are therefore guaranteed by the handler alone: they come from
 configuration, are validated as addresses at startup, and are never read from
 the request body. No IAM condition can express "these two in `To`, anybody in
 `Reply-To`", so this is a limit of the mechanism rather than a shortcut.
+
+## The configuration set is part of the permission
+
+The `voynan.com` identity carries a default configuration set, and a default
+applies to every message sent from that identity. SES therefore authorizes
+`ses:SendEmail` against the identity **and** the configuration set, even though
+`handler.ts` never names one. Granting the identity alone answered
+`AccessDeniedException` on every send, which the handler caught and reported as
+a `502` to the browser.
+
+Both ARNs are listed in `Resource`, and `SesConfigurationSetName` is the
+parameter that carries the name. Read the live value before changing it:
+
+    aws sesv2 get-email-identity --region sa-east-1 \
+      --email-identity voynan.com --query ConfigurationSetName
+
+If someone attaches a different default configuration set in the console, that
+parameter has to follow or every send starts failing again with the same
+`AccessDeniedException`.
+
+`aws iam simulate-principal-policy` cannot confirm this half of the policy. It
+answers `implicitDeny` for the configuration-set ARN even when the deployed
+policy allows it, because it does not recognize `configuration-set` as a
+resource type for `ses:SendEmail`. Use it for the identity, and prove the
+configuration set with a real send.
 
 ## Concurrency
 
