@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type RefObject } from "react"
 
 import { Button } from "@/components/ui/button"
 import { LiveRegion } from "@/components/ui/LiveRegion"
+import { cn } from "@/lib/utils"
 import { track, type AnalyticsTrack } from "@/lib/analytics"
 import {
   copyText,
@@ -72,15 +73,22 @@ export function CopyEmailAction({
       <a href={`mailto:${email}`}>{email}</a>
       <Button
         ref={buttonRef}
+        className="copy-email-action__button"
+        data-state={result}
         type="button"
-        variant="outline"
+        variant={emphasized ? "default" : "outline"}
         onClick={() => void handleCopy()}
       >
-        {result === "copied" ? (
-          <Check aria-hidden="true" />
-        ) : (
-          <Copy aria-hidden="true" />
-        )}
+        <span
+          className="copy-email-action__icon"
+          key={result === "copied" ? "copied" : "idle"}
+        >
+          {result === "copied" ? (
+            <Check aria-hidden="true" />
+          ) : (
+            <Copy aria-hidden="true" />
+          )}
+        </span>
         {result === "copied" ? labels.emailCopied : labels.copyEmail}
       </Button>
 
@@ -94,8 +102,14 @@ export function CopyEmailAction({
         />
       ) : null}
 
+      {/* The control already shows the confirmation, so the copied state is
+          announced only; the manual instruction stays visible because it
+          explains the field that appears beside it. */}
       <LiveRegion
-        className="copy-email-action__status"
+        className={cn(
+          "copy-email-action__status",
+          result !== "manual" && "sr-only",
+        )}
         message={
           result === "copied"
             ? labels.emailCopied

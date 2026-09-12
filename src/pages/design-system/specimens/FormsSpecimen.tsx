@@ -13,6 +13,8 @@ const labels = {
   },
   status: {
     submitting: "Sending…",
+    sent: "Message sent",
+    retry: "Try again",
     success: "Message sent.",
     failure: "The message could not be sent. Use the email fallback.",
     timeout: "The request took too long. Use the email fallback.",
@@ -25,6 +27,7 @@ const labels = {
     emailPending: "Public email awaiting approval.",
     manualEmailLabel: "Email for manual copying",
   },
+  alternativeLabel: "or",
   privacyNotice:
     "Technical fixture: these values are never sent to a production endpoint.",
   antispam: {

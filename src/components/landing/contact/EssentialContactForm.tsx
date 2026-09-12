@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import { useForm } from "@tanstack/react-form"
-import { useEffect, useRef, useState } from "react"
+import { Check, LoaderCircle, TriangleAlert } from "lucide-react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
 
 import type { CopyEmailActionProps } from "@/components/landing/contact/CopyEmailAction"
 import { CopyEmailAction } from "@/components/landing/contact/CopyEmailAction"
@@ -24,6 +25,7 @@ import {
 } from "@/services/contact"
 import { track, type AnalyticsTrack } from "@/lib/analytics"
 import { antispamSlotAttribute } from "@/lib/turnstile"
+import { cn } from "@/lib/utils"
 
 type ContactFormPhase =
   "empty" | "submitting" | "success" | "failure" | "timeout"
@@ -37,6 +39,8 @@ type ContactFormLabels = {
   }
   status: {
     submitting: string
+    sent: string
+    retry: string
     success: string
     failure: string
     timeout: string
@@ -45,6 +49,7 @@ type ContactFormLabels = {
   feedback: CopyEmailActionProps["labels"] & {
     emailPending: string
   }
+  alternativeLabel: string
   privacyNotice: string
   antispam: {
     notice: string
@@ -96,6 +101,10 @@ function getFieldErrors(
   }
 
   return errors
+}
+
+function isRecoverableFailure(phase: ContactFormPhase): boolean {
+  return phase === "failure" || phase === "timeout"
 }
 
 function getErrorKind(error: unknown): ContactError {
@@ -177,11 +186,7 @@ export function EssentialContactForm({
   }, [autoFocusRecovery, errors])
 
   useEffect(() => {
-    if (
-      autoFocusRecovery &&
-      (phase === "failure" || phase === "timeout") &&
-      publicEmail
-    ) {
+    if (autoFocusRecovery && isRecoverableFailure(phase) && publicEmail) {
       emailButtonRef.current?.focus()
     }
   }, [autoFocusRecovery, phase, publicEmail])
@@ -197,6 +202,25 @@ export function EssentialContactForm({
             ? labels.status.unavailable
             : ""
 
+  const submitDisabled = phase === "submitting" || !requestAntispamToken
+  const submitLabel =
+    phase === "submitting"
+      ? labels.status.submitting
+      : phase === "success"
+        ? labels.status.sent
+        : isRecoverableFailure(phase)
+          ? labels.status.retry
+          : ctaLabel
+
+  const submitIcon: ReactNode =
+    phase === "submitting" ? (
+      <LoaderCircle aria-hidden="true" className="contact-submit__spinner" />
+    ) : phase === "success" ? (
+      <Check aria-hidden="true" />
+    ) : isRecoverableFailure(phase) ? (
+      <TriangleAlert aria-hidden="true" />
+    ) : null
+
   const handleFieldChange = (name: ContactFieldName, value: string) => {
     if (name === "name") form.setFieldValue("name", value)
     if (name === "email") form.setFieldValue("email", value)
@@ -209,7 +233,7 @@ export function EssentialContactForm({
         return next
       })
     }
-    if (phase === "success") setPhase("empty")
+    if (phase === "success" || isRecoverableFailure(phase)) setPhase("empty")
   }
 
   return (
@@ -254,7 +278,7 @@ export function EssentialContactForm({
           {...{ [antispamSlotAttribute]: "" }}
         />
 
-        <div className="essential-contact-form__footer">
+        <div className="essential-contact-form__consent">
           <p>
             {labels.privacyNotice}{" "}
             {privacyPolicy ? (
@@ -270,25 +294,52 @@ export function EssentialContactForm({
             </a>
             .
           </p>
+        </div>
+
+        <div className="essential-contact-form__actions">
           <Button
+            className={cn(
+              "contact-submit min-w-48",
+              phase === "success" &&
+                "bg-[var(--color-copper-light)] hover:bg-[var(--color-copper-light)]",
+            )}
+            data-phase={phase}
             type="submit"
+            variant={isRecoverableFailure(phase) ? "destructive" : "default"}
             aria-busy={phase === "submitting" ? "true" : undefined}
-            disabled={phase === "submitting" || !requestAntispamToken}
+            disabled={submitDisabled}
           >
-            <span className="essential-contact-form__button-label">
-              {phase === "submitting" ? labels.status.submitting : ctaLabel}
+            <span aria-hidden="true" className="contact-submit__sweep" />
+            {submitIcon ? (
+              <span key={`icon-${phase}`} className="contact-submit__icon">
+                {submitIcon}
+              </span>
+            ) : null}
+            <span key={`label-${phase}`} className="contact-submit__label">
+              {submitLabel}
             </span>
           </Button>
         </div>
       </form>
 
+      {/* The transformed submit control, and the disabled controls of the
+          unavailable state, are the visible outcome. The sentence stays in the
+          live region for assistive technology and only becomes visible when it
+          carries recovery guidance the control cannot state on its own. */}
       <LiveRegion
-        className="essential-contact-form__status"
+        className={cn(
+          "essential-contact-form__status",
+          isRecoverableFailure(phase) &&
+            "essential-contact-form__status--recovery",
+          !isRecoverableFailure(phase) && "sr-only",
+        )}
         message={statusMessage}
-        politeness={
-          phase === "failure" || phase === "timeout" ? "assertive" : "polite"
-        }
+        politeness={isRecoverableFailure(phase) ? "assertive" : "polite"}
       />
+
+      <div className="essential-contact-form__divider">
+        <span>{labels.alternativeLabel}</span>
+      </div>
 
       <div className="essential-contact-form__fallback">
         {publicEmail ? (
@@ -296,7 +347,7 @@ export function EssentialContactForm({
             buttonRef={emailButtonRef}
             clipboard={clipboard}
             email={publicEmail}
-            emphasized={phase === "failure" || phase === "timeout"}
+            emphasized={isRecoverableFailure(phase)}
             initialResult={initialState?.copyResult}
             labels={labels.feedback}
             trackEvent={trackEvent}

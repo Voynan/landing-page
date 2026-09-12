@@ -83,6 +83,8 @@ const supportingChapterLabels = {
     },
     status: {
       submitting: "Sending…",
+      sent: "Message sent",
+      retry: "Try again",
       success: "Message sent.",
       failure: "The message could not be sent.",
       timeout: "The request timed out. Try again or use email.",
@@ -95,6 +97,7 @@ const supportingChapterLabels = {
       emailPending: "Public email awaiting approval.",
       manualEmailLabel: "Email for manual copying",
     },
+    alternativeLabel: "or",
     privacyNotice: "We use these details only to reply to this conversation.",
     antispam: {
       notice: "This form is protected by Cloudflare Turnstile — see its",

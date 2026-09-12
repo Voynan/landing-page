@@ -359,7 +359,7 @@
   }
 
   .legal-footer a,
-  .essential-contact-form__footer a {
+  .essential-contact-form__consent a {
     color: var(--color-ivory);
     text-decoration-color: var(--color-copper);
     text-underline-offset: 0.25em;
@@ -1617,11 +1617,6 @@
 
   .ds-form-state .essential-contact-form {
     grid-column: auto;
-  }
-
-  .ds-form-state .contact-fields + button,
-  .ds-form-state > [role="status"] + .copy-email-action {
-    margin-top: var(--space-6);
   }
 
   .ds-route-loading {
@@ -4023,11 +4018,6 @@
     grid-column: 6 / -1;
   }
 
-  .essential-contact-form > form {
-    padding-block: var(--space-8);
-    border-block: 1px solid var(--color-line-strong);
-  }
-
   .contact-fields {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -4138,35 +4128,177 @@
     margin-top: var(--space-6);
   }
 
-  .essential-contact-form__footer {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-6);
-    align-items: flex-end;
+  .essential-contact-form__consent {
     margin-top: var(--space-8);
   }
 
-  .essential-contact-form__footer p {
-    /* ~73 characters per line at 0.875rem, now that this paragraph carries the
-       privacy notice and the Turnstile attribution together. */
-    max-width: 32rem;
+  .essential-contact-form__consent p {
     margin: 0;
     color: var(--color-slate);
     font-size: 0.875rem;
   }
 
-  .essential-contact-form__footer button {
-    min-inline-size: 10.5rem;
+  .essential-contact-form__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--space-6);
   }
 
-  .essential-contact-form__button-label {
+  .contact-submit {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-submit__label {
     min-width: max-content;
   }
 
+  .contact-submit__icon {
+    display: inline-flex;
+  }
+
+  /* One light sweep crosses the control when an outcome lands: the same
+     eclipse gesture the rest of the page uses, spent on a single moment. */
+  .contact-submit__sweep {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .contact-submit[data-phase="success"] .contact-submit__sweep,
+  .contact-submit[data-phase="failure"] .contact-submit__sweep,
+  .contact-submit[data-phase="timeout"] .contact-submit__sweep {
+    background: linear-gradient(
+      100deg,
+      rgb(244 241 234 / 0%) 35%,
+      rgb(244 241 234 / 42%) 50%,
+      rgb(244 241 234 / 0%) 65%
+    );
+    animation: contact-submit-sweep var(--duration-reveal) var(--ease-enter);
+  }
+
+  .contact-submit[data-phase="failure"],
+  .contact-submit[data-phase="timeout"] {
+    animation: contact-submit-recoil var(--duration-nav) var(--ease-standard);
+  }
+
+  .contact-submit[data-phase="success"] .contact-submit__icon,
+  .contact-submit[data-phase="failure"] .contact-submit__icon,
+  .contact-submit[data-phase="timeout"] .contact-submit__icon {
+    animation: contact-submit-mark var(--duration-nav) var(--ease-enter)
+      backwards;
+  }
+
+  .contact-submit[data-phase]:not([data-phase="empty"]) .contact-submit__label {
+    animation: contact-submit-label var(--duration-nav) var(--ease-enter)
+      backwards;
+  }
+
+  .contact-submit__spinner {
+    animation: contact-submit-spin 900ms linear infinite;
+  }
+
+  @keyframes contact-submit-sweep {
+    from {
+      opacity: 1;
+      transform: translateX(-100%);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes contact-submit-mark {
+    from {
+      opacity: 0;
+      transform: scale(0.4) rotate(-14deg);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+  }
+
+  @keyframes contact-submit-label {
+    from {
+      opacity: 0;
+      transform: translateY(0.4rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes contact-submit-recoil {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    25% {
+      transform: translateX(-3px);
+    }
+
+    60% {
+      transform: translateX(2px);
+    }
+  }
+
+  @keyframes contact-submit-spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  /* The single rule in this block: it marks the point where the form ends and
+     the standing alternative begins. */
+  .essential-contact-form__divider {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: center;
+    margin-top: var(--space-8);
+    color: var(--color-slate);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .essential-contact-form__divider::before,
+  .essential-contact-form__divider::after {
+    height: 1px;
+    background: var(--color-line);
+    content: "";
+  }
+
   .essential-contact-form__status {
-    min-height: 1.5rem;
     margin-top: var(--space-4);
-    color: var(--color-ivory);
+    color: var(--color-slate);
+    font-size: 0.875rem;
+  }
+
+  .essential-contact-form__status--recovery {
+    color: var(--color-destructive);
+    animation: contact-status-enter var(--duration-nav) var(--ease-enter)
+      backwards;
+  }
+
+  @keyframes contact-status-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-0.25rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .essential-contact-form__fallback {
@@ -4179,17 +4311,30 @@
     font-size: 0.875rem;
   }
 
+  /* The fallback stays flush with the fields above it. When a send fails, the
+     emphasis is carried by the copy control turning primary, not by a rule or
+     a panel that would shift the row. */
   .copy-email-action {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: var(--space-3) var(--space-6);
     align-items: center;
-    padding: var(--space-4) 0;
-    border-block: 1px solid var(--color-line);
+    padding-block: var(--space-4);
   }
 
-  .copy-email-action[data-emphasized="true"] {
-    border-color: var(--color-copper);
+  .copy-email-action[data-emphasized="true"] > a {
+    color: var(--color-ivory);
+  }
+
+  .copy-email-action__icon {
+    display: inline-flex;
+  }
+
+  /* Only the confirmation animates; the resting icon must not perform an
+     entrance every time the page loads. */
+  .copy-email-action__button[data-state="copied"] .copy-email-action__icon {
+    animation: contact-submit-mark var(--duration-nav) var(--ease-enter)
+      backwards;
   }
 
   .copy-email-action > a {
@@ -4210,8 +4355,12 @@
   }
 
   .copy-email-action__status {
-    min-height: 1.25rem;
     color: var(--color-slate);
+  }
+
+  .copy-email-action__button[data-state="copied"] {
+    border-color: var(--color-copper);
+    color: var(--color-copper);
   }
 
   .ds-control-group .landing-cta-group {
@@ -4853,19 +5002,15 @@
     grid-column: 1;
   }
 
-  .essential-contact-form__footer,
-  .copy-email-action {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .essential-contact-form__footer button,
+  .essential-contact-form__actions button,
   .copy-email-action > button {
     width: 100%;
   }
 
   .copy-email-action {
     display: flex;
+    align-items: stretch;
+    flex-direction: column;
   }
 }
 
@@ -4880,9 +5025,23 @@
   .mobile-product-explorer__tap-target::after,
   .product-panel__destination,
   .technical-links a,
-  .founder-note__link {
+  .founder-note__link,
+  .contact-submit,
+  .contact-submit__sweep,
+  .contact-submit__icon,
+  .contact-submit__label,
+  .contact-submit__spinner,
+  .copy-email-action,
+  .copy-email-action__icon,
+  .essential-contact-form__status {
     scroll-behavior: auto !important;
     animation: none !important;
     transition: none !important;
+  }
+
+  /* Without the sweep and the recoil, color, icon, and label still carry the
+     outcome; the spinner keeps a static presence instead of vanishing. */
+  .contact-submit__sweep {
+    display: none;
   }
 }

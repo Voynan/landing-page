@@ -65,6 +65,7 @@
       "summary": "Revise os campos indicados."
     },
     "submit": "Iniciar conversa",
+    "alternative": "ou",
     "privacyNotice": "Usaremos estes dados somente para responder à sua mensagem; nenhum cadastro de marketing será realizado.",
     "antispam": {
       "notice": "Este formulário é protegido pelo Cloudflare Turnstile — veja sua",
@@ -75,6 +76,8 @@
   },
   "status": {
     "submitting": "Enviando…",
+    "sent": "Mensagem enviada",
+    "retry": "Tentar novamente",
     "success": "Mensagem enviada.",
     "failure": "Não foi possível enviar a mensagem. Tente novamente ou use o e-mail disponível.",
     "timeout": "O envio demorou demais. Tente novamente ou use o e-mail disponível.",

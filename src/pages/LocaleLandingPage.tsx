@@ -69,6 +69,8 @@ export function LocaleLandingPage() {
           },
           status: {
             submitting: t("status.submitting"),
+            sent: t("status.sent"),
+            retry: t("status.retry"),
             success: t("status.success"),
             failure: t("status.failure"),
             timeout: t("status.timeout"),
@@ -81,6 +83,7 @@ export function LocaleLandingPage() {
             emailPending: t("feedback.emailPending"),
             manualEmailLabel: t("feedback.manualEmailLabel"),
           },
+          alternativeLabel: t("form.alternative"),
           privacyNotice: t("form.privacyNotice"),
           antispam: {
             notice: t("form.antispam.notice"),

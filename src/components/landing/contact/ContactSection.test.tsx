@@ -22,6 +22,8 @@ const labels: ContactSectionLabels = {
   },
   status: {
     submitting: "Enviando…",
+    sent: "Mensagem enviada",
+    retry: "Tentar novamente",
     success: "Mensagem enviada.",
     failure: "Não foi possível enviar a mensagem.",
     timeout: "O envio demorou demais. Tente novamente ou use o e-mail.",
@@ -34,6 +36,7 @@ const labels: ContactSectionLabels = {
     emailPending: "E-mail público aguardando aprovação.",
     manualEmailLabel: "E-mail para cópia manual",
   },
+  alternativeLabel: "ou",
   privacyNotice: "Usaremos seus dados apenas para responder a esta conversa.",
   antispam: {
     notice: "Este formulário é protegido pelo Cloudflare Turnstile — veja sua",
@@ -146,18 +149,73 @@ it("exposes a stable submitting state without retrying", async () => {
   )
 })
 
-it("confirms success in context and clears the submitted fields", async () => {
+it("confirms success on the submit control itself and clears the submitted fields", async () => {
   const user = userEvent.setup()
   renderContact(async () => ({ submissionId: "submission-42" }))
   await fillValidForm(user)
 
   await user.click(screen.getByRole("button", { name: /iniciar conversa/i }))
 
-  const success = await screen.findByText("Mensagem enviada.")
-  expect(success).toBeVisible()
-  expect(success).toHaveAttribute("role", "status")
+  const confirmation = await screen.findByRole("button", {
+    name: labels.status.sent,
+  })
+  expect(confirmation).toHaveAttribute("data-phase", "success")
   expect(screen.getByLabelText(/^nome$/i)).toHaveValue("")
   expect(screen.getByLabelText(/mensagem/i)).toHaveValue("")
+})
+
+it("announces the full success sentence without repeating it on screen", async () => {
+  const user = userEvent.setup()
+  renderContact(async () => ({ submissionId: "submission-42" }))
+  await fillValidForm(user)
+
+  await user.click(screen.getByRole("button", { name: /iniciar conversa/i }))
+
+  const announcement = await screen.findByText(labels.status.success)
+  expect(announcement).toHaveAttribute("role", "status")
+  expect(announcement).toHaveClass("sr-only")
+})
+
+it("turns the submit control into a retry affordance and keeps the recovery sentence visible", async () => {
+  const user = userEvent.setup()
+  renderContact(async () => {
+    throw new ContactSubmissionError("rejected")
+  })
+  await fillValidForm(user)
+
+  await user.click(screen.getByRole("button", { name: /iniciar conversa/i }))
+
+  const retry = await screen.findByRole("button", { name: labels.status.retry })
+  expect(retry).toHaveAttribute("data-phase", "failure")
+  expect(retry).toBeEnabled()
+
+  const recovery = screen.getByText(labels.status.failure)
+  expect(recovery).not.toHaveClass("sr-only")
+
+  // The sentence belongs to the attempt that just failed, so it stays on the
+  // form side of the divider.
+  const divider = screen.getByText(labels.alternativeLabel)
+  expect(
+    recovery.compareDocumentPosition(divider) &
+      Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy()
+})
+
+it("restores the original call to action when the visitor edits a field after a failure", async () => {
+  const user = userEvent.setup()
+  renderContact(async () => {
+    throw new ContactSubmissionError("rejected")
+  })
+  await fillValidForm(user)
+
+  await user.click(screen.getByRole("button", { name: /iniciar conversa/i }))
+  await screen.findByRole("button", { name: labels.status.retry })
+  await user.type(screen.getByLabelText(/mensagem/i), " Obrigado.")
+
+  expect(
+    screen.getByRole("button", { name: /iniciar conversa/i }),
+  ).toHaveAttribute("data-phase", "empty")
+  expect(screen.queryByText(labels.status.failure)).not.toBeInTheDocument()
 })
 
 it("reports first contact, success, and confirmed email copy without payload data", async () => {
@@ -269,7 +327,35 @@ it("presents an honest unavailable state when no antispam adapter is configured"
   expect(screen.getByLabelText(/^nome$/i)).toBeDisabled()
   expect(screen.getByLabelText(/^e-mail$/i)).toBeDisabled()
   expect(screen.getByLabelText(/^mensagem$/i)).toBeDisabled()
-  expect(screen.getByText(labels.status.unavailable)).toBeVisible()
+
+  // The disabled controls carry the state on screen; the reason stays
+  // available to assistive technology instead of printing a second time.
+  const reason = screen.getByText(labels.status.unavailable)
+  expect(reason).toHaveClass("sr-only")
+})
+
+it("separates the form from the email alternative", () => {
+  renderContact(vi.fn())
+
+  expect(screen.getByText(labels.alternativeLabel)).toBeInTheDocument()
+})
+
+it("keeps the copy confirmation on the control and only announces it elsewhere", async () => {
+  const user = userEvent.setup()
+  renderContact(async () => ({ submissionId: "unused" }), {
+    writeText: async () => undefined,
+  })
+
+  await user.click(screen.getByRole("button", { name: /copiar e-mail/i }))
+
+  expect(
+    await screen.findByRole("button", { name: labels.feedback.emailCopied }),
+  ).toBeInTheDocument()
+
+  const announcement = screen.getByText(labels.feedback.emailCopied, {
+    selector: "[role='status']",
+  })
+  expect(announcement).toHaveClass("sr-only")
 })
 
 it("selects the address for manual copying when Clipboard API is unavailable", async () => {
