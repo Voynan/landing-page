@@ -2464,6 +2464,7 @@
     transform: translateX(-50%);
   }
 
+  .orbital-field__glow,
   .orbital-field__halo,
   .orbital-field__core,
   .orbital-field__filament,
@@ -2497,9 +2498,21 @@
     opacity: 0.72;
   }
 
-  .orbital-field__halo {
+  /* The blurred copy and the sharp stroke share one opacity so they composite
+     exactly as the merged filter did. */
+  .orbital-field__halo-stack {
     opacity: 0.21;
+  }
+
+  .orbital-field__glow,
+  .orbital-field__halo {
     stroke-width: calc(8px * var(--orbital-stroke));
+  }
+
+  /* A CSS blur of the same standard deviation the filter used, on a path the
+     compositor can keep. */
+  .orbital-field__glow {
+    filter: blur(4.8px);
   }
 
   .orbital-field__core {

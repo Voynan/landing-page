@@ -171,7 +171,6 @@ export function OrbitalField() {
   const coreGradientId = `orbital-core-${id}`
   const flowGradientId = `orbital-flow-${id}`
   const gravityGradientId = `orbital-gravity-${id}`
-  const glowFilterId = `orbital-glow-${id}`
   useOrbitalFieldMotion(fieldRef)
 
   return (
@@ -274,28 +273,6 @@ export function OrbitalField() {
           />
           <stop offset="1" stopColor="var(--color-navy)" stopOpacity="0" />
         </radialGradient>
-
-        {/* Sized to the blur spread rather than a share of the path width: the
-            region is rasterised on every frame of the breath. */}
-        <filter
-          id={glowFilterId}
-          colorInterpolationFilters="sRGB"
-          height="190%"
-          width="106%"
-          x="-3%"
-          y="-45%"
-        >
-          <feGaussianBlur
-            in="SourceGraphic"
-            result="softGlow"
-            stdDeviation="4.8"
-          />
-          <feOffset dx="5" dy="2" in="softGlow" result="offsetGlow" />
-          <feMerge>
-            <feMergeNode in="offsetGlow" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
       </defs>
 
       <g className="orbital-field__gravity">
@@ -315,14 +292,28 @@ export function OrbitalField() {
             className="orbital-field__thread"
             data-orbital-thread={index}
           >
-            {/* The glow sits inside the thread so the breath carries both. */}
-            <path
-              className="orbital-field__halo"
-              d={thread.path}
-              data-orbital-halo={index}
-              filter={`url(#${glowFilterId})`}
-              stroke={`url(#${haloGradientId})`}
-            />
+            {/* The glow sits inside the thread so the breath carries both.
+                It is a blurred, offset copy of the halo rather than an SVG
+                filter on it: WebKit rasterises filter regions on the CPU and
+                redoes the work on every animated frame, which collapsed this
+                weave to single-digit frame rates on Safari and mobile. The
+                pair carries the halo opacity together, so the blurred and
+                sharp strokes still composite as the filter merge did. */}
+            <g className="orbital-field__halo-stack">
+              <path
+                className="orbital-field__glow"
+                d={thread.path}
+                data-orbital-glow={index}
+                stroke={`url(#${haloGradientId})`}
+                transform="translate(5 2)"
+              />
+              <path
+                className="orbital-field__halo"
+                d={thread.path}
+                data-orbital-halo={index}
+                stroke={`url(#${haloGradientId})`}
+              />
+            </g>
             <path
               className="orbital-field__core"
               d={thread.path}

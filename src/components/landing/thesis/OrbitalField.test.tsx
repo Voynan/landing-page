@@ -165,6 +165,38 @@ it("holds the drift still until the thesis scrolls into view and drops it on unm
   expect(ScrollTrigger.getById("thesis-orbital-drift")).toBeUndefined()
 })
 
+// The weave is authored in the markup, so this contract needs no motion
+// profile and no running timeline to verify.
+it("draws the halo glow without a per-frame SVG filter", () => {
+  render(<OrbitalField />)
+
+  const field = screen.getByTestId("orbital-field")
+
+  // WebKit rasterises SVG filter regions on the CPU and redoes it on every
+  // animated frame, which collapsed this weave to single-digit frame rates.
+  // The glow is a blurred, offset copy of the halo instead.
+  expect(field.querySelector("feGaussianBlur")).toBeNull()
+  expect(
+    [...field.querySelectorAll("[filter]")].map((node) =>
+      node.getAttribute("filter"),
+    ),
+  ).toEqual([])
+
+  const glows = [...field.querySelectorAll("[data-orbital-glow]")]
+  expect(glows).toHaveLength(7)
+
+  glows.forEach((glow, index) => {
+    const halo = field.querySelector(`[data-orbital-halo="${index}"]`)
+    expect(glow.getAttribute("d")).toBe(halo?.getAttribute("d"))
+    // The offset the merged filter used to apply.
+    expect(glow.getAttribute("transform")).toBe("translate(5 2)")
+    // The blurred copy sits behind the sharp halo, as the filter merge did.
+    expect(
+      glow.compareDocumentPosition(halo!) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+  })
+})
+
 it("moves every glow layer with the thread it lights", async () => {
   installMatchMedia()
   render(<OrbitalField />)
