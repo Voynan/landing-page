@@ -75,6 +75,16 @@ function installIntersectionObserver() {
         {} as IntersectionObserver,
       )
     },
+    /** Delivers several queued observations in a single notification, the way
+     *  engines coalesce them when the notify task is delayed. */
+    deliverCoalesced(values: boolean[]) {
+      callback?.(
+        values.map(
+          (isIntersecting) => ({ isIntersecting }) as IntersectionObserverEntry,
+        ),
+        {} as IntersectionObserver,
+      )
+    },
   }
 }
 
@@ -288,6 +298,34 @@ it("pauses the services loop while the section is outside the viewport", async (
 
   unmount()
   expect(observer.disconnect).toHaveBeenCalledOnce()
+})
+
+it("follows the newest observation when the browser coalesces queued entries", async () => {
+  installMotionProfile("desktop")
+  const observer = installIntersectionObserver()
+
+  render(
+    <BuildWithUsFlow
+      content={getLandingContent("en").services}
+      labels={labels}
+    />,
+  )
+
+  await waitFor(() => {
+    expect(gsap.getById("services-flow-loop")).toBeDefined()
+  })
+
+  const loop = gsap.getById("services-flow-loop")
+  expect(loop?.paused()).toBe(true)
+
+  // Arriving mid-scroll delivers the stale "outside the viewport" observation
+  // together with the current one. Reading the older entry leaves the loop
+  // paused with the section fully visible and no further event to recover it.
+  act(() => observer.deliverCoalesced([false, true]))
+  expect(loop?.paused()).toBe(false)
+
+  act(() => observer.deliverCoalesced([true, false]))
+  expect(loop?.paused()).toBe(true)
 })
 
 it("keeps the motion enhancement paused when viewport observation is unavailable", async () => {

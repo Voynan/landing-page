@@ -147,8 +147,16 @@ function useServicesMotion(scope: RefObject<HTMLElement | null>) {
       typeof IntersectionObserver === "undefined"
         ? undefined
         : new IntersectionObserver(
-            ([entry]) => {
-              isVisible = entry?.isIntersecting ?? false
+            (entries) => {
+              // Browsers coalesce queued observations into one notification
+              // whenever the notify task is delayed, which is routine
+              // mid-scroll on mobile and in Safari. The last entry is the
+              // current state: reading the first one adopts a stale
+              // "outside the viewport" observation and leaves the loop paused
+              // while the section is fully visible, with no further
+              // intersection change to recover it.
+              const latest = entries[entries.length - 1]
+              isVisible = latest?.isIntersecting ?? false
               syncPlayback()
             },
             { rootMargin: "8% 0px" },
