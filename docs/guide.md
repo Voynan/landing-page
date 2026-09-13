@@ -6,13 +6,13 @@
 
 ## 1. Purpose of this document
 
-This guide turns the cinematic visual system described in `terafab-inspired-ux-ui-design-system.md` and the identity defined in `voynan-brand-guide.md` into an original experience for Voynan.
+This guide turns the cinematic visual system described in `terafab-inspired-ux-ui-design-system.md` and the Voynan identity recorded in `DESIGN.md` into an original experience for Voynan.
 
 The document guides design, copywriting, content, motion, and implementation. It must not be treated as a structural or visual copy of Terafab. The reference provides principles—scale, continuity, editorial restraint, and purposeful motion—while the colors, symbol, typography, narrative, media, and components belong to Voynan.
 
 ### 1.1 Business goals, in priority order
 
-1. Drive visitors to the three SaaS products currently in production.
+1. Drive visitors to the two SaaS products currently in production—CryptoVault and BullLedger—while making development-stage Constrully discoverable without implying it has launched.
 2. Generate qualified leads for custom software development.
 3. Position Voynan as a product studio capable of creating, launching, operating, and evolving digital products.
 4. Demonstrate technical contribution through Aegis, an open-source project approaching release.
@@ -37,7 +37,8 @@ The page must communicate the ability to handle complex systems without suggesti
 
 - People and organizations that need to protect files and prove their integrity.
 - Investors and shareholders of every size in Brazil, the United States, and Canada.
-- Brazilian builders and construction companies that need to manage project costs, taxes, and reporting.
+- Lawyers, law firms, professionals, and companies that need to verify contacts and organize reports and evidence of impersonation scams.
+- Brazilian builders and construction companies following a product in development for project costs, taxes, and reporting.
 
 ### 2.2 Custom software clients
 
@@ -61,7 +62,7 @@ The thread should take on different functions:
 |---|---|
 | Hero | Complete ring; opens when the visitor begins scrolling |
 | Thesis | Vertical line that reveals the editorial statement |
-| Products | Orbit and progress indicator across the three SaaS products |
+| Products | Active observatory index across three production SaaS products and one development-stage product |
 | Credibility | Connects metrics, quotes, and the sources of evidence |
 | Services | Becomes a flow of building, integration, and operation |
 | Aegis | Takes the form of a cryptographic flow or line of code |
@@ -169,7 +170,7 @@ Initial scale:
 
 ### 4.4 Media
 
-- Use real screenshots, recordings, and visual identities from CryptoVault, InvestFusion, and Constrully.
+- Use real screenshots, recordings, and visual identities from CryptoVault, BullLedger, and Constrully when those assets are approved.
 - Keep the product legible; do not tilt screens merely to create dynamism.
 - Use art-directed crops with negative space for copy.
 - Prepare a poster and mobile version for every video.
@@ -185,8 +186,8 @@ Progressive navigation
     └── Thesis — operating products changes how we build
         └── SaaS portfolio
             ├── CryptoVault
-            ├── InvestFusion
-            └── Constrully
+            ├── BullLedger
+            └── Constrully — in development
                 └── Credibility — metrics + testimonials
                     └── Custom software
                         └── Aegis — open source / coming soon
@@ -199,7 +200,7 @@ Progressive navigation
 
 1. **Impact:** cinematic hero.
 2. **Clarity:** short editorial thesis.
-3. **Demonstration:** three product chapters.
+3. **Demonstration:** four product chapters, with lifecycle status kept explicit.
 4. **Proof:** metrics and real voices.
 5. **Conversion:** custom development capabilities.
 6. **Openness:** open-source contribution.
@@ -263,7 +264,7 @@ Present Voynan as a product studio and immediately offer the two primary paths.
 
 **Context line:**
 
-> 3 SaaS em produção · 1 projeto open source a caminho · desenvolvimento de ponta a ponta
+> 3 SaaS em produção · 1 produto em desenvolvimento · 1 projeto open source em desenvolvimento
 
 #### Initial copy — English
 
@@ -284,13 +285,13 @@ Present Voynan as a product studio and immediately offer the two primary paths.
 
 **Context line:**
 
-> 3 SaaS products in production · 1 open-source project on the way · end-to-end development
+> 3 SaaS products in production · 1 product in development · 1 open-source project in development
 
 #### Visual
 
 - Hero approximately `100svh` tall.
 - Monumental eclipse ring, partially outside the frame.
-- Real fragments from the three products appear as signals inside or around the ring.
+- Real fragments from the product catalog may appear as signals inside or around the ring after asset approval.
 - Scrolling opens the ring and starts the eclipse thread.
 - A navy scrim preserves legibility across every frame.
 
@@ -319,13 +320,16 @@ Present Voynan as a product studio and immediately offer the two primary paths.
 
 #### Structure
 
-On desktop, the three products share a sticky stage. Content advances in three acts while the media transforms within the same frame. Each act must receive equal visual time.
+On desktop, the three products share a native sticky observatory stage. A three-part index provides direct click navigation and indicates only the currently active product; it does not include a continuous progress line. One active panel changes as the corresponding scroll segment enters the reading band. The first two acts are products in production; Constrully is an equally crafted third act with an explicit development-stage status.
 
-On mobile, remove the long pinned stage: each product becomes a chapter in normal document flow, with its own screenshot or video.
+On tablet and static presentations, remove the sticky enhancement: each product becomes a complete chapter in normal document flow. On mobile, begin with a concise tap instruction, a stacked column of product selectors, and no expanded panel. Selecting a product removes the instruction, smoothly compacts the selectors into one contained 1 × 3 row, reveals only that product at natural document height, and ends with non-wrapping previous, close, and next controls. Within the selected panel, keep product index, name, and lifecycle status on one line, with lifecycle status aligned right. The grid must never introduce internal x/y scrolling. Reduced motion keeps the correct viewport presentation but applies state changes immediately. Use approved product media when available, with a short caption bar inside the frame naming what the capture shows; otherwise show the approved product mark with its name and a coming-soon label, never an invented interface.
+
+The 2 × 2-to-1 × 4 rearrangement and product changes must feel smooth, organized, and fluid. Sequence exits before entries, preserve spatial continuity, and reject visible overlaps, layout flashes, or sluggish input as acceptance failures.
 
 Each product includes:
 
 - Index and category.
+- Lifecycle status.
 - Primary benefit.
 - Up to three capabilities.
 - Real media.
@@ -362,7 +366,7 @@ Each product includes:
 
 **Claims rule:** do not publish “infallible,” “unbreakable,” or “guaranteed legal proof.” Every legal claim must be reviewed for the jurisdiction in which it will appear.
 
-#### 6.4.2 InvestFusion
+#### 6.4.2 BullLedger
 
 **Kicker:** `02 / SaaS`
 
@@ -388,13 +392,15 @@ Each product includes:
 
 > Track assets across Brazil, the United States and Canada, generate reports and turn scattered data into clearer decisions.
 
-**CTA:** `Conhecer o InvestFusion / Explore InvestFusion`
+**CTA:** `Conhecer o BullLedger / Explore BullLedger`
 
 **Claims rule:** content must be presented as data organization and analysis, without promising financial advice or investment outcomes.
 
 #### 6.4.3 Constrully
 
 **Kicker:** `03 / SaaS`
+
+**Lifecycle status:** `Em desenvolvimento / In development`
 
 **Portuguese — title:**
 
@@ -424,10 +430,10 @@ Each product includes:
 
 #### Relationship between chapters
 
-- No SaaS product receives a “primary” badge.
-- Use exactly the same screen time, typographic scale, and CTA weight for each product.
-- The order demonstrates range: security, financial intelligence, and construction operations.
-- The eclipse thread connects the acts without imposing a single visual identity on the products' media.
+- No production SaaS product receives a “primary” badge.
+- Use the same compositional quality, typographic scale, and CTA treatment for every chapter while keeping lifecycle status explicit in the chapter, active index, and footer.
+- The order demonstrates range: security, financial organization, professional identity scam reporting, and construction operations.
+- The active observatory index connects the acts without imposing a single visual identity on the products' media.
 
 ---
 
@@ -666,7 +672,7 @@ Failure
 #### Content
 
 - Voynan wordmark or icon.
-- Products: CryptoVault, InvestFusion, and Constrully.
+- Products: CryptoVault, BullLedger, and Constrully, with Constrully labeled as in development.
 - Open source: Aegis, GitHub, and documentation.
 - Contact: email and LinkedIn.
 - Português / English.
@@ -719,7 +725,7 @@ When `prefers-reduced-motion: reduce` is active:
 ### Desktop — above 1180px
 
 - `1180px` container with generous margins.
-- Sticky stage for the three SaaS products.
+- Sticky stage for the four product chapters.
 - Continuous eclipse thread between sections.
 - Asymmetrical compositions guided by the 12-column grid.
 
@@ -748,7 +754,7 @@ When `prefers-reduced-motion: reduce` is active:
 
 ## 9. Internationalization
 
-- Recommended routes: `/pt` and `/en`.
+- Routes: `/`, `/privacy` and `/terms`, in English and locale-free, with Portuguese selected by an optional `?lang=pt` query.
 - The root may default to Portuguese without preventing manual selection.
 - Persist the selected preference.
 - Switching languages must keep the visitor in the same chapter.
@@ -790,7 +796,7 @@ When `prefers-reduced-motion: reduce` is active:
 
 - Use modern image formats with an appropriate fallback.
 - Provide explicit dimensions to prevent layout shifts.
-- Do not download all three SaaS videos during initial loading.
+- Do not download all four product videos during initial loading.
 - Preload the next chapter when it approaches the viewport.
 - Avoid duplicate animation libraries.
 - The footer canvas, if present, must be disposable.
@@ -836,9 +842,12 @@ LandingShell
 │   └── CTAGroup
 ├── StudioThesis
 ├── SaaSStoryStage
-│   ├── ProductChapter × 3
-│   ├── ProductMedia
-│   └── ProgressOrbit
+│   ├── ProductProgressIndex
+│   ├── MobileProductExplorer
+│   ├── ProductPanel × 4
+│   │   └── ProductEvidence
+│   │       └── ProductMedia (approved assets only)
+│   └── useProductObservatory
 ├── CredibilityField
 │   ├── VerifiedMetric
 │   └── Testimonial
@@ -872,7 +881,7 @@ External links were intentionally excluded from this version because they will b
 
 ### Products
 
-- Official URL for CryptoVault, InvestFusion, and Constrully.
+- Official destination for CryptoVault, BullLedger, and Constrully.
 - Logo, screenshots, videos, posters, and alternative text for each SaaS product.
 - Confirmation of the published capabilities.
 - Legal, tax, and financial review of sensitive claims.
@@ -908,7 +917,8 @@ External links were intentionally excluded from this version because they will b
 ### Strategy and content
 
 - [ ] SaaS products and custom software are the two dominant conversions.
-- [ ] The three SaaS products receive equal emphasis.
+- [ ] CryptoVault and BullLedger are identified as in production; Constrully is explicitly identified as in development.
+- [ ] All four product chapters receive the same compositional quality without erasing their lifecycle distinction.
 - [ ] Aegis appears as open source and “Coming soon.”
 - [ ] The founder mention remains secondary to the products.
 - [ ] The page supports Portuguese and English in full.

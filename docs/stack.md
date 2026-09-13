@@ -4,7 +4,7 @@
 
 React + TypeScript frontend for Voynan's bilingual, product-led landing page. The stack supports a cinematic desktop narrative without making motion a prerequisite for reading, navigation, or conversion.
 
-This document is an implementation baseline derived from `voynan-landing-page-guide-en.md`. It is intentionally more robust than a one-off marketing page so the site can grow, but every dependency must have a current responsibility. Product-specific application concerns such as authentication, protected routes, financial arithmetic, and OAuth are outside this project.
+This document is an implementation baseline derived from `guide.md`. It is intentionally more robust than a one-off marketing page so the site can grow, but every dependency must have a current responsibility. Product-specific application concerns such as authentication, protected routes, financial arithmetic, and OAuth are outside this project.
 
 ---
 

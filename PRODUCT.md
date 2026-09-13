@@ -10,7 +10,7 @@ web
 
 ## Stack
 
-Documented direction: a bilingual React and TypeScript application built with Bun and Vite, statically rendered for the English routes and a prerendered Portuguese `?lang=pt` variant, then progressively hydrated in the browser. The detailed dependency and responsibility boundaries live in `docs/stack.md` and `docs/v1-todo.md`.
+Documented direction: a bilingual React and TypeScript application built with Bun and Vite, statically rendered for the English routes and a prerendered Portuguese `?lang=pt` variant, then progressively hydrated in the browser. The detailed dependency and responsibility boundaries live in `docs/stack.md` and `docs/structure.md`.
 
 ## Users
 
@@ -59,7 +59,7 @@ Documented direction:
 - Analytics accepts only the allowlisted conversion events and never receives form values, copied content, or sensitive financial information visible in product media.
 - Aegis launches in the `development` stage with only its approved logo, “Coming soon” status, title, description, and GitHub destination. Documentation, release metadata, environments, and real code become required only before changing the stage to `released`.
 - Authentication, protected routes, OAuth, financial logic, CMS, smooth scrolling, Three.js, WebGL, and a second animation library are outside v1.
-- Evidence, claims, external destinations, legal content, and media marked as release blockers must be approved in `docs/v1-content-inventory.md` before a public build.
+- Evidence, claims, external destinations, legal content, and media that carry a factual or legal risk must be approved by the maintainer before a public build.
 
 Open decisions and missing product facts:
 
@@ -72,20 +72,18 @@ Open decisions and missing product facts:
 
 Documented direction: the name is Voynan and the tagline is “Building Digital Products.” The identity communicates discreet confidence: a serious engineering studio that operates products and contributes to open source.
 
-`docs/voynan-brand-guide.md` is the binding identity reference. The Terafab-inspired reference contributes editorial and cinematic principles only; Voynan must not copy its trademarks, copy, assets, proprietary imagery, or distinctive branded composition.
+`DESIGN.md` is the binding identity reference. The Terafab-inspired reference contributes editorial and cinematic principles only; Voynan must not copy its trademarks, copy, assets, proprietary imagery, or distinctive branded composition.
 
-Final production assets are not yet present in the repository. Asset names listed in the brand guide are evidence of prior direction, not evidence that approved files were received.
+Final production assets are not yet present in the repository. Marks committed under `src/assets/brand/` are the working identity assets; their presence is not evidence that a final approved set was received.
 
 ## Evidence on Hand
 
 Documented direction available in the repository:
 
-- `docs/voynan-landing-page-guide-en.md`: business priorities, audiences, initial bilingual copy, narrative, behavior, accessibility, resilience, and launch requirements.
-- `docs/voynan-brand-guide.md`: brand position, personality, identity rules, and descriptions of assets generated in an earlier session.
+- `docs/guide.md`: business priorities, audiences, initial bilingual copy, narrative, behavior, accessibility, resilience, and launch requirements.
+- `DESIGN.md`: brand position, color, typography, spacing, and motion tokens.
 - `docs/stack.md` and `docs/structure.md`: technical boundaries and architecture.
 - `docs/terafab-inspired-ux-ui-design-system.md`: reference principles subject to the originality constraint.
-- `docs/v1-todo.md`: closed v1 scope, milestones, implementation order, and verification gates.
-- `docs/v1-content-inventory.md`: current readiness record for content, media, approvals, and missing external facts.
 
 No approved product media, metrics, testimonials, or contact endpoint is currently present. The localized legal routes were approved after external legal review was confirmed on 2026-08-30.
 

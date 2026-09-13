@@ -1,8 +1,7 @@
 # Contact endpoint
 
 An AWS Lambda Function URL that verifies a Cloudflare Turnstile token and sends
-one email through SES. Design and rationale live in
-`docs/superpowers/specs/2026-09-08-contact-endpoint-design.md`.
+one email through SES.
 
 ## Modules
 
