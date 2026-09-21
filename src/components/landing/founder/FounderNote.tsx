@@ -138,8 +138,8 @@ export function FounderNote({ content, labels }: FounderNoteProps) {
                 <img
                   src={content.profile.portraitSrc}
                   alt={content.profile.portraitAlt}
-                  width="1024"
-                  height="1536"
+                  width="1122"
+                  height="1402"
                   loading="lazy"
                 />
               </picture>

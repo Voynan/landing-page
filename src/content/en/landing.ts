@@ -6,7 +6,7 @@ import cryptovaultEvidenceDesktop from "@/assets/crypto-vault/cryptovault-eviden
 import cryptovaultEvidenceMobile from "@/assets/crypto-vault/cryptovault-evidence-mobile.avif"
 import cryptovaultEvidencePoster from "@/assets/crypto-vault/cryptovault-evidence-poster.jpg"
 import construllyIcon from "@/assets/constrully/constrully-icon.svg"
-import founderPortrait from "@/assets/pixelated_portrait.png"
+import founderPortrait from "@/assets/studio_portrait.png"
 
 import type { LandingContentDraft } from "../contracts.js"
 
@@ -230,9 +230,9 @@ export const englishLandingContent = {
       note: "I started Voynan to build the products I wanted to use, and then to run them every day. Every system I hand to a client meets the same bar: it has to keep working when nobody is watching. That standard is what I bring to everyone who builds with us.",
       portraitSrc: founderPortrait,
       portraitAlt:
-        "Pixel-art portrait of Kaio Vinícios with his arms crossed, wearing a black T-shirt.",
+        "Portrait of Kaio Vinícios in a dark studio, wearing a black T-shirt, with dark hair and a short beard.",
       source:
-        "src/assets/pixelated_portrait.png — image supplied and approved by Kaio Vinícios on 2026-08-30",
+        "src/assets/studio_portrait.png — image supplied and approved by Kaio Vinícios on 2026-09-21",
       approval: "approved",
     },
     social: [

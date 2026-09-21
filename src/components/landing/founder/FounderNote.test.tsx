@@ -24,14 +24,14 @@ it.each([
     role: "Fundador e engenheiro principal",
     note: "Comecei a Voynan para construir os produtos que eu queria usar e, depois, operá-los todos os dias. Cada sistema que entrego a um cliente passa pelo mesmo critério: precisa continuar funcionando quando ninguém está olhando. É esse padrão que ofereço a quem constrói conosco.",
     portraitAlt:
-      "Retrato em pixel art de Kaio Vinícios, de braços cruzados e usando camiseta preta.",
+      "Retrato de Kaio Vinícios em estúdio de fundo escuro, usando camiseta preta, com cabelo escuro e barba curta.",
   },
   {
     locale: "en" as const,
     role: "Founder and principal engineer",
     note: "I started Voynan to build the products I wanted to use, and then to run them every day. Every system I hand to a client meets the same bar: it has to keep working when nobody is watching. That standard is what I bring to everyone who builds with us.",
     portraitAlt:
-      "Pixel-art portrait of Kaio Vinícios with his arms crossed, wearing a black T-shirt.",
+      "Portrait of Kaio Vinícios in a dark studio, wearing a black T-shirt, with dark hair and a short beard.",
   },
 ])(
   "renders the approved founder profile in $locale",
@@ -48,10 +48,10 @@ it.each([
     expect(screen.getByRole("heading", { name: "Kaio Vinícios" })).toBeVisible()
     expect(screen.getByText(role)).toBeVisible()
     expect(screen.getByText(note)).toBeVisible()
-    expect(portrait).toHaveAttribute("width", "1024")
-    expect(portrait).toHaveAttribute("height", "1536")
+    expect(portrait).toHaveAttribute("width", "1122")
+    expect(portrait).toHaveAttribute("height", "1402")
     expect(
-      screen.queryByText(/src\/assets\/pixelated_portrait\.png/i),
+      screen.queryByText(/src\/assets\/studio_portrait\.png/i),
     ).not.toBeInTheDocument()
     expect(screen.queryByText(labels.profilePending)).not.toBeInTheDocument()
     expect(screen.queryByText(labels.portraitPending)).not.toBeInTheDocument()
@@ -90,7 +90,7 @@ it("keeps unapproved founder identity and portrait out of the page", () => {
 
 it("groups the approved portrait in its visual frame", () => {
   const portraitAlt =
-    "Pixel-art portrait of Kaio Vinícios with his arms crossed, wearing a black T-shirt."
+    "Portrait of Kaio Vinícios in a dark studio, wearing a black T-shirt, with dark hair and a short beard."
 
   render(
     <FounderNote content={getLandingContent("en").founder} labels={labels} />,
