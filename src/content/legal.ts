@@ -41,7 +41,7 @@ const portuguesePrivacy: LegalDocument = {
   summary:
     "Esta política explica de forma direta quais dados podem ser tratados quando você visita o site da Voynan ou entra em contato conosco.",
   updatedLabel: "Última atualização",
-  updatedDate: "9 de setembro de 2026",
+  updatedDate: "15 de outubro de 2026",
   backLabel: "Voltar para a Voynan",
   contentsLabel: "Nesta página",
   languageLabel: "Idioma",
@@ -73,11 +73,11 @@ const portuguesePrivacy: LegalDocument = {
       id: "dados-tecnologias",
       title: "3. Dados e tecnologias utilizados",
       paragraphs: [
-        "Na versão atual, o site não oferece contas nem pagamentos. O formulário de contato está ativo e envia sua mensagem para a Voynan, e utilizamos analytics de conversão. A preferência de idioma pode ser armazenada localmente no seu navegador para que a próxima visita abra no idioma escolhido.",
+        "Na versão atual, o site não oferece contas nem pagamentos. O formulário de contato está ativo e envia sua mensagem para a Voynan, e utilizamos analytics de uso. A preferência de idioma e a sua escolha sobre cookies de analytics podem ser armazenadas localmente no seu navegador para que a próxima visita as respeite.",
         "A infraestrutura que entrega o site pode processar automaticamente dados técnicos, como endereço IP, data e hora da requisição, tipo de navegador e registros de segurança, quando isso for necessário para disponibilizar e proteger o serviço. Esses registros são administrados conforme as práticas do provedor de hospedagem utilizado.",
         "Para distinguir pessoas de tráfego automatizado, o formulário de contato é protegido pelo Cloudflare Turnstile, que processa seu endereço IP e sinais técnicos do navegador no momento do envio. O Turnstile não é usado para publicidade e não acompanha sua navegação entre sites.",
-        "O analytics é feito pelo PostHog e registra apenas uma lista fechada de onze eventos de conversão, como abrir um produto, iniciar o contato ou trocar de idioma. Não há captura automática de cliques, digitação ou visualizações de página, não há gravação de sessão, e o conteúdo do formulário, os valores copiados e o que aparece nas mídias de produto nunca são enviados.",
-        "O PostHog não grava cookie nem armazenamento local no seu navegador: os dados existem apenas na memória da aba e desaparecem quando você a fecha, de modo que não há como acompanhar você entre visitas. Os eventos são processados na nuvem do PostHog nos Estados Unidos, o que caracteriza transferência internacional de dados, e o endereço IP da requisição é processado por lá para estimativa de localização aproximada.",
+        "O analytics é feito pelo Microsoft Clarity. Ele registra como as páginas são usadas — cliques, rolagem, movimento do mouse e páginas visitadas — para gerar gravações de sessão e mapas de calor, e também registra uma lista fechada de onze eventos de conversão, como abrir um produto, iniciar o contato ou trocar de idioma. O formulário de contato, seus campos e as mídias de produto são mascarados no seu navegador antes de qualquer envio, de modo que o conteúdo deles nunca chega ao Clarity.",
+        "Sem o seu consentimento, o Clarity não grava cookies e atribui um novo identificador a cada visualização de página, de modo que visitas separadas não podem ser ligadas entre si. Se você aceitar os cookies de analytics, o Clarity grava os cookies primários _clck e _clsk para reunir as visualizações de página em uma sessão e reconhecer visitas seguintes, e a Microsoft pode gravar cookies próprios nos domínios dela. Os dados do Clarity são processados pela Microsoft nos Estados Unidos, o que caracteriza transferência internacional de dados, e o endereço IP da requisição é processado por lá para estimativa de localização aproximada. Você pode mudar sua escolha a qualquer momento em “Preferências de cookies”, no fim da página; recusar remove os cookies do Clarity.",
         "Se novas tecnologias de acompanhamento forem ativadas no futuro, esta política será atualizada antes ou no momento dessa mudança e os controles exigidos serão adotados.",
       ],
     },
@@ -93,14 +93,14 @@ const portuguesePrivacy: LegalDocument = {
       id: "finalidades-bases",
       title: "5. Finalidades e bases legais",
       paragraphs: [
-        "O tratamento pode se apoiar, conforme o contexto, em procedimentos preliminares relacionados a um possível contrato, no legítimo interesse de responder comunicações e manter o site seguro, ou no cumprimento de obrigação legal ou regulatória. Quando a lei exigir consentimento para uma finalidade específica, ele será solicitado de forma adequada.",
+        "O tratamento pode se apoiar, conforme o contexto, em procedimentos preliminares relacionados a um possível contrato, no legítimo interesse de responder comunicações e manter o site seguro, ou no cumprimento de obrigação legal ou regulatória. Quando a lei exigir consentimento para uma finalidade específica, ele será solicitado de forma adequada. O analytics de uso sem cookies se apoia no legítimo interesse em entender e melhorar o site; os cookies de analytics só são gravados com o seu consentimento, que pode ser retirado a qualquer momento.",
       ],
     },
     {
       id: "compartilhamento",
       title: "6. Compartilhamento e links externos",
       paragraphs: [
-        "Não vendemos dados pessoais. Informações podem ser processadas por fornecedores necessários à operação — hospedagem, a Amazon Web Services para o envio de e-mail, a Cloudflare para a proteção antispam do formulário e o PostHog para o analytics de conversão — ou compartilhadas quando houver obrigação legal, ordem válida ou necessidade de proteger direitos e segurança.",
+        "Não vendemos dados pessoais. Informações podem ser processadas por fornecedores necessários à operação — hospedagem, a Amazon Web Services para o envio de e-mail, a Cloudflare para a proteção antispam do formulário e a Microsoft, por meio do Clarity, para o analytics de uso — ou compartilhadas quando houver obrigação legal, ordem válida ou necessidade de proteger direitos e segurança.",
         "Links para GitHub, redes sociais e outros sites levam a ambientes controlados por terceiros. Recomendamos consultar as políticas desses serviços antes de fornecer dados a eles.",
       ],
     },
@@ -149,7 +149,7 @@ const englishPrivacy: LegalDocument = {
   summary:
     "This policy explains in plain language which data may be processed when you visit Voynan’s website or contact us.",
   updatedLabel: "Last updated",
-  updatedDate: "September 9, 2026",
+  updatedDate: "October 15, 2026",
   backLabel: "Back to Voynan",
   contentsLabel: "On this page",
   languageLabel: "Language",
@@ -181,11 +181,11 @@ const englishPrivacy: LegalDocument = {
       id: "data-technologies",
       title: "3. Data and technologies used",
       paragraphs: [
-        "The current version of the website does not offer accounts or payments. The contact form is active and sends your message to Voynan, and we use conversion analytics. Your language preference may be stored locally in your browser so a future visit opens in the language you selected.",
+        "The current version of the website does not offer accounts or payments. The contact form is active and sends your message to Voynan, and we use usage analytics. Your language preference and your choice about analytics cookies may be stored locally in your browser so a future visit respects them.",
         "The infrastructure that delivers the website may automatically process technical data such as IP address, request date and time, browser type, and security logs when needed to provide and protect the service. These records are managed according to the practices of the hosting provider in use.",
         "To tell people apart from automated traffic, the contact form is protected by Cloudflare Turnstile, which processes your IP address and technical browser signals at the moment you submit. Turnstile is not used for advertising and does not follow your browsing across websites.",
-        "Analytics runs on PostHog and records only a closed list of eleven conversion events, such as opening a product, starting the contact flow, or switching language. There is no automatic capture of clicks, typing, or page views, no session recording, and form content, copied values, and anything shown in product media are never sent.",
-        "PostHog writes no cookie and no local storage in your browser: the data exists only in the tab's memory and disappears when you close it, so there is no way to follow you between visits. Events are processed in PostHog's United States cloud, which constitutes an international transfer of data, and the request IP address is processed there to estimate approximate location.",
+        "Analytics runs on Microsoft Clarity. It records how the pages are used — clicks, scrolling, mouse movement, and the pages visited — to produce session recordings and heatmaps, and it also records a closed list of eleven conversion events, such as opening a product, starting the contact flow, or switching language. The contact form, its fields, and product media are masked in your browser before anything is sent, so their content never reaches Clarity.",
+        "Without your consent, Clarity sets no cookies and gives each page view a new identifier, so separate visits cannot be connected. If you accept analytics cookies, Clarity sets the first-party cookies _clck and _clsk to connect page views into a session and recognize later visits, and Microsoft may set its own cookies on its domains. Clarity data is processed by Microsoft in the United States, which constitutes an international transfer of data, and the request IP address is processed there to estimate approximate location. You can change your choice at any time through “Cookie preferences” at the bottom of the page; declining removes Clarity's cookies.",
         "If new tracking technologies are enabled in the future, this policy will be updated before or when that change takes place, and any required controls will be implemented.",
       ],
     },
@@ -201,14 +201,14 @@ const englishPrivacy: LegalDocument = {
       id: "purposes-bases",
       title: "5. Purposes and legal bases",
       paragraphs: [
-        "Depending on the context, processing may be based on steps taken before a possible contract, the legitimate interest in responding to communications and keeping the website secure, or compliance with a legal or regulatory obligation. When the law requires consent for a specific purpose, it will be requested appropriately.",
+        "Depending on the context, processing may be based on steps taken before a possible contract, the legitimate interest in responding to communications and keeping the website secure, or compliance with a legal or regulatory obligation. When the law requires consent for a specific purpose, it will be requested appropriately. Usage analytics without cookies relies on the legitimate interest in understanding and improving the website; analytics cookies are set only with your consent, which you can withdraw at any time.",
       ],
     },
     {
       id: "sharing",
       title: "6. Sharing and external links",
       paragraphs: [
-        "We do not sell personal data. Information may be processed by the providers required for operations — hosting, Amazon Web Services for email delivery, Cloudflare for the form's antispam protection, and PostHog for conversion analytics — or shared when required by law, a valid order, or the need to protect rights and security.",
+        "We do not sell personal data. Information may be processed by the providers required for operations — hosting, Amazon Web Services for email delivery, Cloudflare for the form's antispam protection, and Microsoft, through Clarity, for usage analytics — or shared when required by law, a valid order, or the need to protect rights and security.",
         "Links to GitHub, social networks, and other websites lead to environments controlled by third parties. We recommend reviewing their policies before giving them your data.",
       ],
     },
