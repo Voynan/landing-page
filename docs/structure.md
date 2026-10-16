@@ -1,4 +1,4 @@
-<!-- v2.0.0 | last changed 2026-08-13 -->
+<!-- v2.1.0 | last changed 2026-10-15 -->
 
 # Voynan Landing Page — Project Structure
 
@@ -15,6 +15,7 @@ src/
 │   ├── svg/                   # Voynan marks and optimized eclipse geometry
 │   └── video/                 # Art-directed desktop and mobile encodes
 ├── components/
+│   ├── consent/               # Analytics consent banner and cookie preferences control
 │   ├── landing/               # Voynan-specific narrative components
 │   │   ├── aegis/
 │   │   ├── contact/
@@ -45,6 +46,7 @@ src/
 │   └── index.ts               # react-i18next initialization and persistence
 ├── lib/                       # Third-party setup and side-effect adapters
 │   ├── analytics.ts
+│   ├── analyticsConsent.ts    # Remembers the analytics cookie choice for 12 months
 │   ├── apiClient.ts
 │   ├── gsap.ts
 │   ├── queryClient.ts
@@ -192,7 +194,7 @@ Produces locale-specific document metadata, canonical URLs, reciprocal `hreflang
 
 ### `config/`
 
-Is the only application layer that reads `import.meta.env`. Validate public configuration at startup/build time and expose named values for the contact endpoint, canonical site origin, antispam public key, analytics key, and externally supplied URLs.
+Is the only application layer that reads `import.meta.env`. Validate public configuration at startup/build time and expose named values for the contact endpoint, canonical site origin, antispam public key, Clarity project ID, and externally supplied URLs.
 
 Missing launch-critical configuration must fail the production build with a clear message. Development may use explicit placeholders only when they cannot be shipped accidentally.
 
@@ -242,7 +244,8 @@ Contains thin setup and adapters, not narrative logic:
 - `gsap.ts` registers ScrollTrigger once.
 - `queryClient.ts` configures conservative request defaults.
 - `apiClient.ts` configures the contact origin, timeout, and safe error boundary.
-- `analytics.ts` is the only module that imports PostHog.
+- `analytics.ts` is the only module that imports `@microsoft/clarity`. It starts Clarity after hydration — cookieless until the visitor accepts — and forwards later consent changes with `ad_Storage` always denied.
+- `analyticsConsent.ts` stores the visitor's analytics cookie choice for 12 months and tolerates blocked storage.
 
 `analytics.ts` exports typed functions for the approved event names only:
 
@@ -259,6 +262,8 @@ contact_submit_error
 email_copy
 language_change
 ```
+
+Clarity custom events carry no properties, so the approved property becomes part of the name: `product_view:<productId>`, `product_click:<productId>`, `contact_submit_error:<reason>`, and `language_change:<from>-<to>`.
 
 Payload types must not accept form text, copied content, financial data visible in media, or other sensitive values. If analytics fails or is blocked, interaction continues normally.
 

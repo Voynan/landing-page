@@ -826,6 +826,8 @@ Measure only actions that help evaluate the page's goals:
 
 Do not collect form text, copied content, financial data visible in screenshots, or sensitive information from the products.
 
+Analytics runs on Microsoft Clarity. Clarity records sessions and heatmaps, so every surface that can show form text or product data carries `data-clarity-mask="true"`: the contact form and all product media. Clarity sets cookies only after the visitor accepts them in the consent banner; until then it runs cookieless. Events with a property are sent with that property in the name, for example `product_view:cryptovault`.
+
 ---
 
 ## 13. Component inventory

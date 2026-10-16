@@ -1,4 +1,4 @@
-<!-- v2.0.0 | last changed 2026-08-13 -->
+<!-- v2.1.0 | last changed 2026-10-15 -->
 
 # Voynan Landing Page — Frontend Stack
 
@@ -37,7 +37,7 @@ When implementation is scaffolded, declare the dependencies below in `package.js
 | **@aws-sdk/client-sesv2** | Contact delivery from the endpoint function in `functions/`; never reachable from the client graph |
 | **zustand** | Small cross-section UI state only when state cannot stay local |
 | **react-i18next** | Interface translations, validation messages, metadata, and locale persistence |
-| **posthog-js** | Allowlisted conversion analytics without contact text or sensitive media data |
+| **@microsoft/clarity** | Session recordings, heatmaps, and allowlisted conversion events, with the contact form and product media masked |
 | **vitest** + **@testing-library/react** | Unit and component tests |
 | **msw** | Contact endpoint behavior in tests |
 | **playwright** | End-to-end, responsive, reduced-motion, and failure-path tests |
@@ -68,7 +68,7 @@ When implementation is scaffolded, declare the dependencies below in `package.js
 | Contact endpoint | **AWS Lambda Function URL in `sa-east-1`** | Chosen over a Vercel Function because the Lambda free tier is permanent, permits commercial use, and bills real usage beyond it, while Vercel's Hobby plan is a hard ceiling restricted to non-commercial projects. Defined in `functions/contact/template.yaml` with AWS SAM. |
 | Antispam | **Cloudflare Turnstile, verified server-side** | Free at any volume, invisible on most visits, and no tracking cookie. The site key is public; the secret exists only as a Lambda environment variable. |
 | Client state | **Local state first; Zustand only across sections** | The active product chapter or global thread state may use a small store if DOM-local coordination is insufficient. Form and server state stay in their dedicated tools. |
-| Analytics | **PostHog through an allowlisted adapter** | Only events listed in the landing-page guide may be emitted. Event payload types must make message text, copied values, and sensitive screenshot data unrepresentable. |
+| Analytics | **Microsoft Clarity through an allowlisted adapter, behind a consent banner** | Clarity runs cookieless until the visitor accepts analytics cookies, and `ad_Storage` is always denied. Only events listed in the landing-page guide may be emitted, and event names must make message text, copied values, and sensitive screenshot data unrepresentable. The contact form and product media carry `data-clarity-mask`. |
 | Testing | **Vitest + Testing Library + MSW + Playwright** | Covers isolated content variants, controls, form states, routing, analytics contracts, responsive flow, media fallback, and reduced motion. |
 
 ---
@@ -128,4 +128,4 @@ Analytics may record `contact_start`, `contact_submit_success`, and `contact_sub
 
 ## Stack at a Glance
 
-React · TypeScript · Vite · Bun · Tailwind CSS · selective shadcn/ui and Radix · GSAP · ScrollTrigger · `@gsap/react` · TanStack Router · TanStack Query · TanStack Form · Zod · axios · Zustand · react-i18next · PostHog · Vitest · Testing Library · MSW · Playwright · ESLint · Prettier
+React · TypeScript · Vite · Bun · Tailwind CSS · selective shadcn/ui and Radix · GSAP · ScrollTrigger · `@gsap/react` · TanStack Router · TanStack Query · TanStack Form · Zod · axios · Zustand · react-i18next · Microsoft Clarity · Vitest · Testing Library · MSW · Playwright · ESLint · Prettier
