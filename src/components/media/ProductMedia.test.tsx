@@ -193,4 +193,17 @@ describe("ProductMedia", () => {
     expect(screen.queryByRole("figure")).not.toBeInTheDocument()
     expect(screen.getByTestId("product-media")).toBeVisible()
   })
+
+  it("masks the product image and video from session recordings", () => {
+    render(<ProductMedia {...fixture} eager />)
+
+    expect(
+      screen
+        .getByRole("img", { name: fixture.alt })
+        .closest('[data-clarity-mask="true"]'),
+    ).not.toBeNull()
+    expect(
+      screen.getByTestId("product-video").closest('[data-clarity-mask="true"]'),
+    ).not.toBeNull()
+  })
 })

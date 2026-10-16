@@ -81,6 +81,7 @@ export function ProductMedia({
     <div
       data-testid="product-media"
       data-media-state={mediaState}
+      data-clarity-mask="true"
       className={["product-media", className].filter(Boolean).join(" ")}
       style={
         {

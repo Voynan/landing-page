@@ -237,7 +237,7 @@ export function EssentialContactForm({
   }
 
   return (
-    <div className="essential-contact-form">
+    <div className="essential-contact-form" data-clarity-mask="true">
       <form
         noValidate
         aria-busy={phase === "submitting" ? "true" : undefined}

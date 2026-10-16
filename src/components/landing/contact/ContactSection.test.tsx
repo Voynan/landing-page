@@ -388,3 +388,13 @@ it("renders the antispam slot and the Cloudflare attribution inside the form", (
     "https://www.cloudflare.com/website-terms/",
   )
 })
+
+it("masks every contact field from session recordings", () => {
+  renderContact(async () => ({ submissionId: "unused" }))
+
+  for (const field of [/^nome$/i, /e-mail/i, /mensagem/i]) {
+    expect(
+      screen.getByLabelText(field).closest('[data-clarity-mask="true"]'),
+    ).not.toBeNull()
+  }
+})
