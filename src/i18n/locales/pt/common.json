@@ -99,6 +99,13 @@
   "contact": {
     "sectionLabel": "Contato"
   },
+  "consent": {
+    "title": "Cookies de analytics",
+    "body": "Usamos o Microsoft Clarity para entender como o site é usado: cliques, rolagem e páginas visitadas, com formulário e imagens de produto mascarados. Sem sua permissão, ele funciona sem cookies. Se você aceitar, grava cookies para reconhecer suas próximas visitas.",
+    "accept": "Aceitar cookies",
+    "decline": "Recusar",
+    "privacyLink": "Política de privacidade"
+  },
   "footer": {
     "sectionLabel": "Rodapé da Voynan",
     "tagline": "Building Digital Products",

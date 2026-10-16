@@ -2,6 +2,7 @@ import { Outlet, useRouterState } from "@tanstack/react-router"
 import { useMemo } from "react"
 
 import { AppProviders } from "@/app/AppProviders"
+import { ConsentBanner } from "@/components/consent/ConsentBanner"
 import { publicConfig } from "@/config/publicConfig"
 import { createAntispamAdapter } from "@/lib/turnstile"
 import { LOCALE_QUERY_KEY, resolveLocale } from "@/utils/locale"
@@ -28,9 +29,13 @@ export function RootLayout() {
 
   return (
     <AppProviders
+      analyticsEnabled={publicConfig.analyticsEnabled}
       initialLocale={initialLocale}
       requestAntispamToken={requestAntispamToken}
     >
+      {/* First in the document so keyboard and screen-reader visitors meet the
+          choice before the page; it is fixed to the bottom visually. */}
+      <ConsentBanner />
       <Outlet />
     </AppProviders>
   )

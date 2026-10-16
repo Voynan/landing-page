@@ -5058,3 +5058,90 @@
     display: none;
   }
 }
+
+@layer components {
+  /* A closing rule laid over the end of the page, in the footer's ledger
+     language: structural navy, one ivory rule, no elevation. */
+  .consent-banner {
+    position: fixed;
+    z-index: 35;
+    inset: auto 0 0;
+    border-top: 1px solid var(--color-line-strong);
+    background: var(--color-navy);
+  }
+
+  .consent-banner:focus-visible {
+    outline: 2px solid var(--color-copper-light);
+    outline-offset: -2px;
+  }
+
+  .consent-banner__frame {
+    display: flex;
+    width: min(100% - (2 * var(--page-pad)), var(--container-max));
+    gap: var(--space-8);
+    align-items: center;
+    justify-content: space-between;
+    margin-inline: auto;
+    padding-block: var(--space-6);
+  }
+
+  .consent-banner__copy {
+    display: grid;
+    gap: var(--space-2);
+    max-width: var(--measure-copy);
+  }
+
+  .consent-banner__title {
+    margin: 0;
+    color: var(--color-ivory);
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-medium);
+    line-height: 1.25rem;
+  }
+
+  .consent-banner__body {
+    margin: 0;
+    color: var(--color-slate);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .consent-banner__body a {
+    color: var(--color-ivory);
+    text-decoration-color: var(--color-copper);
+    text-underline-offset: 0.25em;
+  }
+
+  .consent-banner__actions {
+    display: flex;
+    gap: var(--space-3);
+    flex-shrink: 0;
+  }
+
+  /* The measured banner height keeps the footer reachable above the banner and
+     keeps focused controls from scrolling underneath it. */
+  :root:has(.consent-banner) {
+    scroll-padding-bottom: var(--consent-banner-height, 10rem);
+  }
+
+  :root:has(.consent-banner) body {
+    padding-bottom: var(--consent-banner-height, 10rem);
+  }
+
+  @media (width <= 50rem) {
+    .consent-banner__frame {
+      flex-direction: column;
+      gap: var(--space-4);
+      align-items: stretch;
+      padding-block: var(--space-4);
+    }
+
+    .consent-banner__actions {
+      flex-wrap: wrap;
+    }
+
+    .consent-banner__actions > * {
+      flex: 1 1 9rem;
+    }
+  }
+}

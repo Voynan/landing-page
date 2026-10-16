@@ -40,6 +40,15 @@ describe("public routes", () => {
     },
   )
 
+  it.each(["/", "/?lang=pt", "/privacy", "/terms?lang=pt"] as const)(
+    "never prerenders the consent banner at %s",
+    async (url) => {
+      const result = await render(url, { origin: "https://voynan.com" })
+
+      expect(result.appHtml).not.toContain("consent-banner")
+    },
+  )
+
   it("serves English at the root without a redirect", async () => {
     const router = createAppRouter("/")
 

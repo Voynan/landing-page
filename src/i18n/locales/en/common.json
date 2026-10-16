@@ -99,6 +99,13 @@
   "contact": {
     "sectionLabel": "Contact"
   },
+  "consent": {
+    "title": "Analytics cookies",
+    "body": "We use Microsoft Clarity to understand how the site is used: clicks, scrolling, and pages visited, with the form and product images masked. Without your permission it runs without cookies. If you accept, it sets cookies to recognize your next visits.",
+    "accept": "Accept cookies",
+    "decline": "Decline",
+    "privacyLink": "Privacy policy"
+  },
   "footer": {
     "sectionLabel": "Voynan footer",
     "tagline": "Building Digital Products",
