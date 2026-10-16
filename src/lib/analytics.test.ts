@@ -10,9 +10,7 @@ import {
 } from "@/lib/analytics"
 
 type ClarityCall =
-  | ["init", string]
-  | ["event", string]
-  | ["consentV2", ClarityConsentOptions]
+  ["init", string] | ["event", string] | ["consentV2", ClarityConsentOptions]
 
 const projectId = "yydi4j8nmh"
 const cookieless = { ad_Storage: "denied", analytics_Storage: "denied" }

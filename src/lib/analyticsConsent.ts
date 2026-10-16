@@ -39,10 +39,7 @@ export function readConsent(now: Date): AnalyticsConsentStatus {
   }
 }
 
-export function writeConsent(
-  choice: AnalyticsConsentChoice,
-  now: Date,
-): void {
+export function writeConsent(choice: AnalyticsConsentChoice, now: Date): void {
   try {
     window.localStorage.setItem(
       ANALYTICS_CONSENT_STORAGE_KEY,

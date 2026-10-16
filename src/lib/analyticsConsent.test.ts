@@ -18,22 +18,17 @@ describe("analytics consent storage", () => {
     expect(readConsent(decidedAt)).toBe("undecided")
   })
 
-  it.each(["granted", "denied"] as const)(
-    "remembers a %s choice",
-    (choice) => {
-      writeConsent(choice, decidedAt)
+  it.each(["granted", "denied"] as const)("remembers a %s choice", (choice) => {
+    writeConsent(choice, decidedAt)
 
-      expect(readConsent(new Date("2027-04-15T12:00:00.000Z"))).toBe(choice)
-    },
-  )
+    expect(readConsent(new Date("2027-04-15T12:00:00.000Z"))).toBe(choice)
+  })
 
   it("asks again once the choice is twelve months old", () => {
     writeConsent("granted", decidedAt)
 
     expect(readConsent(new Date("2027-10-15T11:59:59.000Z"))).toBe("granted")
-    expect(readConsent(new Date("2027-10-15T12:00:00.000Z"))).toBe(
-      "undecided",
-    )
+    expect(readConsent(new Date("2027-10-15T12:00:00.000Z"))).toBe("undecided")
   })
 
   it.each([
