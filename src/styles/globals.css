@@ -359,13 +359,15 @@
   }
 
   .legal-footer a,
+  .legal-footer .cookie-preferences-button,
   .essential-contact-form__consent a {
     color: var(--color-ivory);
     text-decoration-color: var(--color-copper);
     text-underline-offset: 0.25em;
   }
 
-  .legal-footer a {
+  .legal-footer a,
+  .legal-footer .cookie-preferences-button {
     font-size: 0.875rem;
   }
 }
@@ -598,6 +600,7 @@
   }
 
   .atmospheric-footer__ledger a,
+  .atmospheric-footer__ledger .cookie-preferences-button,
   .atmospheric-footer__pending > span[role="link"] {
     display: inline-flex;
     min-width: 2.75rem;
@@ -609,7 +612,9 @@
   }
 
   .atmospheric-footer__ledger a:hover,
-  .atmospheric-footer__ledger a:focus-visible {
+  .atmospheric-footer__ledger a:focus-visible,
+  .atmospheric-footer__ledger .cookie-preferences-button:hover,
+  .atmospheric-footer__ledger .cookie-preferences-button:focus-visible {
     color: var(--color-copper-light);
   }
 
@@ -5120,6 +5125,21 @@
 
   /* The measured banner height keeps the footer reachable above the banner and
      keeps focused controls from scrolling underneath it. */
+  /* A button that opens the consent banner, dressed as a peer of the legal
+     links around it rather than as a call to action. */
+  .cookie-preferences-button {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .legal-footer .cookie-preferences-button {
+    text-decoration-line: underline;
+  }
+
   :root:has(.consent-banner) {
     scroll-padding-bottom: var(--consent-banner-height, 10rem);
   }

@@ -1,4 +1,6 @@
+import { useAnalyticsConsent } from "@/app/analyticsConsentContext"
 import { useLocale } from "@/app/localeContext"
+import { CookiePreferencesButton } from "@/components/consent/CookiePreferencesButton"
 import { LanguageSwitch } from "@/components/landing/navigation/LanguageSwitch"
 import { SkipLink } from "@/components/ui/SkipLink"
 import {
@@ -15,6 +17,7 @@ type LegalDocumentPageProps = {
 export function LegalDocumentPage({ kind }: LegalDocumentPageProps) {
   const { locale } = useLocale()
   const { t } = useTranslation()
+  const { enabled: analyticsConsentEnabled } = useAnalyticsConsent()
   const document = getLegalDocument(locale, kind)
   const homeHref = "/"
   const privacyHref = legalPaths.privacy
@@ -95,6 +98,9 @@ export function LegalDocumentPage({ kind }: LegalDocumentPageProps) {
             <a href={privacyHref}>{t("legal.privacy")}</a>
             <a href={termsHref}>{t("legal.terms")}</a>
             <a href="mailto:contact@voynan.com">{document.contactLabel}</a>
+            {analyticsConsentEnabled ? (
+              <CookiePreferencesButton label={t("footer.cookiePreferences")} />
+            ) : null}
           </nav>
         </div>
       </footer>

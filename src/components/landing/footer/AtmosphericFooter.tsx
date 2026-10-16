@@ -1,5 +1,7 @@
 import { useId } from "react"
 
+import { useAnalyticsConsent } from "@/app/analyticsConsentContext"
+import { CookiePreferencesButton } from "@/components/consent/CookiePreferencesButton"
 import { LanguageSwitch } from "@/components/landing/navigation/LanguageSwitch"
 import type { LandingContentDraft } from "@/content"
 import { track, type AllowedEvent, type AnalyticsTrack } from "@/lib/analytics"
@@ -21,6 +23,7 @@ type AtmosphericFooterLabels = {
   destinationPending: string
   creatorNoticePending: string
   developmentStatus: string
+  cookiePreferences: string
 }
 
 type AtmosphericFooterProps = {
@@ -73,6 +76,7 @@ export function AtmosphericFooter({
   trackEvent = track,
 }: AtmosphericFooterProps) {
   const pendingId = useId()
+  const { enabled: analyticsConsentEnabled } = useAnalyticsConsent()
   const companyGithub = content.contact.social.find(
     (profile) => profile.platform === "github",
   )
@@ -257,6 +261,11 @@ export function AtmosphericFooter({
                   trackEvent={trackEvent}
                 />
               </li>
+              {analyticsConsentEnabled ? (
+                <li>
+                  <CookiePreferencesButton label={labels.cookiePreferences} />
+                </li>
+              ) : null}
             </ul>
           </nav>
 

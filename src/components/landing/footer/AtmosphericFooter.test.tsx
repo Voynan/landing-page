@@ -3,11 +3,14 @@
 import "@testing-library/jest-dom/vitest"
 
 import { cleanup, render, screen, within } from "@testing-library/react"
-import { afterEach, expect, it } from "vitest"
+import userEvent from "@testing-library/user-event"
+import { afterEach, beforeEach, expect, it, vi } from "vitest"
 
 import { AppProviders } from "@/app/AppProviders"
+import { ConsentBanner } from "@/components/consent/ConsentBanner"
 import { AtmosphericFooter } from "@/components/landing/footer/AtmosphericFooter"
 import { getLandingContent } from "@/content"
+import { ANALYTICS_CONSENT_STORAGE_KEY } from "@/lib/analyticsConsent"
 
 const labels = {
   sectionLabel: "Voynan footer",
@@ -22,9 +25,11 @@ const labels = {
   destinationPending: "Destination awaiting approval",
   creatorNoticePending: "Creator notice awaiting approval",
   developmentStatus: "In development",
+  cookiePreferences: "Cookie preferences",
 } as const
 
 afterEach(cleanup)
+beforeEach(() => window.localStorage.clear())
 
 it("renders every footer group without inventing pending destinations", () => {
   render(
@@ -177,4 +182,58 @@ it("uses approved legal, contact, and creator facts completely", () => {
       "All featured products and services are created and maintained by Voynan.",
     ),
   ).toBeVisible()
+})
+
+it("reopens the analytics choice from the legal column and returns focus there", async () => {
+  window.localStorage.setItem(
+    ANALYTICS_CONSENT_STORAGE_KEY,
+    JSON.stringify({
+      version: 1,
+      choice: "granted",
+      decidedAt: new Date().toISOString(),
+    }),
+  )
+  const user = userEvent.setup()
+  const runtime = { start: vi.fn(), setConsent: vi.fn() }
+
+  render(
+    <AppProviders
+      initialLocale="en"
+      analyticsEnabled
+      analyticsRuntime={runtime}
+    >
+      <ConsentBanner />
+      <AtmosphericFooter content={getLandingContent("en")} labels={labels} />
+    </AppProviders>,
+  )
+
+  const legal = screen.getByRole("navigation", { name: labels.legal })
+  const preferences = within(legal).getByRole("button", {
+    name: labels.cookiePreferences,
+  })
+
+  expect(
+    screen.queryByRole("region", { name: "Analytics cookies" }),
+  ).not.toBeInTheDocument()
+
+  await user.click(preferences)
+  const banner = screen.getByRole("region", { name: "Analytics cookies" })
+  expect(banner).toHaveFocus()
+
+  await user.click(within(banner).getByRole("button", { name: "Decline" }))
+
+  expect(runtime.setConsent).toHaveBeenLastCalledWith(false)
+  expect(preferences).toHaveFocus()
+})
+
+it("offers no cookie preferences when analytics is not configured", () => {
+  render(
+    <AppProviders initialLocale="en">
+      <AtmosphericFooter content={getLandingContent("en")} labels={labels} />
+    </AppProviders>,
+  )
+
+  expect(
+    screen.queryByRole("button", { name: labels.cookiePreferences }),
+  ).not.toBeInTheDocument()
 })

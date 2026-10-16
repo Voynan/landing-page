@@ -105,6 +105,7 @@ export function LocaleLandingPage() {
           destinationPending: t("footer.destinationPending"),
           creatorNoticePending: t("footer.creatorNoticePending"),
           developmentStatus: t("footer.developmentStatus"),
+          cookiePreferences: t("footer.cookiePreferences"),
         },
       }}
       navigationContent={{

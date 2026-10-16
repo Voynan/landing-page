@@ -118,7 +118,8 @@
     "language": "Language",
     "destinationPending": "Destination awaiting approval",
     "creatorNoticePending": "Creator notice awaiting approval",
-    "developmentStatus": "In development"
+    "developmentStatus": "In development",
+    "cookiePreferences": "Cookie preferences"
   },
   "metadata": {
     "languageLabel": "English"

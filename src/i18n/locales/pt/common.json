@@ -118,7 +118,8 @@
     "language": "Idioma",
     "destinationPending": "Destino aguardando aprovação",
     "creatorNoticePending": "Nota de autoria aguardando aprovação",
-    "developmentStatus": "Em desenvolvimento"
+    "developmentStatus": "Em desenvolvimento",
+    "cookiePreferences": "Preferências de cookies"
   },
   "metadata": {
     "languageLabel": "Português"

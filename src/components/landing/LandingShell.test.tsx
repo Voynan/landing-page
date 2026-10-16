@@ -119,6 +119,7 @@ const supportingChapterLabels = {
     destinationPending: "Destination awaiting approval",
     creatorNoticePending: "Creator notice awaiting approval",
     developmentStatus: "In development",
+    cookiePreferences: "Cookie preferences",
   },
 } as const
 
