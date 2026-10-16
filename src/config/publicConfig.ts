@@ -15,17 +15,15 @@ export function readPublicConfig(
   const parsed = publicEnvironmentSchema.parse(environment)
   const siteOrigin = trimTrailingSlash(parsed.VITE_SITE_ORIGIN)
   const contactEndpoint = trimTrailingSlash(parsed.VITE_CONTACT_ENDPOINT)
-  const posthogHost = trimTrailingSlash(parsed.VITE_POSTHOG_HOST)
 
   return {
     siteOrigin,
     contactEndpoint,
     antispamSiteKey: parsed.VITE_ANTISPAM_SITE_KEY,
-    posthogKey: parsed.VITE_POSTHOG_KEY,
-    posthogHost,
+    clarityProjectId: parsed.VITE_CLARITY_PROJECT_ID,
     enableDesignSystem: parsed.VITE_ENABLE_DESIGN_SYSTEM,
     isDevelopment: parsed.DEV,
-    analyticsEnabled: Boolean(parsed.VITE_POSTHOG_KEY && posthogHost),
+    analyticsEnabled: Boolean(parsed.VITE_CLARITY_PROJECT_ID),
   }
 }
 

@@ -42,12 +42,26 @@ describe("public configuration", () => {
       siteOrigin: "https://voynan.com",
       contactEndpoint: undefined,
       antispamSiteKey: undefined,
-      posthogKey: undefined,
-      posthogHost: undefined,
+      clarityProjectId: undefined,
       enableDesignSystem: false,
       isDevelopment: false,
       analyticsEnabled: false,
     })
+  })
+
+  it("enables analytics only from the Clarity project ID", () => {
+    expect(
+      readPublicConfig({ VITE_CLARITY_PROJECT_ID: " yydi4j8nmh " }),
+    ).toMatchObject({ clarityProjectId: "yydi4j8nmh", analyticsEnabled: true })
+
+    const retired = readPublicConfig({
+      VITE_POSTHOG_KEY: "phc_retired",
+      VITE_POSTHOG_HOST: "https://us.i.posthog.com",
+    })
+
+    expect(retired.analyticsEnabled).toBe(false)
+    expect(retired).not.toHaveProperty("posthogKey")
+    expect(retired).not.toHaveProperty("posthogHost")
   })
 
   it("normalizes the Vite development mode for internal route gates", () => {

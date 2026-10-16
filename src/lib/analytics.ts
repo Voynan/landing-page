@@ -43,14 +43,27 @@ const allowedEventSchema = z.discriminatedUnion("name", [
 
 export type AllowedEvent = z.infer<typeof allowedEventSchema>
 export type AnalyticsTrack = (event: AllowedEvent) => unknown
-export type AnalyticsCapture = (
-  name: AllowedEvent["name"],
-  properties: Record<string, unknown>,
-) => void | Promise<void>
+export type AnalyticsCapture = (eventName: string) => void | Promise<void>
 
 type CreateAnalyticsOptions = {
   capture: AnalyticsCapture
   enabled: boolean
+}
+
+// Clarity custom events carry no properties, so the single approved property
+// of an event becomes part of its name.
+function toClarityEventName(event: AllowedEvent): string {
+  switch (event.name) {
+    case "product_view":
+    case "product_click":
+      return `${event.name}:${event.productId}`
+    case "contact_submit_error":
+      return `${event.name}:${event.reason}`
+    case "language_change":
+      return `${event.name}:${event.from}-${event.to}`
+    default:
+      return event.name
+  }
 }
 
 export function createAnalytics({ capture, enabled }: CreateAnalyticsOptions) {
@@ -73,10 +86,8 @@ export function createAnalytics({ capture, enabled }: CreateAnalyticsOptions) {
         viewedProducts.add(result.data.productId)
       }
 
-      const { name, ...properties } = result.data
-
       try {
-        const request = capture(name, properties)
+        const request = capture(toClarityEventName(result.data))
         void Promise.resolve(request).catch(() => undefined)
         return true
       } catch {
@@ -86,37 +97,87 @@ export function createAnalytics({ capture, enabled }: CreateAnalyticsOptions) {
   }
 }
 
-let posthogClientPromise:
-  Promise<(typeof import("posthog-js"))["default"]> | undefined
+export type ClarityConsentOptions = {
+  ad_Storage: "granted" | "denied"
+  analytics_Storage: "granted" | "denied"
+}
 
-function getPostHogClient() {
-  if (!posthogClientPromise) {
-    posthogClientPromise = import("posthog-js").then(({ default: posthog }) => {
-      posthog.init(publicConfig.posthogKey!, {
-        api_host: publicConfig.posthogHost,
-        autocapture: false,
-        capture_pageleave: false,
-        capture_pageview: false,
-        disable_session_recording: true,
-        persistence: "memory",
-        person_profiles: "identified_only",
-      })
+export type ClarityClient = {
+  init: (projectId: string) => void
+  event: (eventName: string) => void
+  consentV2: (options: ClarityConsentOptions) => void
+}
 
-      return posthog
-    })
+export type AnalyticsRuntime = {
+  start: (granted: boolean) => void
+  setConsent: (granted: boolean) => void
+}
+
+type CreateClarityRuntimeOptions = {
+  projectId: string | undefined
+  loadClient: () => Promise<ClarityClient>
+}
+
+// The site runs no advertising, so ad storage is never granted; the visitor's
+// choice only decides whether Clarity may set its analytics cookies.
+function consentOptions(granted: boolean): ClarityConsentOptions {
+  return {
+    ad_Storage: "denied",
+    analytics_Storage: granted ? "granted" : "denied",
   }
-
-  return posthogClientPromise
 }
 
-const captureWithPostHog: AnalyticsCapture = async (name, properties) => {
-  const posthog = await getPostHogClient()
-  posthog.capture(name, properties)
+export function createClarityRuntime({
+  projectId,
+  loadClient,
+}: CreateClarityRuntimeOptions): AnalyticsRuntime & {
+  capture: AnalyticsCapture
+} {
+  let resolveClient: (client: ClarityClient) => void = () => undefined
+  const client = new Promise<ClarityClient>((resolve) => {
+    resolveClient = resolve
+  })
+  let started = false
+
+  return {
+    start(granted) {
+      if (started || !projectId) return
+      started = true
+
+      void loadClient()
+        .then((loaded) => {
+          loaded.init(projectId)
+          loaded.consentV2(consentOptions(granted))
+          resolveClient(loaded)
+        })
+        .catch(() => undefined)
+    },
+    setConsent(granted) {
+      void client
+        .then((loaded) => loaded.consentV2(consentOptions(granted)))
+        .catch(() => undefined)
+    },
+    async capture(eventName) {
+      const loaded = await client
+      loaded.event(eventName)
+    },
+  }
 }
+
+const clarityRuntime = createClarityRuntime({
+  projectId: publicConfig.clarityProjectId,
+  loadClient: () =>
+    import("@microsoft/clarity").then(({ default: clarity }) => clarity),
+})
 
 const runtimeAnalytics = createAnalytics({
-  capture: captureWithPostHog,
+  capture: clarityRuntime.capture,
   enabled: publicConfig.analyticsEnabled && typeof window !== "undefined",
 })
 
 export const track = (event: AllowedEvent) => runtimeAnalytics.track(event)
+
+export const analyticsRuntime: AnalyticsRuntime = {
+  start: clarityRuntime.start,
+  setConsent: clarityRuntime.setConsent,
+}
