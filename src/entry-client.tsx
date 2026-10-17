@@ -13,7 +13,8 @@ async function hydrateApp() {
     throw new Error('Unable to hydrate: missing the element with id "root".')
   }
 
-  const router = createAppRouter(window.location.href)
+  const hydrating = root.hasChildNodes()
+  const router = createAppRouter(window.location.href, { hydrating })
   await router.load()
 
   const app = (
@@ -22,7 +23,7 @@ async function hydrateApp() {
     </StrictMode>
   )
 
-  if (root.hasChildNodes()) {
+  if (hydrating) {
     hydrateRoot(root, app)
     return
   }
