@@ -23,7 +23,8 @@ export function readPublicConfig(
     clarityProjectId: parsed.VITE_CLARITY_PROJECT_ID,
     enableDesignSystem: parsed.VITE_ENABLE_DESIGN_SYSTEM,
     isDevelopment: parsed.DEV,
-    analyticsEnabled: Boolean(parsed.VITE_CLARITY_PROJECT_ID),
+    // The development server never records into the Clarity project.
+    analyticsEnabled: Boolean(parsed.VITE_CLARITY_PROJECT_ID) && !parsed.DEV,
   }
 }
 

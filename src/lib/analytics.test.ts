@@ -120,6 +120,27 @@ describe("createAnalytics", () => {
     ])
   })
 
+  it("counts a product viewed before consent once analytics becomes active", () => {
+    const records: string[] = []
+    let active = false
+    const analytics = createAnalytics({
+      capture: recordingCapture(records),
+      enabled: true,
+      isActive: () => active,
+    })
+
+    expect(
+      analytics.track({ name: "product_view", productId: "cryptovault" }),
+    ).toBe(false)
+
+    active = true
+
+    expect(
+      analytics.track({ name: "product_view", productId: "cryptovault" }),
+    ).toBe(true)
+    expect(records).toEqual(["product_view:cryptovault"])
+  })
+
   it("keeps interaction outcomes silent when analytics is blocked", () => {
     const analytics = createAnalytics({
       capture: () => {
@@ -261,6 +282,19 @@ describe("createClarityRuntime", () => {
 
     expect(calls).toContainEqual(["init", projectId])
     expect(calls).not.toContainEqual(["event", "hero_contact_click"])
+  })
+
+  it("becomes active only once consent has been granted", () => {
+    const runtime = createClarityRuntime({
+      projectId,
+      loadClient: async () => fakeClarity([]),
+    })
+
+    expect(runtime.isActive()).toBe(false)
+    runtime.setConsent(false)
+    expect(runtime.isActive()).toBe(false)
+    runtime.setConsent(true)
+    expect(runtime.isActive()).toBe(true)
   })
 
   it("loads nothing without a project ID", async () => {

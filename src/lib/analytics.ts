@@ -48,6 +48,9 @@ export type AnalyticsCapture = (eventName: string) => void | Promise<void>
 type CreateAnalyticsOptions = {
   capture: AnalyticsCapture
   enabled: boolean
+  // Before the visitor consents nothing is recorded, so an event is not even
+  // remembered as seen and a product viewed earlier still counts afterwards.
+  isActive?: () => boolean
 }
 
 // Clarity custom events carry no properties, so the single approved property
@@ -66,14 +69,18 @@ function toClarityEventName(event: AllowedEvent): string {
   }
 }
 
-export function createAnalytics({ capture, enabled }: CreateAnalyticsOptions) {
+export function createAnalytics({
+  capture,
+  enabled,
+  isActive = () => true,
+}: CreateAnalyticsOptions) {
   const viewedProducts = new Set<string>()
 
   return {
     track(event: AllowedEvent): boolean {
       const result = allowedEventSchema.safeParse(event)
 
-      if (!result.success || !enabled) return false
+      if (!result.success || !enabled || !isActive()) return false
 
       if (
         result.data.name === "product_view" &&
@@ -134,6 +141,7 @@ export function createClarityRuntime({
   loadClient,
 }: CreateClarityRuntimeOptions): AnalyticsRuntime & {
   capture: AnalyticsCapture
+  isActive: () => boolean
 } {
   let resolveClient: (client: ClarityClient) => void = () => undefined
   const client = new Promise<ClarityClient>((resolve) => {
@@ -163,6 +171,9 @@ export function createClarityRuntime({
         })
         .catch(() => undefined)
     },
+    isActive() {
+      return started
+    },
     async capture(eventName) {
       // Events from before consent are dropped, never replayed afterwards.
       if (!started) return
@@ -182,6 +193,7 @@ const clarityRuntime = createClarityRuntime({
 const runtimeAnalytics = createAnalytics({
   capture: clarityRuntime.capture,
   enabled: publicConfig.analyticsEnabled && typeof window !== "undefined",
+  isActive: clarityRuntime.isActive,
 })
 
 export const track = (event: AllowedEvent) => runtimeAnalytics.track(event)

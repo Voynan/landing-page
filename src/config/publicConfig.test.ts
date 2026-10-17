@@ -64,6 +64,13 @@ describe("public configuration", () => {
     expect(retired).not.toHaveProperty("posthogHost")
   })
 
+  it("keeps analytics off on the development server so local sessions never reach Clarity", () => {
+    expect(
+      readPublicConfig({ VITE_CLARITY_PROJECT_ID: "yydi4j8nmh", DEV: true })
+        .analyticsEnabled,
+    ).toBe(false)
+  })
+
   it("normalizes the Vite development mode for internal route gates", () => {
     expect(readPublicConfig({ DEV: true }).isDevelopment).toBe(true)
   })
