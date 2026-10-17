@@ -11,7 +11,7 @@ function BannerState() {
 }
 
 it("keeps the banner out of the prerendered HTML even when analytics is configured", () => {
-  const runtime = { start: vi.fn(), setConsent: vi.fn() }
+  const runtime = { setConsent: vi.fn() }
 
   const html = renderToString(
     <AnalyticsConsentProvider enabled runtime={runtime}>
@@ -20,5 +20,5 @@ it("keeps the banner out of the prerendered HTML even when analytics is configur
   )
 
   expect(html).toContain("banner-closed")
-  expect(runtime.start).not.toHaveBeenCalled()
+  expect(runtime.setConsent).not.toHaveBeenCalled()
 })

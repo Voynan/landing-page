@@ -157,7 +157,7 @@ describe("createAnalytics", () => {
 })
 
 describe("createClarityRuntime", () => {
-  it("initializes Clarity once, with ad storage denied and the stored choice", async () => {
+  it("loads nothing from Microsoft until the visitor grants consent", async () => {
     const calls: ClarityCall[] = []
     let loads = 0
     const runtime = createClarityRuntime({
@@ -168,31 +168,47 @@ describe("createClarityRuntime", () => {
       },
     })
 
-    runtime.start(true)
-    runtime.start(true)
+    runtime.setConsent(false)
+    void runtime.capture("hero_product_click")
     await flushPromises()
 
-    expect(loads).toBe(1)
-    expect(calls).toEqual([
-      ["init", projectId],
-      ["consentV2", withCookies],
-    ])
+    expect(loads).toBe(0)
+    expect(calls).toEqual([])
   })
 
-  it("starts cookieless when the visitor has not accepted", async () => {
+  it("loads Clarity once consent is granted, with ad storage denied", async () => {
     const calls: ClarityCall[] = []
     const runtime = createClarityRuntime({
       projectId,
       loadClient: async () => fakeClarity(calls),
     })
 
-    runtime.start(false)
+    runtime.setConsent(true)
     await flushPromises()
 
     expect(calls).toEqual([
       ["init", projectId],
-      ["consentV2", cookieless],
+      ["consentV2", withCookies],
     ])
+  })
+
+  it("initializes Clarity only once when consent is granted repeatedly", async () => {
+    const calls: ClarityCall[] = []
+    let loads = 0
+    const runtime = createClarityRuntime({
+      projectId,
+      loadClient: async () => {
+        loads += 1
+        return fakeClarity(calls)
+      },
+    })
+
+    runtime.setConsent(true)
+    runtime.setConsent(true)
+    await flushPromises()
+
+    expect(loads).toBe(1)
+    expect(calls.filter(([method]) => method === "init")).toHaveLength(1)
   })
 
   it("forwards later decisions without ever granting ad storage", async () => {
@@ -202,7 +218,7 @@ describe("createClarityRuntime", () => {
       loadClient: async () => fakeClarity(calls),
     })
 
-    runtime.start(true)
+    runtime.setConsent(true)
     runtime.setConsent(false)
     runtime.setConsent(true)
     await flushPromises()
@@ -214,22 +230,37 @@ describe("createClarityRuntime", () => {
     ])
   })
 
-  it("delivers events tracked before Clarity has loaded", async () => {
+  it("delivers events tracked while Clarity is still loading", async () => {
     const calls: ClarityCall[] = []
     const runtime = createClarityRuntime({
       projectId,
       loadClient: async () => fakeClarity(calls),
     })
 
+    runtime.setConsent(true)
     void runtime.capture("product_view:cryptovault")
-    runtime.start(false)
     await flushPromises()
 
     expect(calls).toEqual([
       ["init", projectId],
-      ["consentV2", cookieless],
+      ["consentV2", withCookies],
       ["event", "product_view:cryptovault"],
     ])
+  })
+
+  it("never sends events tracked before consent, even after a later acceptance", async () => {
+    const calls: ClarityCall[] = []
+    const runtime = createClarityRuntime({
+      projectId,
+      loadClient: async () => fakeClarity(calls),
+    })
+
+    void runtime.capture("hero_contact_click")
+    runtime.setConsent(true)
+    await flushPromises()
+
+    expect(calls).toContainEqual(["init", projectId])
+    expect(calls).not.toContainEqual(["event", "hero_contact_click"])
   })
 
   it("loads nothing without a project ID", async () => {
@@ -242,7 +273,6 @@ describe("createClarityRuntime", () => {
       },
     })
 
-    runtime.start(true)
     runtime.setConsent(true)
     await flushPromises()
 
@@ -257,7 +287,7 @@ describe("createClarityRuntime", () => {
       },
     })
 
-    expect(() => runtime.start(true)).not.toThrow()
+    expect(() => runtime.setConsent(true)).not.toThrow()
     expect(() => runtime.setConsent(false)).not.toThrow()
     await flushPromises()
   })

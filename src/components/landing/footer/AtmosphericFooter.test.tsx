@@ -194,7 +194,7 @@ it("reopens the analytics choice from the legal column and returns focus there",
     }),
   )
   const user = userEvent.setup()
-  const runtime = { start: vi.fn(), setConsent: vi.fn() }
+  const runtime = { setConsent: vi.fn() }
 
   render(
     <AppProviders

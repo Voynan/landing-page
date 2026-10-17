@@ -34,7 +34,7 @@ function ConsentProbe() {
 }
 
 function renderConsent(enabled = true) {
-  const runtime = { start: vi.fn(), setConsent: vi.fn() }
+  const runtime = { setConsent: vi.fn() }
 
   render(
     <AnalyticsConsentProvider enabled={enabled} runtime={runtime}>
@@ -59,13 +59,12 @@ afterEach(() => {
 })
 
 describe("AnalyticsConsentProvider", () => {
-  it("opens the banner for a new visitor and starts Clarity cookieless", () => {
+  it("opens the banner for a new visitor without loading Clarity", () => {
     const runtime = renderConsent()
 
     expect(screen.getByTestId("banner")).toHaveTextContent("open")
     expect(screen.getByTestId("status")).toHaveTextContent("undecided")
-    expect(runtime.start).toHaveBeenCalledOnce()
-    expect(runtime.start).toHaveBeenCalledWith(false)
+    expect(runtime.setConsent).not.toHaveBeenCalled()
   })
 
   it("remembers acceptance, grants analytics cookies, and closes the banner", async () => {
@@ -84,22 +83,31 @@ describe("AnalyticsConsentProvider", () => {
     ).toMatchObject({ version: 1, choice: "granted" })
   })
 
-  it("starts Clarity with cookies for a returning visitor who accepted, without asking again", () => {
+  it("loads Clarity for a returning visitor who accepted, without asking again", () => {
     storeChoice("granted", new Date(Date.now() - 30 * dayInMs))
 
     const runtime = renderConsent()
 
     expect(screen.getByTestId("banner")).toHaveTextContent("closed")
-    expect(runtime.start).toHaveBeenCalledWith(true)
+    expect(runtime.setConsent).toHaveBeenCalledWith(true)
   })
 
-  it("asks again and starts cookieless when the stored choice has expired", () => {
+  it("keeps Clarity unloaded for a returning visitor who declined", () => {
+    storeChoice("denied", new Date(Date.now() - 30 * dayInMs))
+
+    const runtime = renderConsent()
+
+    expect(screen.getByTestId("banner")).toHaveTextContent("closed")
+    expect(runtime.setConsent).not.toHaveBeenCalled()
+  })
+
+  it("asks again without loading Clarity when the stored choice has expired", () => {
     storeChoice("granted", new Date(Date.now() - 400 * dayInMs))
 
     const runtime = renderConsent()
 
     expect(screen.getByTestId("banner")).toHaveTextContent("open")
-    expect(runtime.start).toHaveBeenCalledWith(false)
+    expect(runtime.setConsent).not.toHaveBeenCalled()
   })
 
   it("reopens on request and returns focus to the control that asked", async () => {
@@ -142,6 +150,6 @@ describe("AnalyticsConsentProvider", () => {
     await user.click(screen.getByRole("button", { name: "Cookie preferences" }))
 
     expect(screen.getByTestId("banner")).toHaveTextContent("closed")
-    expect(runtime.start).not.toHaveBeenCalled()
+    expect(runtime.setConsent).not.toHaveBeenCalled()
   })
 })

@@ -19,7 +19,7 @@ it("lets visitors change their analytics choice from the privacy policy", () => 
     <AppProviders
       initialLocale="en"
       analyticsEnabled
-      analyticsRuntime={{ start: vi.fn(), setConsent: vi.fn() }}
+      analyticsRuntime={{ setConsent: vi.fn() }}
     >
       <LegalDocumentPage kind="privacy" />
     </AppProviders>,

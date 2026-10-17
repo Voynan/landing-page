@@ -109,7 +109,6 @@ export type ClarityClient = {
 }
 
 export type AnalyticsRuntime = {
-  start: (granted: boolean) => void
   setConsent: (granted: boolean) => void
 }
 
@@ -127,6 +126,9 @@ function consentOptions(granted: boolean): ClarityConsentOptions {
   }
 }
 
+// Clarity is loaded only after the visitor grants consent: even in its
+// no-consent mode, its tag and sync pixels make Microsoft set cookies on its
+// own domains, so nothing is requested from Microsoft before that.
 export function createClarityRuntime({
   projectId,
   loadClient,
@@ -140,24 +142,31 @@ export function createClarityRuntime({
   let started = false
 
   return {
-    start(granted) {
-      if (started || !projectId) return
+    setConsent(granted) {
+      if (!projectId) return
+
+      if (started) {
+        void client
+          .then((loaded) => loaded.consentV2(consentOptions(granted)))
+          .catch(() => undefined)
+        return
+      }
+
+      if (!granted) return
       started = true
 
       void loadClient()
         .then((loaded) => {
           loaded.init(projectId)
-          loaded.consentV2(consentOptions(granted))
+          loaded.consentV2(consentOptions(true))
           resolveClient(loaded)
         })
         .catch(() => undefined)
     },
-    setConsent(granted) {
-      void client
-        .then((loaded) => loaded.consentV2(consentOptions(granted)))
-        .catch(() => undefined)
-    },
     async capture(eventName) {
+      // Events from before consent are dropped, never replayed afterwards.
+      if (!started) return
+
       const loaded = await client
       loaded.event(eventName)
     },
@@ -178,6 +187,5 @@ const runtimeAnalytics = createAnalytics({
 export const track = (event: AllowedEvent) => runtimeAnalytics.track(event)
 
 export const analyticsRuntime: AnalyticsRuntime = {
-  start: clarityRuntime.start,
   setConsent: clarityRuntime.setConsent,
 }

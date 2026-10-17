@@ -46,7 +46,9 @@ export function AnalyticsConsentProvider({
     // the prerendered HTML.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setConsent({ hydrated: true, status })
-    runtime.start(status === "granted")
+
+    // Clarity is loaded only for a visitor who has accepted.
+    if (status === "granted") runtime.setConsent(true)
   }, [enabled, runtime])
 
   const decide = useCallback(

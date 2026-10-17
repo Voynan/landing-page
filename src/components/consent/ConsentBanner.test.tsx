@@ -22,7 +22,7 @@ function Reopener() {
 }
 
 function renderBanner(analyticsEnabled = true) {
-  const runtime = { start: vi.fn(), setConsent: vi.fn() }
+  const runtime = { setConsent: vi.fn() }
 
   render(
     <AppProviders
