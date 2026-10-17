@@ -35,7 +35,9 @@ export function ConsentBanner() {
     const observer = new ResizeObserver(([entry]) => {
       root.style.setProperty(
         bannerHeightProperty,
-        `${Math.ceil(entry.borderBoxSize[0]?.blockSize ?? banner.offsetHeight)}px`,
+        // Older Safari reports no borderBoxSize, so the element height is
+        // the fallback measurement.
+        `${Math.ceil(entry.borderBoxSize?.[0]?.blockSize ?? banner.offsetHeight)}px`,
       )
     })
 
