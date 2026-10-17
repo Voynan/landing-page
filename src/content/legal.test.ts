@@ -39,6 +39,23 @@ describe("privacy policy", () => {
     },
   )
 
+  it.each(["pt", "en"] as const)(
+    "names the domains where Microsoft sets its own cookies in the %s edition",
+    (locale) => {
+      expect(privacyText(locale)).toContain("clarity.ms")
+      expect(privacyText(locale)).toContain("bing.com")
+    },
+  )
+
+  it("says Clarity loads only after consent instead of promising a cookieless mode", () => {
+    const text = privacyText("en")
+
+    expect(text).toContain(
+      "Clarity is loaded only after you accept analytics cookies",
+    )
+    expect(text).not.toContain("Without your consent, Clarity sets no cookies")
+  })
+
   it("keeps both editions paragraph-for-paragraph aligned", () => {
     const count = (locale: "pt" | "en") =>
       getLegalDocument(locale, "privacy").sections.map(
@@ -50,10 +67,10 @@ describe("privacy policy", () => {
 
   it("dates both editions to the Clarity change", () => {
     expect(getLegalDocument("en", "privacy").updatedDate).toBe(
-      "October 15, 2026",
+      "October 17, 2026",
     )
     expect(getLegalDocument("pt", "privacy").updatedDate).toMatch(
-      /^15 .+ 2026$/,
+      /^17 .+ 2026$/,
     )
   })
 })

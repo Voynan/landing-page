@@ -101,7 +101,7 @@
   },
   "consent": {
     "title": "Analytics cookies",
-    "body": "We use Microsoft Clarity to understand how the site is used: clicks, scrolling, and pages visited, with the form and product images masked. Without your permission it runs without cookies. If you accept, it sets cookies to recognize your next visits.",
+    "body": "If you accept, Microsoft Clarity records your session (clicks, scrolling, pages visited), masking the form and product images, and sets cookies. Nothing loads before that.",
     "accept": "Accept cookies",
     "decline": "Decline",
     "privacyLink": "Privacy policy"

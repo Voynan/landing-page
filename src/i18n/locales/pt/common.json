@@ -101,7 +101,7 @@
   },
   "consent": {
     "title": "Cookies de analytics",
-    "body": "Usamos o Microsoft Clarity para entender como o site é usado: cliques, rolagem e páginas visitadas, com formulário e imagens de produto mascarados. Sem sua permissão, ele funciona sem cookies. Se você aceitar, grava cookies para reconhecer suas próximas visitas.",
+    "body": "Se você aceitar, o Microsoft Clarity registra sua sessão (cliques, rolagem, páginas vistas), mascarando formulário e imagens de produto, e grava cookies. Nada carrega antes disso.",
     "accept": "Aceitar cookies",
     "decline": "Recusar",
     "privacyLink": "Política de privacidade"

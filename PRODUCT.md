@@ -56,7 +56,7 @@ Documented direction:
 - Primary content, landmarks, headings, links, and calls to action exist in static HTML before hydration.
 - Motion, media playback, analytics, and contact submission are independent progressive enhancements with meaningful failure states.
 - The contact form collects name, e-mail, and message, validates for usability, never retries submissions automatically, preserves values on failure, and offers manual e-mail copying.
-- Analytics emits only the allowlisted conversion events, and its session recordings mask the contact form and product media, so it never receives form values, copied content, or sensitive financial information visible in product media. Analytics cookies are set only after the visitor accepts them.
+- Analytics emits only the allowlisted conversion events, and its session recordings mask the contact form and product media, so it never receives form values, copied content, or sensitive financial information visible in product media. Analytics loads only after the visitor accepts analytics cookies.
 - Aegis launches in the `development` stage with only its approved logo, “Coming soon” status, title, description, and GitHub destination. Documentation, release metadata, environments, and real code become required only before changing the stage to `released`.
 - Authentication, protected routes, OAuth, financial logic, CMS, smooth scrolling, Three.js, WebGL, and a second animation library are outside v1.
 - Evidence, claims, external destinations, legal content, and media that carry a factual or legal risk must be approved by the maintainer before a public build.

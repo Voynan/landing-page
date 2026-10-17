@@ -244,7 +244,7 @@ Contains thin setup and adapters, not narrative logic:
 - `gsap.ts` registers ScrollTrigger once.
 - `queryClient.ts` configures conservative request defaults.
 - `apiClient.ts` configures the contact origin, timeout, and safe error boundary.
-- `analytics.ts` is the only module that imports `@microsoft/clarity`. It starts Clarity after hydration — cookieless until the visitor accepts — and forwards later consent changes with `ad_Storage` always denied.
+- `analytics.ts` is the only module that imports `@microsoft/clarity`. It loads Clarity only after the visitor accepts analytics cookies, because even Clarity's no-consent mode makes Microsoft set cookies on its own domains; later consent changes are forwarded with `ad_Storage` always denied, and events from before consent are dropped. The development server never loads it.
 - `analyticsConsent.ts` stores the visitor's analytics cookie choice for 12 months and tolerates blocked storage.
 
 `analytics.ts` exports typed functions for the approved event names only:
