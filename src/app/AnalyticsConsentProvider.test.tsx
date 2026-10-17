@@ -4,11 +4,20 @@ import "@testing-library/jest-dom/vitest"
 
 import { cleanup, render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  onTestFinished,
+  vi,
+} from "vitest"
 
 import { AnalyticsConsentProvider } from "@/app/AnalyticsConsentProvider"
 import { useAnalyticsConsent } from "@/app/analyticsConsentContext"
 import { ANALYTICS_CONSENT_STORAGE_KEY } from "@/lib/analyticsConsent"
+import { blockLocalStorage } from "@/test/blockedStorage"
 
 const dayInMs = 24 * 60 * 60 * 1000
 
@@ -128,12 +137,7 @@ describe("AnalyticsConsentProvider", () => {
   })
 
   it("honours the choice for the page view when storage is blocked", async () => {
-    vi.spyOn(window.localStorage, "getItem").mockImplementation(() => {
-      throw new Error("blocked")
-    })
-    vi.spyOn(window.localStorage, "setItem").mockImplementation(() => {
-      throw new Error("blocked")
-    })
+    onTestFinished(blockLocalStorage())
     const user = userEvent.setup()
     const runtime = renderConsent()
 

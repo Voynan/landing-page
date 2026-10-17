@@ -1,12 +1,21 @@
 // @vitest-environment jsdom
 
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  onTestFinished,
+  vi,
+} from "vitest"
 
 import {
   ANALYTICS_CONSENT_STORAGE_KEY,
   readConsent,
   writeConsent,
 } from "@/lib/analyticsConsent"
+import { blockLocalStorage } from "@/test/blockedStorage"
 
 const decidedAt = new Date("2026-10-15T12:00:00.000Z")
 
@@ -60,12 +69,7 @@ describe("analytics consent storage", () => {
   })
 
   it("stays usable when storage is blocked", () => {
-    vi.spyOn(window.localStorage, "getItem").mockImplementation(() => {
-      throw new Error("blocked")
-    })
-    vi.spyOn(window.localStorage, "setItem").mockImplementation(() => {
-      throw new Error("blocked")
-    })
+    onTestFinished(blockLocalStorage())
 
     expect(() => writeConsent("granted", decidedAt)).not.toThrow()
     expect(readConsent(decidedAt)).toBe("undecided")
