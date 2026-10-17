@@ -627,6 +627,9 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 0.125rem;
+    /* Stacked product links start at the same offset the centered single-line
+       links of the other columns reach inside their 44px targets. */
+    padding-block-start: 0.75rem;
   }
 
   .atmospheric-footer__ledger > nav:first-child a small {
