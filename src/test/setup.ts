@@ -40,6 +40,13 @@ if (typeof window !== "undefined" && !window.localStorage) {
 if (typeof window !== "undefined") {
   const { ScrollTrigger } = await import("@/lib/gsap")
 
-  beforeAll(() => ScrollTrigger.enable())
+  // registerPlugin already enabled ScrollTrigger, and enable() is not
+  // idempotent: each call starts a new sync interval and drops the handle of
+  // the previous one. Disabling first leaves exactly one interval, the one
+  // afterAll clears, so no timer outlives the jsdom environment.
+  beforeAll(() => {
+    ScrollTrigger.disable()
+    ScrollTrigger.enable()
+  })
   afterAll(() => ScrollTrigger.disable(true, true))
 }
