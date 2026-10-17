@@ -39,20 +39,30 @@ const publicPages: readonly PublicPage[] = [
   { url: "/terms?lang=pt", outputDirectory: "_lang/pt/terms" },
 ]
 
+const emptyRootElement = /<div\s+id=(["'])root\1\s*><\/div>/i
+
 // The English root output overwrites the very template this script reads, so a
-// pristine copy is stashed beside the client directory to keep reruns stable.
+// pristine copy is cached beside the client directory to keep reruns stable.
+// A client build always writes a fresh template with an empty root, and that
+// template replaces the cache: an old cache must never reintroduce the asset
+// hashes of an earlier build.
 async function readTemplate(clientDir: string) {
-  const stashPath = resolve(dirname(clientDir), "prerender-template.html")
+  const cachePath = resolve(dirname(clientDir), "prerender-template.html")
+  const current = await readFile(resolve(clientDir, "index.html"), "utf8")
+
+  if (emptyRootElement.test(current)) {
+    await mkdir(dirname(cachePath), { recursive: true })
+    await writeFile(cachePath, current, "utf8")
+
+    return current
+  }
 
   try {
-    return await readFile(stashPath, "utf8")
+    return await readFile(cachePath, "utf8")
   } catch {
-    const template = await readFile(resolve(clientDir, "index.html"), "utf8")
-
-    await mkdir(dirname(stashPath), { recursive: true })
-    await writeFile(stashPath, template, "utf8")
-
-    return template
+    throw new Error(
+      `${resolve(clientDir, "index.html")} is already prerendered and no cached template exists; run \`bun run build:client\` before prerendering.`,
+    )
   }
 }
 
@@ -71,9 +81,7 @@ function injectRenderedPage(template: string, page: RenderedPage) {
     throw new Error("Client template is missing a closing </head> tag.")
   }
 
-  const rootElement = /<div\s+id=(["'])root\1\s*><\/div>/i
-
-  if (!rootElement.test(template)) {
+  if (!emptyRootElement.test(template)) {
     throw new Error(
       'Client template is missing an empty <div id="root"></div>.',
     )
@@ -87,7 +95,7 @@ function injectRenderedPage(template: string, page: RenderedPage) {
   return localizedTemplate
     .replace(/<html(?:\s[^>]*)?>/i, `<html${htmlAttrs ? ` ${htmlAttrs}` : ""}>`)
     .replace(/<\/head>/i, `${page.headHtml}</head>`)
-    .replace(rootElement, `<div id="root">${page.appHtml}</div>`)
+    .replace(emptyRootElement, `<div id="root">${page.appHtml}</div>`)
 }
 
 export async function prerender(options: PrerenderOptions = {}) {

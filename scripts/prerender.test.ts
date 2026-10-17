@@ -86,6 +86,43 @@ describe("static prerender", () => {
     expect(firstPortugueseOutput).toContain('<main data-locale="pt"')
   })
 
+  it("takes the template from a new client build instead of the one cached by an earlier build", async () => {
+    const fixture = await createFixture(localeRenderer)
+
+    await prerender(fixture)
+
+    // A later client build replaces the template with new hashed assets.
+    await writeFile(
+      join(fixture.clientDir, "index.html"),
+      '<!doctype html><html lang="pt-BR"><head><title>Voynan</title><script type="module" src="/assets/index-new.js"></script></head><body><div id="root"></div></body></html>',
+      "utf8",
+    )
+
+    await prerender(fixture)
+
+    for (const file of [
+      "index.html",
+      "privacy/index.html",
+      "_lang/pt/index.html",
+    ]) {
+      expect(await readFile(join(fixture.clientDir, file), "utf8")).toContain(
+        "/assets/index-new.js",
+      )
+    }
+  })
+
+  it("explains how to recover when only prerendered output remains", async () => {
+    const fixture = await createFixture(localeRenderer)
+
+    await writeFile(
+      join(fixture.clientDir, "index.html"),
+      '<!doctype html><html lang="en"><head></head><body><div id="root"><main>old</main></div></body></html>',
+      "utf8",
+    )
+
+    await expect(prerender(fixture)).rejects.toThrow(/build:client/)
+  })
+
   it("writes every public document, with Portuguese under the internal tree", async () => {
     const fixture = await createFixture(localeRenderer)
 
