@@ -37,6 +37,7 @@ export type PublicConfig = {
   contactEndpoint?: string
   antispamSiteKey?: string
   clarityProjectId?: string
+  loadsClarity: boolean
   enableDesignSystem: boolean
   isDevelopment: boolean
   analyticsEnabled: boolean

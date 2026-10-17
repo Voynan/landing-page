@@ -185,7 +185,9 @@ export function createClarityRuntime({
 }
 
 const clarityRuntime = createClarityRuntime({
-  projectId: publicConfig.clarityProjectId,
+  projectId: publicConfig.loadsClarity
+    ? publicConfig.clarityProjectId
+    : undefined,
   loadClient: () =>
     import("@microsoft/clarity").then(({ default: clarity }) => clarity),
 })

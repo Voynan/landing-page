@@ -21,10 +21,12 @@ export function readPublicConfig(
     contactEndpoint,
     antispamSiteKey: parsed.VITE_ANTISPAM_SITE_KEY,
     clarityProjectId: parsed.VITE_CLARITY_PROJECT_ID,
+    // The development server runs the whole consent flow but never loads the
+    // Clarity script, so local sessions cannot reach the production project.
+    loadsClarity: Boolean(parsed.VITE_CLARITY_PROJECT_ID) && !parsed.DEV,
     enableDesignSystem: parsed.VITE_ENABLE_DESIGN_SYSTEM,
     isDevelopment: parsed.DEV,
-    // The development server never records into the Clarity project.
-    analyticsEnabled: Boolean(parsed.VITE_CLARITY_PROJECT_ID) && !parsed.DEV,
+    analyticsEnabled: Boolean(parsed.VITE_CLARITY_PROJECT_ID),
   }
 }
 

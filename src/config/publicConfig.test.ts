@@ -43,6 +43,7 @@ describe("public configuration", () => {
       contactEndpoint: undefined,
       antispamSiteKey: undefined,
       clarityProjectId: undefined,
+      loadsClarity: false,
       enableDesignSystem: false,
       isDevelopment: false,
       analyticsEnabled: false,
@@ -64,11 +65,20 @@ describe("public configuration", () => {
     expect(retired).not.toHaveProperty("posthogHost")
   })
 
-  it("keeps analytics off on the development server so local sessions never reach Clarity", () => {
+  it("shows the consent flow on the development server without ever loading Clarity there", () => {
+    const config = readPublicConfig({
+      VITE_CLARITY_PROJECT_ID: "yydi4j8nmh",
+      DEV: true,
+    })
+
+    expect(config.analyticsEnabled).toBe(true)
+    expect(config.loadsClarity).toBe(false)
+  })
+
+  it("loads Clarity from production builds that carry the project ID", () => {
     expect(
-      readPublicConfig({ VITE_CLARITY_PROJECT_ID: "yydi4j8nmh", DEV: true })
-        .analyticsEnabled,
-    ).toBe(false)
+      readPublicConfig({ VITE_CLARITY_PROJECT_ID: "yydi4j8nmh" }).loadsClarity,
+    ).toBe(true)
   })
 
   it("normalizes the Vite development mode for internal route gates", () => {
