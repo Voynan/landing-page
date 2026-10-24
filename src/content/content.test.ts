@@ -257,7 +257,7 @@ describe("landing content contracts", () => {
         getLandingContent(locale).products.items
 
       expect(cryptovault.destination).toMatchObject({
-        href: "https://cryptovault.rosetta-solutions.com/",
+        href: "https://cryptovault.voynan.com",
         approval: "approved",
       })
       expect(bullledger.destination).toMatchObject({

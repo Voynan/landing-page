@@ -62,7 +62,7 @@ export const englishLandingContent = {
         ],
         destination: {
           label: "Explore CryptoVault",
-          href: "https://cryptovault.rosetta-solutions.com/",
+          href: "https://cryptovault.voynan.com",
           approval: "approved",
         },
         claimReview: {
